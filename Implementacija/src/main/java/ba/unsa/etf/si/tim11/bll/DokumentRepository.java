@@ -3,7 +3,6 @@ package ba.unsa.etf.si.tim11.bll;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
 
 public class DokumentRepository {
-
 	/**
 	 * 
 	 * @param dokument

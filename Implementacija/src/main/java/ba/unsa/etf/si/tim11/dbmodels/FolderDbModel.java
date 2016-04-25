@@ -1,6 +1,6 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
-public class FolderDbModel {
+public class FolderDbModel extends BaseDbModel {
 
 	private Integer folderId;
 	private String folderNaziv;

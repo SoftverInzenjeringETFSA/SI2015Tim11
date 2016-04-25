@@ -2,7 +2,7 @@ package ba.unsa.etf.si.tim11.dbmodels;
 
 import java.util.Date;
 
-public class KorisnikDbModel {
+public class KorisnikDbModel extends BaseDbModel {
 
 	private Integer korisnikID;
 	private String ime;

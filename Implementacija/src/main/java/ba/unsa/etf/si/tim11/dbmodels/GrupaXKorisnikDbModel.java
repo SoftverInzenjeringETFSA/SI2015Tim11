@@ -2,7 +2,7 @@ package ba.unsa.etf.si.tim11.dbmodels;
 
 import java.util.Date;
 
-public class GrupaXKorisnikDbModel {
+public class GrupaXKorisnikDbModel extends BaseDbModel {
 
 	private Integer grupaXKorisnikId;
 	private Integer grupaId;

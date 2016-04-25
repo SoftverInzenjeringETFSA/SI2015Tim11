@@ -2,7 +2,7 @@ package ba.unsa.etf.si.tim11.dbmodels;
 
 import java.util.Date;
 
-public class ZahtjevDbModel {
+public class ZahtjevDbModel extends BaseDbModel {
 
 	private Integer zahtjevId;
 	private Date datumVrijemeKreiranja;

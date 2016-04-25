@@ -2,13 +2,9 @@ package ba.unsa.etf.si.tim11.dal;
 
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
 
-import java.util.List;
+public class KorisnikPozicijaDALRepository extends DALRepository<KorisnikPozicijaDbModel> {
 
-public class KorisnikPozicijaDALRepository {
-
-	public List<KorisnikPozicijaDbModel> dajKorisnikPozicije() {
-		// TODO - implement KorisnikPozicijaDALRepository.dajKorisnikPozicije
-		throw new UnsupportedOperationException();
+	public KorisnikPozicijaDALRepository() {
+		super(KorisnikPozicijaDbModel.class);
 	}
-
 }

@@ -1,6 +1,6 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
-public class DokumentVerzijaStatusDbModel {
+public class DokumentVerzijaStatusDbModel extends BaseDbModel {
 
 	private Integer dokumentVerzijaStatusId;
 	private String dokumentVerzijaStatusNaziv;

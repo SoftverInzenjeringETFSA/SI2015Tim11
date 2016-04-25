@@ -1,6 +1,6 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
-public class ZahtjevStatusDbModel {
+public class ZahtjevStatusDbModel extends BaseDbModel {
 
 	private Integer zahtjevStatusId;
 	private String zahtjevStatusNaziv;

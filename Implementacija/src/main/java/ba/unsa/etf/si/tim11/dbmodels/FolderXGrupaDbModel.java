@@ -1,6 +1,6 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
-public class FolderXGrupaDbModel {
+public class FolderXGrupaDbModel extends BaseDbModel {
 
 	private Integer folderXGrupaId;
 	private Integer grupaId;

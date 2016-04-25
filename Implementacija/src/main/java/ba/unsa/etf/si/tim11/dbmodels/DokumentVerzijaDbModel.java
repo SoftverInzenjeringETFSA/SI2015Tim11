@@ -2,7 +2,7 @@ package ba.unsa.etf.si.tim11.dbmodels;
 
 import java.sql.Blob;
 
-public class DokumentVerzijaDbModel {
+public class DokumentVerzijaDbModel extends BaseDbModel {
 
 	private Integer dokumentVerzijaId;
 	private Integer dokumentId;

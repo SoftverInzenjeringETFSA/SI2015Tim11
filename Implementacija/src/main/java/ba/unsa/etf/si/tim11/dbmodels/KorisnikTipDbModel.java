@@ -1,6 +1,6 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
-public class KorisnikTipDbModel {
+public class KorisnikTipDbModel extends BaseDbModel {
 
 	private Integer korisnikTipId;
 	private String korisnikTipNaziv;
