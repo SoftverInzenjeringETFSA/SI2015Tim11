@@ -1,6 +1,6 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
-public class DokumentDbModel {
+public class DokumentDbModel extends BaseDbModel {
 
 	private Integer dokumentId;
 	private Integer folderId;

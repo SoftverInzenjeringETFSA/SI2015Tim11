@@ -2,7 +2,7 @@ package ba.unsa.etf.si.tim11.dbmodels;
 
 import java.util.Date;
 
-public class GrupaDbModel {
+public class GrupaDbModel extends BaseDbModel {
 
 	private Integer grupaId;
 	private String naziv;

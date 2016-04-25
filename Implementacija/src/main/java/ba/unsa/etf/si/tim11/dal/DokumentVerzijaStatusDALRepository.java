@@ -1,14 +1,10 @@
 package ba.unsa.etf.si.tim11.dal;
 
-import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaStatusDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
 
-import java.util.List;
+public class DokumentVerzijaStatusDALRepository extends DALRepository<DokumentVerzijaDbModel> {
 
-public class DokumentVerzijaStatusDALRepository {
-
-	public List<DokumentVerzijaStatusDbModel> dajDokumentVerzijaStatuse() {
-		// TODO - implement DokumentVerzijaStatusDALRepository.dajDokumentVerzijaStatuse
-		throw new UnsupportedOperationException();
+	public DokumentVerzijaStatusDALRepository() {
+		super(DokumentVerzijaDbModel.class);
 	}
-
 }
