@@ -2,10 +2,59 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a895f907-f7e7-4c91-9e04-f04dceaf2a81" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_3_8_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/App.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/DokumentRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/FolderRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/GrupaRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/KomentarRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/KorisnikRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/Sesija.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/UnitOfWork.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/bll/ZahtjevRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/DbDMSContext.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/DokumentDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/DokumentVerzijaDAlRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/DokumentVerzijaStatusDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/FolderDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/FolderXGrupaDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/GrupaDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/GrupaXKorisnikDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/KorisnikDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/KorisnikPozicijaDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/KorisnikTipDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/ZahtjevDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/ZahtjevStatusDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dal/ZahtjevTipDALRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/DokumentDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/DokumentVerzijaDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/DokumentVerzijaStatusDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/FolderDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/FolderXGrupaDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/GrupaDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/GrupaXKorisnikDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/KomentarDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/KorisnikDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/KorisnikPozicijaDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/KorisnikTipDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/ZahtjevDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/ZahtjevStatusDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/dbmodels/ZahtjevTipDbModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/DokumentSadrzaj.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/DokumentVerzijaStatusViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/DokumentVerzijaViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/DokumentViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/FolderViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/GrupaFolderPravaPristupa.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/GrupaViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/KomentarViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/KorisnikGrupaPristup.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/KorisnikPozicijaViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/KorisnikTipViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/KorisnikViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/ZahtjevStatusViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/ZahtjevTipViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ba/unsa/etf/si/tim11/viewmodels/ZahtjevViewModel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/test-classes/ba/unsa/etf/si/tim11/AppTest.class" afterPath="" />
     </list>
     <ignored path="Implementacija.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -160,7 +209,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/ba/unsa/etf/si/tim11/App.java" />
         <option value="$PROJECT_DIR$/src/main/java/ba/unsa/etf/si/tim11/BLL/DokumentRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/ba/unsa/etf/si/tim11/viewmodel/KorisnikPozicijaViewModel.java" />
@@ -211,6 +259,7 @@
         <option value="$PROJECT_DIR$/src/main/java/ba/unsa/etf/si/tim11/dbmodels/ZahtjevDbModel.java" />
         <option value="$PROJECT_DIR$/src/main/java/ba/unsa/etf/si/tim11/dbmodels/ZahtjevStatusDbModel.java" />
         <option value="$PROJECT_DIR$/src/main/java/ba/unsa/etf/si/tim11/dbmodels/ZahtjevTipDbModel.java" />
+        <option value="$PROJECT_DIR$/Implementacija.iml" />
       </list>
     </option>
   </component>
@@ -789,12 +838,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1461604840961</updated>
-      <workItem from="1461604847064" duration="2437000" />
+      <workItem from="1461604847064" duration="2539000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2437000" />
+    <option name="totallyTimeSpent" value="2539000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="0" />
@@ -938,7 +987,7 @@
         <state relative-caret-position="105">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
