@@ -3,7 +3,7 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 
 @Entity
-public class DokumentDbModel extends BaseDbModel {
+public class DokumentDbModel implements java.io.Serializable{
 
 	private Integer dokumentId;
 	private Integer folderId;

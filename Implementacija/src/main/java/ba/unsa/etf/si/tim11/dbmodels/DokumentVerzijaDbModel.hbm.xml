@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 27, 2016 9:08:22 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <joined-subclass name="ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel" extends="ba.unsa.etf.si.tim11.dbmodels.BaseDbModel" table="DOKUMENTVERZIJADBMODEL" lazy="false">
+        <key>
+            <column name="ID" />
+        </key>
+        <property name="dokumentVerzijaId" type="java.lang.Integer">
+            <column name="DOKUMENTVERZIJAID" />
+        </property>
+        <property name="dokumentId" type="java.lang.Integer">
+            <column name="DOKUMENTID" />
+        </property>
+        <property name="postavioKorisnikId" type="java.lang.Integer">
+            <column name="POSTAVIOKORISNIKID" />
+        </property>
+        <property name="dokumentVerzijaStatusId" type="java.lang.Integer">
+            <column name="DOKUMENTVERZIJASTATUSID" />
+        </property>
+        <property name="sadrzaj" type="java.sql.Blob">
+            <column name="SADRZAJ" />
+        </property>
+        <property name="aktivan" type="java.lang.Boolean">
+            <column name="AKTIVAN" />
+        </property>
+    </joined-subclass>
+</hibernate-mapping>

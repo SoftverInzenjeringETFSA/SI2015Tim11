@@ -5,6 +5,8 @@ package ba.unsa.etf.si.tim11.dal;
  */
 
 import ba.unsa.etf.si.tim11.dbmodels.BaseDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,7 +14,8 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class DALRepository<T extends BaseDbModel>{
+//sad prima samo T
+public class DALRepository<T>{
     private static final Logger logger =
             Logger.getLogger(DALRepository.class.getName());
 
@@ -54,11 +57,15 @@ public class DALRepository<T extends BaseDbModel>{
      */
     public T ucitaj(Long id, Session session) {
         Transaction t = session.beginTransaction();
-        String queryString = FROM + SPACE + PARAMETER;
+        /*String queryString = FROM + SPACE + PARAMETER;
         Query query = session.createQuery(queryString);
-        query.setString(0, entityClass.getCanonicalName());
-        T resultObject = (T)query.uniqueResult();
-        t.commit();
+        query.setString(0, entityClass.getCanonicalName());*/
+
+        //mozda laksi nacin, nema pisanja querya
+        T resultObject = (T) session.get(entityClass, id);
+        
+        //T resultObject = (T)query.uniqueResult();
+        //t.commit();
         return resultObject;
     }
 

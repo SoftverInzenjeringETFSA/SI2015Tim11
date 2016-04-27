@@ -15,8 +15,8 @@ public class BaseDbModel implements Serializable {
     private static final Logger logger =
             Logger.getLogger(BaseDbModel.class.getName());
 
-    @Id
-    @GeneratedValue
+    /*@Id
+    @GeneratedValue*/
     private long id;
 
     public long getId() {

@@ -14,12 +14,17 @@
             jdbc:mysql://localhost/dms
         </property>
         <property name="connection.username">
-                dmsuser
+                root
         </property>
         <property name="connection.password">
-                dmsuser123
+                root
         </property>
+        
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
+        
+        <!-- OVAKO DODAVATI OVE MAPINGE I DOPINGE  -->
+        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/KorisnikDbModel.hbm.xml"></mapping>
+        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/BaseDbModel.hbm.xml"></mapping>
     </session-factory>
 </hibernate-configuration>

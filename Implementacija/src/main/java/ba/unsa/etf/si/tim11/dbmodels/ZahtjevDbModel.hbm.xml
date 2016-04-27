@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 27, 2016 9:08:22 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <joined-subclass name="ba.unsa.etf.si.tim11.dbmodels.ZahtjevDbModel" extends="ba.unsa.etf.si.tim11.dbmodels.BaseDbModel" table="ZAHTJEVDBMODEL" lazy="false">
+        <key>
+            <column name="ID" />
+        </key>
+        <property name="zahtjevId" type="java.lang.Integer">
+            <column name="ZAHTJEVID" />
+        </property>
+        <property name="datumVrijemeKreiranja" type="java.util.Date">
+            <column name="DATUMVRIJEMEKREIRANJA" />
+        </property>
+        <property name="kreiraoKorisnikId" type="java.lang.Integer">
+            <column name="KREIRAOKORISNIKID" />
+        </property>
+        <property name="upucenoKorisnikId" type="java.lang.Integer">
+            <column name="UPUCENOKORISNIKID" />
+        </property>
+        <property name="zahtjevTipId" type="java.lang.Integer">
+            <column name="ZAHTJEVTIPID" />
+        </property>
+        <property name="zahtjevStatusId" type="java.lang.Integer">
+            <column name="ZAHTJEVSTATUSID" />
+        </property>
+        <property name="dokumentVerzijaId" type="java.lang.Integer">
+            <column name="DOKUMENTVERZIJAID" />
+        </property>
+        <property name="aktivan" type="java.lang.Boolean">
+            <column name="AKTIVAN" />
+        </property>
+    </joined-subclass>
+</hibernate-mapping>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 27, 2016 9:08:22 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <joined-subclass name="ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel" extends="ba.unsa.etf.si.tim11.dbmodels.BaseDbModel" table="KORISNIKPOZICIJADBMODEL" lazy="false">
+        <key>
+            <column name="ID" />
+        </key>
+        <property name="korisnikPozicijaId" type="java.lang.Integer">
+            <column name="KORISNIKPOZICIJAID" />
+        </property>
+        <property name="korisnikPozicijaNaziv" type="java.lang.String">
+            <column name="KORISNIKPOZICIJANAZIV" />
+        </property>
+        <property name="aktivan" type="java.lang.Boolean">
+            <column name="AKTIVAN" />
+        </property>
+    </joined-subclass>
+</hibernate-mapping>

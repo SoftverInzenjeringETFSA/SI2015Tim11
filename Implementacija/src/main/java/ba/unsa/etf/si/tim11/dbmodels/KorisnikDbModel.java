@@ -1,12 +1,22 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import java.util.Date;
 
 @Entity
-public class KorisnikDbModel extends BaseDbModel {
-
-	private Integer korisnikID;
+@Table(name="TBL_FLIGHT")
+public class KorisnikDbModel implements java.io.Serializable {
+	
+	@Id
+    @GeneratedValue
+    @Column(name = "KorisniID")
+	private long korisnikID;
+	
 	private String ime;
 	private String prezime;
 	private String adresa;
@@ -17,11 +27,11 @@ public class KorisnikDbModel extends BaseDbModel {
 	private Integer korisnikPozicijaId;
 	private Boolean aktivan;
 
-	public Integer getKorisnikID() {
+	public long getKorisnikID() {
 		return korisnikID;
 	}
 
-	public void setKorisnikID(Integer korisnikID) {
+	public void setKorisnikID(long korisnikID) {
 		this.korisnikID = korisnikID;
 	}
 
