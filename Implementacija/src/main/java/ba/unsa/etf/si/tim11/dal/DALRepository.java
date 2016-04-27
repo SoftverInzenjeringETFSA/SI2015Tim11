@@ -19,6 +19,7 @@ public class DALRepository<T extends BaseDbModel>{
     private static final String DELETE = "DELETE";
     private static final String FROM = "FROM";
     private static final String SPACE = " ";
+    private static final String PARAMETER = "?";
 
     private Class<T> entityClass;
 
@@ -37,8 +38,9 @@ public class DALRepository<T extends BaseDbModel>{
      */
     public List<T> ucitajSve(Session session) {
         Transaction t = session.beginTransaction();
-        String queryString = FROM + SPACE + entityClass.getCanonicalName();
+        String queryString = FROM + SPACE + PARAMETER;
         Query query = session.createQuery(queryString);
+        query.setString(0, entityClass.getCanonicalName());
         List<T> resultObjects = query.list();
         t.commit();
         return resultObjects;
@@ -52,8 +54,9 @@ public class DALRepository<T extends BaseDbModel>{
      */
     public T ucitaj(Long id, Session session) {
         Transaction t = session.beginTransaction();
-        String queryString = FROM + SPACE + entityClass.getCanonicalName();
+        String queryString = FROM + SPACE + PARAMETER;
         Query query = session.createQuery(queryString);
+        query.setString(0, entityClass.getCanonicalName());
         T resultObject = (T)query.uniqueResult();
         t.commit();
         return resultObject;
@@ -99,8 +102,9 @@ public class DALRepository<T extends BaseDbModel>{
      */
     public void obrisiSve(Session session) {
         Transaction t = session.beginTransaction();
-        String queryString = DELETE + SPACE + FROM + entityClass.getCanonicalName();
+        String queryString = DELETE + SPACE + FROM + PARAMETER;
         Query query = session.createQuery(queryString);
+        query.setString(0, entityClass.getCanonicalName());
         query.executeUpdate();
         t.commit();
     }
