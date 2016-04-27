@@ -1,5 +1,8 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
+import javax.persistence.Entity;
+
+@Entity
 public class DokumentVerzijaStatusDbModel extends BaseDbModel {
 
 	private Integer dokumentVerzijaStatusId;

@@ -1,7 +1,9 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
+@Entity
 public class KomentarDbModel extends BaseDbModel {
 
 	private Integer komentarId;

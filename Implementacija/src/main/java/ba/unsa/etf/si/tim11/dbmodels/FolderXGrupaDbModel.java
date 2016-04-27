@@ -1,5 +1,8 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
+import javax.persistence.Entity;
+
+@Entity
 public class FolderXGrupaDbModel extends BaseDbModel {
 
 	private Integer folderXGrupaId;
