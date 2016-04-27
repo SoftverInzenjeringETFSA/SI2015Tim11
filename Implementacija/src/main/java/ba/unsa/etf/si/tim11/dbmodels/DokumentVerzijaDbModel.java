@@ -1,9 +1,13 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
+import javax.persistence.Entity;
 import java.sql.Blob;
 
+<<<<<<< HEAD
 import javax.persistence.Entity;
 
+=======
+>>>>>>> master
 @Entity
 public class DokumentVerzijaDbModel extends BaseDbModel {
 
