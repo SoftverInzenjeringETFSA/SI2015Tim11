@@ -1,12 +1,17 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import java.util.Date;
 
 @Entity
-public class ZahtjevDbModel extends BaseDbModel {
+public class ZahtjevDbModel implements java.io.Serializable {
 
-	private Integer zahtjevId;
+	@Id
+    @GeneratedValue
+	private long zahtjevId;
 	private Date datumVrijemeKreiranja;
 	private Integer kreiraoKorisnikId;
 	private Integer upucenoKorisnikId;
@@ -15,11 +20,11 @@ public class ZahtjevDbModel extends BaseDbModel {
 	private Integer dokumentVerzijaId;
 	private Boolean aktivan;
 
-	public Integer getZahtjevId() {
+	public long getZahtjevId() {
 		return zahtjevId;
 	}
 
-	public void setZahtjevId(Integer zahtjevId) {
+	public void setZahtjevId(long zahtjevId) {
 		this.zahtjevId = zahtjevId;
 	}
 

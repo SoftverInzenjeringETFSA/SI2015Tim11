@@ -1,21 +1,25 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class DokumentDbModel implements java.io.Serializable{
 
-	private Integer dokumentId;
+	@Id
+    @GeneratedValue
+	private long dokumentId;
 	private Integer folderId;
 	private String dokumentNaziv;
 	private String ekstenzija;
 	private Boolean aktivan;
 
-	public Integer getDokumentId() {
+	public long getDokumentId() {
 		return dokumentId;
 	}
 
-	public void setDokumentId(Integer dokumentId) {
+	public void setDokumentId(long dokumentId) {
 		this.dokumentId = dokumentId;
 	}
 

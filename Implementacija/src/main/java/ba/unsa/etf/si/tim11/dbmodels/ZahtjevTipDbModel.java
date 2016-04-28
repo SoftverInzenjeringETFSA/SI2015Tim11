@@ -1,19 +1,23 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-public class ZahtjevTipDbModel extends BaseDbModel {
+public class ZahtjevTipDbModel implements java.io.Serializable {
 
-	private Integer zahtjevTipId;
+	@Id
+    @GeneratedValue
+	private long zahtjevTipId;
 	private String zahtjevTipNaziv;
 	private Boolean aktivan;
 
-	public Integer getZahtjevTipId() {
+	public long getZahtjevTipId() {
 		return zahtjevTipId;
 	}
 
-	public void setZahtjevTipId(Integer zahtjevTipId) {
+	public void setZahtjevTipId(long zahtjevTipId) {
 		this.zahtjevTipId = zahtjevTipId;
 	}
 

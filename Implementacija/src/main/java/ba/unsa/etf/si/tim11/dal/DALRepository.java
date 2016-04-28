@@ -6,10 +6,13 @@ package ba.unsa.etf.si.tim11.dal;
 
 import ba.unsa.etf.si.tim11.dbmodels.BaseDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+import ba.unsa.etf.si.tim11.hibernate.DMSSessionFactory;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import static ba.unsa.etf.si.tim11.hibernate.DMSSessionFactory.getSession;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,13 +28,15 @@ public class DALRepository<T>{
     private static final String PARAMETER = "?";
 
     private Class<T> entityClass;
-
+    private final Session session;
+    
     /**
      * Kreiraj repozitorij za odredjenu klasu
      * @param entityClass klasa repozitorija
      */
     public DALRepository(Class<T> entityClass) {
         this.entityClass = entityClass;
+        session = DMSSessionFactory.getSession();
     }
 
     /**
@@ -55,17 +60,9 @@ public class DALRepository<T>{
      * @param session Hibernate sesija
      * @return Trazeni objekat ili null ako ga nema
      */
-    public T ucitaj(Long id, Session session) {
-        Transaction t = session.beginTransaction();
-        /*String queryString = FROM + SPACE + PARAMETER;
-        Query query = session.createQuery(queryString);
-        query.setString(0, entityClass.getCanonicalName());*/
-
-        //mozda laksi nacin, nema pisanja querya
-        T resultObject = (T) session.get(entityClass, id);
-        
-        //T resultObject = (T)query.uniqueResult();
-        //t.commit();
+    public T ucitaj(Long id) {
+        Transaction t = this.session.beginTransaction();
+        T resultObject = (T) this.session.get(entityClass, id);
         return resultObject;
     }
 

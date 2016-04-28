@@ -18,7 +18,21 @@ public class DbDMSContext {
 	private FolderDALRepository folderi;
 	private FolderXGrupaDALRepository folderiGrupe;
 
-	private DbDMSContext() {}
+	private DbDMSContext() {
+		korisnici = new KorisnikDALRepository();
+		korisnikPozicije = new KorisnikPozicijaDALRepository();
+		korisnikTipovi = new KorisnikTipDALRepository();
+		dokumenti = new DokumentDALRepository();
+		dokumentiVerzije = new DokumentVerzijaDAlRepository();
+		dokumentVerzijaStatusi = new DokumentVerzijaStatusDALRepository();
+		zahtjevi = new ZahtjevDALRepository();
+		zahtjevStatusi = new ZahtjevStatusDALRepository();
+		zahtjevTipovi = new ZahtjevTipDALRepository();
+		grupe = new GrupaDALRepository();
+		grupeKorisnici = new GrupaXKorisnikDALRepository();
+		folderi = new FolderDALRepository();
+		folderiGrupe = new FolderXGrupaDALRepository();
+	}
 
 	public static DbDMSContext getInstance() {
 		if(instance == null) {

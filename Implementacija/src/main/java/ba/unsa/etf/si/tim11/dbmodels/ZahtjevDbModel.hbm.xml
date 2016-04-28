@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 27, 2016 9:08:22 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Apr 28, 2016 9:10:31 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <joined-subclass name="ba.unsa.etf.si.tim11.dbmodels.ZahtjevDbModel" extends="ba.unsa.etf.si.tim11.dbmodels.BaseDbModel" table="ZAHTJEVDBMODEL" lazy="false">
-        <key>
-            <column name="ID" />
-        </key>
-        <property name="zahtjevId" type="java.lang.Integer">
+    <class name="ba.unsa.etf.si.tim11.dbmodels.ZahtjevDbModel" table="ZAHTJEV">
+        <id name="zahtjevId" type="long">
             <column name="ZAHTJEVID" />
-        </property>
+            <generator class="native" />
+        </id>
         <property name="datumVrijemeKreiranja" type="java.util.Date">
             <column name="DATUMVRIJEMEKREIRANJA" />
         </property>
@@ -31,5 +29,5 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
-    </joined-subclass>
+    </class>
 </hibernate-mapping>

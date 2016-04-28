@@ -9,7 +9,6 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name="TBL_FLIGHT")
 public class KorisnikDbModel implements java.io.Serializable {
 	
 	@Id

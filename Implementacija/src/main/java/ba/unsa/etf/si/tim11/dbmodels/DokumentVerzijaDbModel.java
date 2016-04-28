@@ -1,23 +1,28 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import java.sql.Blob;
 
 @Entity
-public class DokumentVerzijaDbModel extends BaseDbModel {
+public class DokumentVerzijaDbModel implements java.io.Serializable {
 
-	private Integer dokumentVerzijaId;
+	@Id
+    @GeneratedValue
+	private long dokumentVerzijaId;
 	private Integer dokumentId;
 	private Integer postavioKorisnikId;
 	private Integer dokumentVerzijaStatusId;
 	private Blob sadrzaj;
 	private Boolean aktivan;
 
-	public Integer getDokumentVerzijaId() {
+	public long getDokumentVerzijaId() {
 		return dokumentVerzijaId;
 	}
 
-	public void setDokumentVerzijaId(Integer dokumentVerzijaId) {
+	public void setDokumentVerzijaId(long dokumentVerzijaId) {
 		this.dokumentVerzijaId = dokumentVerzijaId;
 	}
 

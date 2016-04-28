@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 27, 2016 9:08:22 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Apr 28, 2016 10:28:54 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <joined-subclass name="ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel" extends="ba.unsa.etf.si.tim11.dbmodels.BaseDbModel" table="GRUPAXKORISNIKDBMODEL" lazy="false">
-        <key>
-            <column name="ID" />
-        </key>
-        <property name="grupaXKorisnikId" type="java.lang.Integer">
+    <class name="ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel" table="GRUPAXKORISNIK">
+        <id name="grupaXKorisnikId" type="long">
             <column name="GRUPAXKORISNIKID" />
-        </property>
+            <generator class="native" />
+        </id>
         <property name="grupaId" type="java.lang.Integer">
             <column name="GRUPAID" />
         </property>
@@ -25,5 +23,5 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
-    </joined-subclass>
+    </class>
 </hibernate-mapping>

@@ -1,22 +1,26 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-public class FolderXGrupaDbModel extends BaseDbModel {
+public class FolderXGrupaDbModel implements java.io.Serializable {
 
-	private Integer folderXGrupaId;
+	@Id
+    @GeneratedValue
+	private long folderXGrupaId;
 	private Integer grupaId;
 	private Integer folderId;
 	private Boolean pravoSkidanja;
 	private Boolean pravoDodavanja;
 	private Boolean aktivan;
 
-	public Integer getFolderXGrupaId() {
+	public long getFolderXGrupaId() {
 		return folderXGrupaId;
 	}
 
-	public void setFolderXGrupaId(Integer folderXGrupaId) {
+	public void setFolderXGrupaId(long folderXGrupaId) {
 		this.folderXGrupaId = folderXGrupaId;
 	}
 

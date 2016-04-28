@@ -1,19 +1,23 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-public class KorisnikPozicijaDbModel extends BaseDbModel {
+public class KorisnikPozicijaDbModel implements java.io.Serializable {
 
-	private Integer korisnikPozicijaId;
+	@Id
+    @GeneratedValue
+	private long korisnikPozicijaId;
 	private String korisnikPozicijaNaziv;
 	private Boolean aktivan;
 
-	public Integer getKorisnikPozicijaId() {
+	public long getKorisnikPozicijaId() {
 		return korisnikPozicijaId;
 	}
 
-	public void setKorisnikPozicijaId(Integer korisnikPozicijaId) {
+	public void setKorisnikPozicijaId(long korisnikPozicijaId) {
 		this.korisnikPozicijaId = korisnikPozicijaId;
 	}
 

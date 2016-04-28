@@ -1,23 +1,28 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import java.util.Date;
 
 @Entity
-public class GrupaXKorisnikDbModel extends BaseDbModel {
+public class GrupaXKorisnikDbModel implements java.io.Serializable {
 
-	private Integer grupaXKorisnikId;
+	@Id
+    @GeneratedValue
+	private long grupaXKorisnikId;
 	private Integer grupaId;
 	private Integer korisnikId;
 	private Date datumPristupa;
 	private Date datumZadnjeIzmjene;
 	private Boolean aktivan;
 
-	public Integer getGrupaXKorisnikId() {
+	public long getGrupaXKorisnikId() {
 		return grupaXKorisnikId;
 	}
 
-	public void setGrupaXKorisnikId(Integer grupaXKorisnikId) {
+	public void setGrupaXKorisnikId(long grupaXKorisnikId) {
 		this.grupaXKorisnikId = grupaXKorisnikId;
 	}
 

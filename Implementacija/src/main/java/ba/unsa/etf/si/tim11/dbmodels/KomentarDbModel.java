@@ -1,22 +1,27 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import java.util.Date;
 
 @Entity
-public class KomentarDbModel extends BaseDbModel {
+public class KomentarDbModel implements java.io.Serializable{
 
-	private Integer komentarId;
+	@Id
+    @GeneratedValue
+	private long komentarId;
 	private Integer korisnikId;
 	private Integer dokumentVerzijaId;
 	private Date dokumentVrijemeKreiranja;
 	private Boolean aktivan;
 
-	public Integer getKomentarId() {
+	public long getKomentarId() {
 		return komentarId;
 	}
 
-	public void setKomentarId(Integer komentarId) {
+	public void setKomentarId(long komentarId) {
 		this.komentarId = komentarId;
 	}
 

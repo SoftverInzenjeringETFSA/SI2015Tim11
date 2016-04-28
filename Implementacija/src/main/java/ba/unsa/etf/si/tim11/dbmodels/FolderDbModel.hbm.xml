@@ -1,20 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 27, 2016 9:08:22 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Apr 28, 2016 9:10:31 AM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <joined-subclass name="ba.unsa.etf.si.tim11.dbmodels.FolderDbModel" extends="ba.unsa.etf.si.tim11.dbmodels.BaseDbModel" table="FOLDERDBMODEL" lazy="false">
-        <key>
-            <column name="ID" />
-        </key>
-        <property name="folderId" type="java.lang.Integer">
+    <class name="ba.unsa.etf.si.tim11.dbmodels.FolderDbModel" table="FOLDER">
+        <id name="folderId" type="long">
             <column name="FOLDERID" />
+            <generator class="native" />
+        </id>
+        <property name="grupaId" type="java.lang.Integer">
+            <column name="GRUPAID" />
         </property>
         <property name="folderNaziv" type="java.lang.String">
             <column name="FOLDERNAZIV" />
-        </property>
-        <property name="grupaId" type="java.lang.Integer">
-            <column name="GRUPAID" />
         </property>
         <property name="kreriraoKorisnikId" type="java.lang.Integer">
             <column name="KRERIRAOKORISNIKID" />
@@ -25,5 +23,5 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
-    </joined-subclass>
+    </class>
 </hibernate-mapping>

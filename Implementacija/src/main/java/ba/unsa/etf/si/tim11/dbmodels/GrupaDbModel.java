@@ -1,22 +1,27 @@
 package ba.unsa.etf.si.tim11.dbmodels;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import java.util.Date;
 
 @Entity
-public class GrupaDbModel extends BaseDbModel {
+public class GrupaDbModel implements java.io.Serializable {
 
-	private Integer grupaId;
+	@Id
+    @GeneratedValue
+	private long grupaId;
 	private String naziv;
 	private Integer odgovorniKorisnikId;
 	private Date datumKreiranja;
 	private Boolean aktivan;
 
-	public Integer getGrupaId() {
+	public long getGrupaId() {
 		return grupaId;
 	}
 
-	public void setGrupaId(Integer grupaId) {
+	public void setGrupaId(long grupaId) {
 		this.grupaId = grupaId;
 	}
 
