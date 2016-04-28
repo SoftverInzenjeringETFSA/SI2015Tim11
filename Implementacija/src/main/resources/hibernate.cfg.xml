@@ -24,22 +24,22 @@
         <!-- <property name="hbm2ddl.auto">update</property> -->
         
         <!-- OVAKO DODAVATI OVE MAPINGE I DOPINGE  -->
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/BaseDbModel.hbm.xml"></mapping>
+        <mapping resource="BaseDbModel.hbm.xml"></mapping>
         
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/DokumentDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/DokumentVerzijaDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/DokumentVerzijaStatusDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/FolderDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/FolderXGrupaDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/GrupaDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/GrupaXKorisnikDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/KomentarDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/KorisnikDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/KorisnikPozicijaDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/KorisnikTipDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/ZahtjevDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/ZahtjevStatusDbModel.hbm.xml"></mapping>
-        <mapping resource="ba/unsa/etf/si/tim11/dbmodels/ZahtjevTipDbModel.hbm.xml"></mapping>
+        <mapping resource="DokumentDbModel.hbm.xml"></mapping>
+        <mapping resource="DokumentVerzijaDbModel.hbm.xml"></mapping>
+        <mapping resource="DokumentVerzijaStatusDbModel.hbm.xml"></mapping>
+        <mapping resource="FolderDbModel.hbm.xml"></mapping>
+        <mapping resource="FolderXGrupaDbModel.hbm.xml"></mapping>
+        <mapping resource="GrupaDbModel.hbm.xml"></mapping>
+        <mapping resource="GrupaXKorisnikDbModel.hbm.xml"></mapping>
+        <mapping resource="KomentarDbModel.hbm.xml"></mapping>
+        <mapping resource="KorisnikDbModel.hbm.xml"></mapping>
+        <mapping resource="KorisnikPozicijaDbModel.hbm.xml"></mapping>
+        <mapping resource="KorisnikTipDbModel.hbm.xml"></mapping>
+        <mapping resource="ZahtjevDbModel.hbm.xml"></mapping>
+        <mapping resource="ZahtjevStatusDbModel.hbm.xml"></mapping>
+        <mapping resource="ZahtjevTipDbModel.hbm.xml"></mapping>
         
     </session-factory>
 </hibernate-configuration>
