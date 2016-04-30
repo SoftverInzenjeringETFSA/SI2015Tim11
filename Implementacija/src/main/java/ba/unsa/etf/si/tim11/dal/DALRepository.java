@@ -28,7 +28,7 @@ public class DALRepository<T>{
     private static final String PARAMETER = "?";
 
     private Class<T> entityClass;
-    private final Session session;
+    private Session session;
     
     /**
      * Kreiraj repozitorij za odredjenu klasu
@@ -36,7 +36,7 @@ public class DALRepository<T>{
      */
     public DALRepository(Class<T> entityClass) {
         this.entityClass = entityClass;
-        session = DMSSessionFactory.getSession();
+        
     }
 
     /**
@@ -44,14 +44,12 @@ public class DALRepository<T>{
      * @param session Hibernate sesija
      * @return Lista svih objekata
      */
-    public List<T> ucitajSve(Session session) {
-        Transaction t = session.beginTransaction();
-        String queryString = FROM + SPACE + PARAMETER;
-        Query query = session.createQuery(queryString);
-        query.setString(0, entityClass.getCanonicalName());
-        List<T> resultObjects = query.list();
-        t.commit();
-        return resultObjects;
+    public List<T> ucitajSve() {
+    	session = DMSSessionFactory.getSession();
+        Transaction t = this.session.beginTransaction();
+        List lista = this.session.createCriteria(entityClass).list();
+        session.close();
+        return lista;
     }
 
     /**
@@ -61,8 +59,10 @@ public class DALRepository<T>{
      * @return Trazeni objekat ili null ako ga nema
      */
     public T ucitaj(Long id) {
+    	session = DMSSessionFactory.getSession();
         Transaction t = this.session.beginTransaction();
         T resultObject = (T) this.session.get(entityClass, id);
+        session.close();
         return resultObject;
     }
 
@@ -72,9 +72,11 @@ public class DALRepository<T>{
      * @param session Hibernate sesija
      */
     public void sacuvaj(T object, Session session) {
+    	session = DMSSessionFactory.getSession();
         Transaction t = session.beginTransaction();
         session.save(object);
         t.commit();
+        session.close();
     }
 
     /**
@@ -83,9 +85,11 @@ public class DALRepository<T>{
      * @param session Hibernate sesija
      */
     public void sacuvajIliAzuriraj(T object, Session session) {
+    	session = DMSSessionFactory.getSession();
         Transaction t = session.beginTransaction();
         session.saveOrUpdate(object);
         t.commit();
+        session.close();
     }
 
 
@@ -95,9 +99,11 @@ public class DALRepository<T>{
      * @param session Hibernate sesija
      */
     public void obrisi(T object, Session session) {
+    	session = DMSSessionFactory.getSession();
         Transaction t = session.beginTransaction();
         session.delete(object);
         t.commit();
+        session.close();
     }
 
     /**
@@ -105,11 +111,13 @@ public class DALRepository<T>{
      * @param session Hibernate sesija
      */
     public void obrisiSve(Session session) {
+    	session = DMSSessionFactory.getSession();
         Transaction t = session.beginTransaction();
         String queryString = DELETE + SPACE + FROM + PARAMETER;
         Query query = session.createQuery(queryString);
         query.setString(0, entityClass.getCanonicalName());
         query.executeUpdate();
         t.commit();
+        session.close();
     }
 }
