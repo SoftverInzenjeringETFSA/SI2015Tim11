@@ -2042,10 +2042,10 @@ public class ManagementDokumenata
 		table_3 = new JTable();
 		panel_8.add(table_3, "16, 18, 19, 9, fill, fill");
 		
-		JComboBox comboBoxTipIzvje�taja = new JComboBox();
-		comboBoxTipIzvje�taja.setModel(new DefaultComboBoxModel(new String[] {"Tip Izvje\u0161taja", "Korisnik", "Dokument ", "Zahtjev", "Odobrenje"}));
-		comboBoxTipIzvje�taja.setFont(new Font("Dialog", Font.PLAIN, 16));
-		panel_8.add(comboBoxTipIzvje�taja, "34, 30, fill, default");
+		JComboBox comboBoxTipIzvjestaja = new JComboBox();
+		comboBoxTipIzvjestaja.setModel(new DefaultComboBoxModel(new String[] {"Tip Izvje\u0161taja", "Korisnik", "Dokument ", "Zahtjev", "Odobrenje"}));
+		comboBoxTipIzvjestaja.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panel_8.add(comboBoxTipIzvjestaja, "34, 30, fill, default");
 		
 		JButton btnKreirajIzvjetaj = new JButton("Kreiraj Izvje\u0161taj");
 		btnKreirajIzvjetaj.setFont(new Font("Dialog", Font.PLAIN, 16));

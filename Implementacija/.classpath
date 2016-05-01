@@ -22,5 +22,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Interfejs/jgoodies-forms-1.8.0.jar" sourcepath="/Interfejs/jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="/Interfejs/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
