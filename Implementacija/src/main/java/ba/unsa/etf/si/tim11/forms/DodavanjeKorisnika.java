@@ -15,9 +15,9 @@ import javax.swing.JButton;
 public class DodavanjeKorisnika {
 
 	private JFrame frmDodavanjeizmjenaKorisnika;
-	private JTextField txtIme;
-	private JTextField txtPrezime;
-	private JTextField txtAdresa;
+	private JTextField txtDodavanjeIme;
+	private JTextField txtDodavanjePrezime;
+	private JTextField txtDodavanjeAdresa;
 
 	/**
 	 * Launch the application.
@@ -47,71 +47,72 @@ public class DodavanjeKorisnika {
 	 */
 	private void initialize() {
 		frmDodavanjeizmjenaKorisnika = new JFrame();
-		frmDodavanjeizmjenaKorisnika.setTitle("Dodavanje/Izmjena korisnika");
+		frmDodavanjeizmjenaKorisnika.setResizable(false);
+		frmDodavanjeizmjenaKorisnika.setTitle("Dodavanje Korisnika");
 		frmDodavanjeizmjenaKorisnika.setBounds(100, 100, 439, 399);
 		frmDodavanjeizmjenaKorisnika.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDodavanjeizmjenaKorisnika.getContentPane().setLayout(null);
 		
 		JLabel label = new JLabel("Ime:");
 		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		label.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		label.setFont(new Font("Dialog", Font.PLAIN, 11));
 		label.setBounds(98, 11, 29, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label);
 		
-		txtIme = new JTextField();
-		txtIme.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtIme.setColumns(10);
-		txtIme.setBounds(133, 11, 267, 21);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(txtIme);
+		txtDodavanjeIme = new JTextField();
+		txtDodavanjeIme.setFont(new Font("Dialog", Font.PLAIN, 11));
+		txtDodavanjeIme.setColumns(10);
+		txtDodavanjeIme.setBounds(133, 11, 267, 21);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(txtDodavanjeIme);
 		
 		JLabel label_1 = new JLabel("Prezime:");
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		label_1.setFont(new Font("Dialog", Font.PLAIN, 11));
 		label_1.setBounds(65, 46, 62, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_1);
 		
-		txtPrezime = new JTextField();
-		txtPrezime.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtPrezime.setColumns(10);
-		txtPrezime.setBounds(133, 43, 267, 21);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(txtPrezime);
+		txtDodavanjePrezime = new JTextField();
+		txtDodavanjePrezime.setFont(new Font("Dialog", Font.PLAIN, 11));
+		txtDodavanjePrezime.setColumns(10);
+		txtDodavanjePrezime.setBounds(133, 43, 267, 21);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(txtDodavanjePrezime);
 		
 		JLabel label_2 = new JLabel("Adresa:");
 		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		label_2.setFont(new Font("Dialog", Font.PLAIN, 11));
 		label_2.setBounds(72, 81, 55, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_2);
 		
-		txtAdresa = new JTextField();
-		txtAdresa.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		txtAdresa.setColumns(10);
-		txtAdresa.setBounds(133, 81, 267, 21);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(txtAdresa);
+		txtDodavanjeAdresa = new JTextField();
+		txtDodavanjeAdresa.setFont(new Font("Dialog", Font.PLAIN, 11));
+		txtDodavanjeAdresa.setColumns(10);
+		txtDodavanjeAdresa.setBounds(133, 81, 267, 21);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(txtDodavanjeAdresa);
 		
 		JLabel label_3 = new JLabel("Datum Rođenja:");
 		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		label_3.setFont(new Font("Dialog", Font.PLAIN, 11));
 		label_3.setBounds(19, 115, 108, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_3);
 		
-		JCalendar calendarDatumRodjenja = new JCalendar();
-		calendarDatumRodjenja.setBounds(133, 116, 198, 157);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(calendarDatumRodjenja);
+		JCalendar calendarDodavanjeDatumRodjenja = new JCalendar();
+		calendarDodavanjeDatumRodjenja.setBounds(133, 116, 198, 157);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(calendarDodavanjeDatumRodjenja);
 		
 		JLabel label_4 = new JLabel("Pozicija u Organizaciji:");
 		label_4.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_4.setBounds(10, 290, 117, 21);
+		label_4.setFont(new Font("Dialog", Font.PLAIN, 11));
+		label_4.setBounds(10, 287, 117, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_4);
 		
-		JComboBox cmbPozicija = new JComboBox();
-		cmbPozicija.setFont(new Font("Dialog", Font.PLAIN, 16));
-		cmbPozicija.setBounds(133, 287, 267, 21);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(cmbPozicija);
+		JComboBox cmbDodavanjePozicija = new JComboBox();
+		cmbDodavanjePozicija.setFont(new Font("Dialog", Font.PLAIN, 11));
+		cmbDodavanjePozicija.setBounds(133, 287, 267, 21);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(cmbDodavanjePozicija);
 		
-		JButton btnSpremi = new JButton("Spremi");
-		btnSpremi.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnSpremi.setBounds(270, 322, 130, 29);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(btnSpremi);
+		JButton btnDodavanjeSpremi = new JButton("Spremi");
+		btnDodavanjeSpremi.setFont(new Font("Dialog", Font.PLAIN, 11));
+		btnDodavanjeSpremi.setBounds(270, 322, 130, 29);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(btnDodavanjeSpremi);
 	}
 }
