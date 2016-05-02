@@ -1,41 +1,43 @@
 package ba.unsa.etf.si.tim11.forms;
+
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
 import java.awt.Font;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import com.toedter.calendar.JCalendar;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JPasswordField;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.JCheckBox;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.event.ActionListener;
 
-public class ManagementDokumenata
-{
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+import com.toedter.calendar.JCalendar;
+
+public class MuhaTest {
 
 	private JFrame frame;
+	
 	private JTextField textFieldPretragaKorisnika;
 	private JTable tableKorisnici;
 	private JPasswordField passwordFieldNovaSifra;
@@ -62,22 +64,17 @@ public class ManagementDokumenata
 	private JTable table_2;
 	private JTextField textField_2;
 	private JTable table_3;
-
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					ManagementDokumenata window = new ManagementDokumenata();
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MuhaTest window = new MuhaTest();
 					window.frame.setVisible(true);
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -87,8 +84,7 @@ public class ManagementDokumenata
 	/**
 	 * Create the application.
 	 */
-	public ManagementDokumenata()
-	{
+	public MuhaTest() {
 		initialize();
 	}
 
@@ -2055,4 +2051,5 @@ public class ManagementDokumenata
 		panel_8.add(separator_12, "28, 58");
 	
 	}
+
 }

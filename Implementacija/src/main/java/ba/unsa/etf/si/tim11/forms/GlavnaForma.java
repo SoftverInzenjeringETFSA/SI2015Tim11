@@ -19,6 +19,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JEditorPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GlavnaForma {
 
@@ -263,6 +265,12 @@ public class GlavnaForma {
 		menuBar.add(mnKorisnici);
 		
 		mntmDodavanjeKorisnika = new JMenuItem("Dodavanje korisnika");
+		mntmDodavanjeKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DodavanjeKorisnika dodavanjeKorisnikaForma = new DodavanjeKorisnika();
+				dodavanjeKorisnikaForma.PokreniFormu();
+			}
+		});
 		mnKorisnici.add(mntmDodavanjeKorisnika);
 		
 		mntmBrisanjeKorisnika = new JMenuItem("Brisanje korisnika");
