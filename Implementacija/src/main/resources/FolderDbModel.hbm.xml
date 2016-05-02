@@ -8,14 +8,11 @@
             <column name="FOLDERID" />
             <generator class="native" />
         </id>
-        <property name="grupaId" type="java.lang.Integer">
-            <column name="GRUPAID" />
-        </property>
         <property name="folderNaziv" type="java.lang.String">
             <column name="FOLDERNAZIV" />
         </property>
-        <property name="kreriraoKorisnikId" type="java.lang.Integer">
-            <column name="KRERIRAOKORISNIKID" />
+        <property name="kreiraoKorisnikId" type="java.lang.Integer">
+            <column name="KREIRAOKORISNIKID" />
         </property>
         <property name="roditeljFolderId" type="java.lang.Integer">
             <column name="RODITELJFOLDERID" />
@@ -23,5 +20,12 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
+        <many-to-one name="kreiraoKorisnik" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel" fetch="join">
+            <column name="kreiraoKorisnikID"/>
+        </many-to-one>
+        <many-to-one name="roditeljFolder" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.FolderDbModel" fetch="join">
+            <column name="roditeljFolderID"/>
+        </many-to-one>
+        
     </class>
 </hibernate-mapping>

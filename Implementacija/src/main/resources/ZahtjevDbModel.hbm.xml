@@ -29,5 +29,21 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
+        
+        <many-to-one name="kreiraoKorisnik" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel" fetch="join">
+            <column name="KREIRAOKORISNIKID"/>
+        </many-to-one>
+        <many-to-one name="upucenoKorisnik" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel" fetch="join">
+            <column name="UPUCENOKORISNIKID"/>
+        </many-to-one>
+        <many-to-one name="zahtjevTip" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.ZahtjevTipDbModel" fetch="join">
+            <column name="ZAHTJEVTIPID"/>
+        </many-to-one>
+        <many-to-one name="zahtjevStatus" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.ZahtjevStatusDbModel" fetch="join">
+            <column name="ZAHTJEVSTATUSID"/>
+        </many-to-one>
+        <many-to-one name="dokumentVerzija" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel" fetch="join">
+            <column name="DOKUMENTVERZIJAID"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

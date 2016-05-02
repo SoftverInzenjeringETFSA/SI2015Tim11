@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class DokumentDbModel implements java.io.Serializable{
@@ -14,6 +16,18 @@ public class DokumentDbModel implements java.io.Serializable{
 	private String dokumentNaziv;
 	private String ekstenzija;
 	private Boolean aktivan;
+
+	@ManyToOne
+	@JoinColumn(name="folderId")
+	private FolderDbModel folder;
+	
+	public FolderDbModel getFolder() {
+		return folder;
+	}
+
+	public void setFolder(FolderDbModel folder) {
+		this.folder = folder;
+	}
 
 	public long getDokumentId() {
 		return dokumentId;

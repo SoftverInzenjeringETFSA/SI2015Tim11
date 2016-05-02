@@ -8,12 +8,18 @@ import ba.unsa.etf.si.tim11.dbmodels.BaseDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.hibernate.DMSSessionFactory;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.CriteriaImpl;
+import org.hibernate.internal.CriteriaImpl.CriterionEntry;
 
 import static ba.unsa.etf.si.tim11.hibernate.DMSSessionFactory.getSession;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -51,7 +57,26 @@ public class DALRepository<T>{
         session.close();
         return lista;
     }
-
+    
+    /**
+     * Ucitaj sve objekte iz baze
+     * @param session Hibernate sesija
+     * @return Lista svih objekata
+     */
+    public List<T> ucitajSveSaKriterujumom(List<Criterion> kriteriji) {
+    	session = DMSSessionFactory.getSession();
+        Transaction t = this.session.beginTransaction();
+        Criteria kriterija = this.session.createCriteria(entityClass);
+        
+        for (Criterion criterion : kriteriji) {
+        	kriterija.add(criterion);
+		}
+        
+        List lista  = kriterija.list();
+        session.close();
+        return lista;
+    }
+    
     /**
      * Ucitaj objekat iz baze
      * @param id Id objekta

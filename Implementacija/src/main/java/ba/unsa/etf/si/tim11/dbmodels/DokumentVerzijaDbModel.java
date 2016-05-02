@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import java.sql.Blob;
 
@@ -17,6 +19,43 @@ public class DokumentVerzijaDbModel implements java.io.Serializable {
 	private Integer dokumentVerzijaStatusId;
 	private Blob sadrzaj;
 	private Boolean aktivan;
+
+	@ManyToOne
+	@JoinColumn(name="dokumentId")
+	private DokumentDbModel dokument;
+	
+	@ManyToOne
+	@JoinColumn(name="postavioKorisnikId")
+	private KorisnikTipDbModel postavioKorisnik;
+	
+	@ManyToOne
+	@JoinColumn(name="dokumentVerzijaStatusId")
+	private DokumentVerzijaStatusDbModel dokumentVerzijaStatus;
+	
+	
+	public DokumentDbModel getDokument() {
+		return dokument;
+	}
+
+	public void setDokument(DokumentDbModel dokument) {
+		this.dokument = dokument;
+	}
+
+	public KorisnikTipDbModel getPostavioKorisnik() {
+		return postavioKorisnik;
+	}
+
+	public void setPostavioKorisnik(KorisnikTipDbModel postavioKorisnik) {
+		this.postavioKorisnik = postavioKorisnik;
+	}
+
+	public DokumentVerzijaStatusDbModel getDokumentVerzijaStatus() {
+		return dokumentVerzijaStatus;
+	}
+
+	public void setDokumentVerzijaStatus(DokumentVerzijaStatusDbModel dokumentVerzijaStatus) {
+		this.dokumentVerzijaStatus = dokumentVerzijaStatus;
+	}
 
 	public long getDokumentVerzijaId() {
 		return dokumentVerzijaId;

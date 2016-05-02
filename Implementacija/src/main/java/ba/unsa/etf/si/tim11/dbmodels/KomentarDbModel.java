@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import java.util.Date;
 
@@ -17,6 +19,31 @@ public class KomentarDbModel implements java.io.Serializable{
 	private Date dokumentVrijemeKreiranja;
 	private Boolean aktivan;
 
+	@ManyToOne
+	@JoinColumn(name="korisnikId")
+	private KorisnikTipDbModel korisnik;
+	
+	public KorisnikTipDbModel getKorisnik() {
+		return korisnik;
+	}
+
+	public void setKorisnik(KorisnikTipDbModel korisnik) {
+		this.korisnik = korisnik;
+	}
+
+	public DokumentVerzijaDbModel getDokumentVerzija() {
+		return dokumentVerzija;
+	}
+
+	public void setDokumentVerzija(DokumentVerzijaDbModel dokumentVerzija) {
+		this.dokumentVerzija = dokumentVerzija;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="dokumentVerzijaId")
+	private DokumentVerzijaDbModel dokumentVerzija;
+	
+	
 	public long getKomentarId() {
 		return komentarId;
 	}

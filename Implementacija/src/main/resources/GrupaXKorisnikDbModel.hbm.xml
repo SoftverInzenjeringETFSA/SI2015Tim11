@@ -23,5 +23,12 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
+        
+        <many-to-one name="grupa" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel" fetch="join">
+            <column name="GRUPAID"/>
+        </many-to-one>
+        <many-to-one name="korisnik" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel" fetch="join">
+            <column name="KORISNIKID"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

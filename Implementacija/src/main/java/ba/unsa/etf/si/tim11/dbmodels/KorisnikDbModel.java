@@ -4,7 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.Date;
 
@@ -25,6 +30,30 @@ public class KorisnikDbModel implements java.io.Serializable {
 	private Integer korisnikTipId;
 	private Integer korisnikPozicijaId;
 	private Boolean aktivan;
+	
+	@ManyToOne
+	@JoinColumn(name="korisnikTipId")
+	private KorisnikTipDbModel korisnikTip;
+	
+	@ManyToOne
+	@JoinColumn(name="korisnikPozicijaId")
+	private KorisnikPozicijaDbModel korisnikPozicija;
+	
+	public KorisnikPozicijaDbModel getKorisnikPozicija() {
+		return korisnikPozicija;
+	}
+
+	public void setKorisnikPozicija(KorisnikPozicijaDbModel korisnikPozicija) {
+		this.korisnikPozicija = korisnikPozicija;
+	}
+
+	public KorisnikTipDbModel getKorisnikTip() {
+		return korisnikTip;
+	}
+
+	public void setKorisnikTip(KorisnikTipDbModel korisnikTip) {
+		this.korisnikTip = korisnikTip;
+	}
 
 	public long getKorisnikID() {
 		return korisnikID;

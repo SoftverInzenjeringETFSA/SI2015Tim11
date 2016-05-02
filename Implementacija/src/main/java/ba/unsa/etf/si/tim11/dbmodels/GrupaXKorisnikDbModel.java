@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import java.util.Date;
 
@@ -17,6 +19,30 @@ public class GrupaXKorisnikDbModel implements java.io.Serializable {
 	private Date datumPristupa;
 	private Date datumZadnjeIzmjene;
 	private Boolean aktivan;
+
+	@ManyToOne
+	@JoinColumn(name="grupaId")
+	private GrupaDbModel grupa;
+	
+	@ManyToOne
+	@JoinColumn(name="korisnikId")
+	private KorisnikTipDbModel korisnik;
+	
+	public GrupaDbModel getGrupa() {
+		return grupa;
+	}
+
+	public void setGrupa(GrupaDbModel grupa) {
+		this.grupa = grupa;
+	}
+	
+	public KorisnikTipDbModel getKorisnik() {
+		return korisnik;
+	}
+
+	public void setKorisnik(KorisnikTipDbModel korisnik) {
+		this.korisnik = korisnik;
+	}
 
 	public long getGrupaXKorisnikId() {
 		return grupaXKorisnikId;

@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class FolderXGrupaDbModel implements java.io.Serializable {
@@ -15,6 +17,31 @@ public class FolderXGrupaDbModel implements java.io.Serializable {
 	private Boolean pravoSkidanja;
 	private Boolean pravoDodavanja;
 	private Boolean aktivan;
+
+	@ManyToOne
+	@JoinColumn(name="grupaId")
+	private GrupaDbModel grupa;
+	
+	@ManyToOne
+	@JoinColumn(name="folderId")
+	private FolderDbModel folder;
+	
+	
+	public GrupaDbModel getGrupa() {
+		return grupa;
+	}
+
+	public void setGrupa(GrupaDbModel grupa) {
+		this.grupa = grupa;
+	}
+
+	public FolderDbModel getFolder() {
+		return folder;
+	}
+
+	public void setFolder(FolderDbModel folder) {
+		this.folder = folder;
+	}
 
 	public long getFolderXGrupaId() {
 		return folderXGrupaId;

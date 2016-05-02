@@ -20,5 +20,8 @@
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />
         </property>
+         <many-to-one name="odgovorniKorisnik" insert="false" update="false" class="ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel" fetch="join">
+            <column name="ODGOVORNIKORISNIKID"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

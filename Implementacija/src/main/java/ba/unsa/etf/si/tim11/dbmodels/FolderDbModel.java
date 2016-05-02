@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class FolderDbModel implements java.io.Serializable {
@@ -11,10 +13,34 @@ public class FolderDbModel implements java.io.Serializable {
     @GeneratedValue
 	private long folderId;
 	private String folderNaziv;
-	private Integer grupaId;
-	private Integer kreriraoKorisnikId;
+	private Integer kreiraoKorisnikId;
 	private Integer roditeljFolderId;
 	private Boolean aktivan;
+
+	@ManyToOne
+	@JoinColumn(name="korisnikID")
+	private KorisnikDbModel kreiraoKorisnik;
+	
+	@ManyToOne
+	@JoinColumn(name="folderId")
+	private FolderDbModel roditeljFolder;
+	
+	public KorisnikDbModel getKreiraoKorisnik() {
+		return kreiraoKorisnik;
+	}
+
+	public void setKreiraoKorisnik(KorisnikDbModel kreiraoKorisnik) {
+		this.kreiraoKorisnik = kreiraoKorisnik;
+	}
+
+
+	public FolderDbModel getRoditeljFolder() {
+		return roditeljFolder;
+	}
+
+	public void setRoditeljFolder(FolderDbModel roditeljFolder) {
+		this.roditeljFolder = roditeljFolder;
+	}
 
 	public long getFolderId() {
 		return folderId;
@@ -32,20 +58,13 @@ public class FolderDbModel implements java.io.Serializable {
 		this.folderNaziv = folderNaziv;
 	}
 
-	public Integer getGrupaId() {
-		return grupaId;
+
+	public Integer getKreiraoKorisnikId() {
+		return kreiraoKorisnikId;
 	}
 
-	public void setGrupaId(Integer grupaId) {
-		this.grupaId = grupaId;
-	}
-
-	public Integer getKreriraoKorisnikId() {
-		return kreriraoKorisnikId;
-	}
-
-	public void setKreriraoKorisnikId(Integer kreriraoKorisnikId) {
-		this.kreriraoKorisnikId = kreriraoKorisnikId;
+	public void setKreiraoKorisnikId(Integer kreiraoKorisnikId) {
+		this.kreiraoKorisnikId = kreiraoKorisnikId;
 	}
 
 	public Integer getRoditeljFolderId() {

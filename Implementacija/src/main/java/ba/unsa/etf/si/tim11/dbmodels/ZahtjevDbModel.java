@@ -3,6 +3,8 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import java.util.Date;
 
@@ -19,6 +21,67 @@ public class ZahtjevDbModel implements java.io.Serializable {
 	private Integer zahtjevStatusId;
 	private Integer dokumentVerzijaId;
 	private Boolean aktivan;
+
+	@ManyToOne
+	@JoinColumn(name="kreiraoKorisnikId")
+	private KorisnikDbModel kreiraoKorisnik;
+	
+	@ManyToOne
+	@JoinColumn(name="upucenoKorisnikId")
+	private KorisnikDbModel upucenoKorisnik;
+	
+	@ManyToOne
+	@JoinColumn(name="zahtjevTipId")
+	private ZahtjevTipDbModel zahtjevTip;
+	
+	@ManyToOne
+	@JoinColumn(name="zahtjevStatusId")
+	private ZahtjevStatusDbModel zahtjevStatus;
+	
+	@ManyToOne
+	@JoinColumn(name="dokumentVerzijaId")
+	private DokumentVerzijaDbModel dokumentVerzija;
+	
+	
+	public KorisnikDbModel getKreiraoKorisnik() {
+		return kreiraoKorisnik;
+	}
+
+	public void setKreiraoKorisnik(KorisnikDbModel kreiraoKorisnik) {
+		this.kreiraoKorisnik = kreiraoKorisnik;
+	}
+
+	public KorisnikDbModel getUpucenoKorisnik() {
+		return upucenoKorisnik;
+	}
+
+	public void setUpucenoKorisnik(KorisnikDbModel upucenoKorisnik) {
+		this.upucenoKorisnik = upucenoKorisnik;
+	}
+
+	public ZahtjevTipDbModel getZahtjevTip() {
+		return zahtjevTip;
+	}
+
+	public void setZahtjevTip(ZahtjevTipDbModel zahtjevTip) {
+		this.zahtjevTip = zahtjevTip;
+	}
+
+	public ZahtjevStatusDbModel getZahtjevStatus() {
+		return zahtjevStatus;
+	}
+
+	public void setZahtjevStatus(ZahtjevStatusDbModel zahtjevStatus) {
+		this.zahtjevStatus = zahtjevStatus;
+	}
+
+	public DokumentVerzijaDbModel getDokumentVerzija() {
+		return dokumentVerzija;
+	}
+
+	public void setDokumentVerzija(DokumentVerzijaDbModel dokumentVerzija) {
+		this.dokumentVerzija = dokumentVerzija;
+	}
 
 	public long getZahtjevId() {
 		return zahtjevId;
