@@ -52,7 +52,6 @@ public class DALRepository<T>{
      */
     public List<T> ucitajSve() {
     	session = DMSSessionFactory.getSession();
-        Transaction t = this.session.beginTransaction();
         List lista = this.session.createCriteria(entityClass).list();
         session.close();
         return lista;
@@ -65,7 +64,6 @@ public class DALRepository<T>{
      */
     public List<T> ucitajSveSaKriterujumom(List<Criterion> kriteriji) {
     	session = DMSSessionFactory.getSession();
-        Transaction t = this.session.beginTransaction();
         Criteria kriterija = this.session.createCriteria(entityClass);
         
         for (Criterion criterion : kriteriji) {
@@ -85,7 +83,6 @@ public class DALRepository<T>{
      */
     public T ucitaj(Long id) {
     	session = DMSSessionFactory.getSession();
-        Transaction t = this.session.beginTransaction();
         T resultObject = (T) this.session.get(entityClass, id);
         session.close();
         return resultObject;
