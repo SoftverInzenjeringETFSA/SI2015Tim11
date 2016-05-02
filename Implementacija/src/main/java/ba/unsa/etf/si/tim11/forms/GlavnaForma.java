@@ -273,7 +273,7 @@ public class GlavnaForma {
 		});
 		mnKorisnici.add(mntmDodavanjeKorisnika);
 		
-		mntmBrisanjeKorisnika = new JMenuItem("Brisanje korisnika");
+		mntmBrisanjeKorisnika = new JMenuItem("Izmjena korisnika");
 		mnKorisnici.add(mntmBrisanjeKorisnika);
 		
 		mnZahtjevi = new JMenu("Zahtjevi");
