@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS `dms`.`Korisnik` (
   `DatumRodjenja` DATETIME NULL,
   `Username` NVARCHAR(200) NULL,
   `Password` NVARCHAR(300) NULL,
-  `KorisnikTipID` INT NOT NULL,
-  `KorisnikPozicijaID` INT NOT NULL,
+  `KorisnikTipID` INT NULL,
+  `KorisnikPozicijaID` INT NULL,
   `Aktivan` BIT NOT NULL,
   PRIMARY KEY (`KorisnikID`),
   INDEX `fk_Korisnik_KorisnikTip_idx` (`KorisnikTipID` ASC),
@@ -75,7 +75,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `dms`.`Grupa` (
   `GrupaID` INT NOT NULL AUTO_INCREMENT,
   `GrupaNaziv` NVARCHAR(300) NULL,
-  `OdgovorniKorisnikID` INT NOT NULL,
+  `OdgovorniKorisnikID` INT NULL,
   `DatumKreiranja` DATETIME NULL,
   `Aktivan` BIT NOT NULL,
   PRIMARY KEY (`GrupaID`),
@@ -93,8 +93,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dms`.`GrupaXKorisnik` (
   `GrupaXKorisnikID` INT NOT NULL AUTO_INCREMENT,
-  `GrupaID` INT NOT NULL,
-  `KorisnikID` INT NOT NULL,
+  `GrupaID` INT NULL,
+  `KorisnikID` INT NULL,
   `DatumZadnjeIzmjene` DATETIME NULL,
   `Aktivan` BIT NOT NULL,
   PRIMARY KEY (`GrupaXKorisnikID`),
@@ -119,8 +119,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `dms`.`Folder` (
   `FolderID` INT NOT NULL AUTO_INCREMENT,
   `FolderNaziv` NVARCHAR(100) NULL,
-  `KreiraoKorisnikID` INT NOT NULL,
-  `RoditeljFolderID` INT NOT NULL,
+  `KreiraoKorisnikID` INT NULL,
+  `RoditeljFolderID` INT NULL,
   `Aktivan` BIT NULL,
   PRIMARY KEY (`FolderID`),
   INDEX `fk_Folder_Korisnik1_idx` (`KreiraoKorisnikID` ASC),
@@ -143,7 +143,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dms`.`Dokument` (
   `DokumentID` INT NOT NULL AUTO_INCREMENT,
-  `FolderID` INT NOT NULL,
+  `FolderID` INT NULL,
   `Dokument` NVARCHAR(200) NULL,
   `Ekstenzija` NVARCHAR(15) NULL,
   `Aktivan` BIT NOT NULL,
@@ -173,9 +173,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dms`.`DokumentVerzija` (
   `DokumentVerzijaID` INT NOT NULL AUTO_INCREMENT,
-  `DokumentID` INT NOT NULL,
-  `PostavioKorisnikID` INT NOT NULL,
-  `DokumentVerzijaStatusID` INT NOT NULL,
+  `DokumentID` INT NULL,
+  `PostavioKorisnikID` INT NULL,
+  `DokumentVerzijaStatusID` INT NULL,
   `Sadrzaj` BLOB NULL,
   `Aktivan` BIT NOT NULL,
   PRIMARY KEY (`DokumentVerzijaID`),
@@ -205,8 +205,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dms`.`Komentar` (
   `KomentarID` INT NOT NULL AUTO_INCREMENT,
-  `KorisnikID` INT NOT NULL,
-  `DokumentVerzijaID` INT NOT NULL,
+  `KorisnikID` INT NULL,
+  `DokumentVerzijaID` INT NULL,
   `Komentar` NVARCHAR(400) NULL,
   `DatumVrijemeKomentara` DATETIME NULL,
   `Aktivan` VARCHAR(45) NOT NULL,
@@ -254,11 +254,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `dms`.`Zahtjev` (
   `ZahtjevID` INT NOT NULL AUTO_INCREMENT,
   `DatumVrijemeKreiranja` DATETIME NULL,
-  `KreiraoKorisnikID` INT NOT NULL,
-  `UpucenoKorisnikID` INT NOT NULL,
-  `ZahtjevTipID` INT NOT NULL,
-  `ZahtjevStatusID` INT NOT NULL,
-  `DokumentVerzijaID` INT NOT NULL,
+  `KreiraoKorisnikID` INT NULL,
+  `UpucenoKorisnikID` INT NULL,
+  `ZahtjevTipID` INT NULL,
+  `ZahtjevStatusID` INT NULL,
+  `DokumentVerzijaID` INT NULL,
   `Aktivan` BIT NOT NULL,
   PRIMARY KEY (`ZahtjevID`),
   INDEX `fk_Zahtjev_Korisnik1_idx` (`KreiraoKorisnikID` ASC),
@@ -299,8 +299,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dms`.`FolderXGrupa` (
   `FolderXGrupaID` INT NOT NULL,
-  `GrupaID` INT NOT NULL,
-  `FolderID` INT NOT NULL,
+  `GrupaID` INT NULL,
+  `FolderID` INT NULL,
   `PravoSkidanja` BIT NULL,
   `PravoDodavanja` BIT NULL,
   `Aktivan` BIT NULL,
