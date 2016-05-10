@@ -3,6 +3,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.metadata.ClassMetadata;
+
+import ba.unsa.etf.si.tim11.bll.UnitOfWork;
 import ba.unsa.etf.si.tim11.dal.*;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
@@ -24,7 +26,7 @@ public class Main {
 			test();
 			testJoin();
 			testFolder();
-			
+			testKorisnikIDPoUsername();
 		} catch (Exception ex) {
 			System.out.println("GRESKA: " + ex);
 		} finally {
@@ -57,6 +59,20 @@ public class Main {
 		}
 		
 	}
+	
+	private static void testKorisnikIDPoUsername(){
+		UnitOfWork uow = new UnitOfWork();
+		System.out.println("KOrisnikID po username");
+		
+		Integer korisnikId = uow.getKorisnikRepository().dajIdKorisnikaPoUsername("muhamed"); 
+		if (korisnikId == null) {
+			System.out.println("Nema korisnika sa usernemeom: "+"muhamed");
+		} else {
+			System.out.println("KorisnikID: "+korisnikId.toString());
+		}
+		
+	}
+	
 	private static void test() {
 		System.out.println("Unesite id studenta");
 		

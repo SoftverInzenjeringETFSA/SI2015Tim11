@@ -24,7 +24,7 @@ public class DodavanjeKorisnika {
 	private JTextField txtDodavanjePrezime;
 	private JTextField txtDodavanjeAdresa;
 
-	KorisnikRepository korisnikRepository = new KorisnikRepository(null);
+	KorisnikRepository korisnikRepository = new KorisnikRepository();
 	
 	/**
 	 * Launch the application.
@@ -117,7 +117,6 @@ public class DodavanjeKorisnika {
 		JComboBox cmbDodavanjePozicija = new JComboBox();
 		cmbDodavanjePozicija.setFont(new Font("Dialog", Font.PLAIN, 11));
 		cmbDodavanjePozicija.setBounds(133, 287, 267, 21);
-		
 		
 		for (KorisnikTipDbModel korisnikTip : korisnikRepository.dajSveKorisnikTipove() ) {
 			cmbDodavanjePozicija.addItem(korisnikTip);
