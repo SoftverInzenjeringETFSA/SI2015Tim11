@@ -45,7 +45,9 @@
 	<groupId>com.jgoodies</groupId>
 	<artifactId>jgoodies-forms</artifactId>
 	<version>1.8.0</version>
-</dependency>
+	</dependency>
+
+
 	
   </dependencies>
 </project>

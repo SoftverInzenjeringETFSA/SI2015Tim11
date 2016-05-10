@@ -93,7 +93,7 @@ public class DALRepository<T>{
      * @param object Objekat koji se spasava
      * @param session Hibernate sesija
      */
-    public void sacuvaj(T object, Session session) {
+    public void sacuvaj(T object) {
     	session = DMSSessionFactory.getSession();
         Transaction t = session.beginTransaction();
         session.save(object);
@@ -106,7 +106,7 @@ public class DALRepository<T>{
      * @param object Objekat koji se spasava
      * @param session Hibernate sesija
      */
-    public void sacuvajIliAzuriraj(T object, Session session) {
+    public void sacuvajIliAzuriraj(T object) {
     	session = DMSSessionFactory.getSession();
         Transaction t = session.beginTransaction();
         session.saveOrUpdate(object);
