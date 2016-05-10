@@ -91,7 +91,9 @@ public class GlavnaForma {
 		frmDobrodoaolaUDms = new JFrame();
 		frmDobrodoaolaUDms.setTitle("Dobrodošao/la u DMS");
 		frmDobrodoaolaUDms.setBounds(100, 100, 858, 510);
-		frmDobrodoaolaUDms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		frmDobrodoaolaUDms.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //samo ce se zatvorit prozor, nece sve
+		
 		frmDobrodoaolaUDms.getContentPane().setLayout(null);
 		
 		JTree treeFolderView = new JTree();
@@ -268,7 +270,7 @@ public class GlavnaForma {
 		mntmDodavanjeKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DodavanjeKorisnika dodavanjeKorisnikaForma = new DodavanjeKorisnika();
-				dodavanjeKorisnikaForma.PokreniFormu();
+			//	dodavanjeKorisnikaForma.PokreniFormu();
 			}
 		});
 		mnKorisnici.add(mntmDodavanjeKorisnika);

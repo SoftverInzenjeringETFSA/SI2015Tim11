@@ -84,7 +84,7 @@ public class DALRepository<T>{
     public T ucitaj(Long id) {
     	session = DMSSessionFactory.getSession();
         T resultObject = (T) this.session.get(entityClass, id);
-        session.close();
+        this.session.close();
         return resultObject;
     }
 
@@ -93,10 +93,10 @@ public class DALRepository<T>{
      * @param object Objekat koji se spasava
      * @param session Hibernate sesija
      */
-    public void sacuvaj(T object, Session session) {
-    	session = DMSSessionFactory.getSession();
-        Transaction t = session.beginTransaction();
-        session.save(object);
+    public void sacuvaj(T object) {
+    	this.session = DMSSessionFactory.getSession();
+        Transaction t = this.session.beginTransaction();
+        this.session.save(object);
         t.commit();
         session.close();
     }
@@ -106,12 +106,12 @@ public class DALRepository<T>{
      * @param object Objekat koji se spasava
      * @param session Hibernate sesija
      */
-    public void sacuvajIliAzuriraj(T object, Session session) {
-    	session = DMSSessionFactory.getSession();
-        Transaction t = session.beginTransaction();
-        session.saveOrUpdate(object);
+    public void sacuvajIliAzuriraj(T object) {
+    	this.session = DMSSessionFactory.getSession();
+        Transaction t = this.session.beginTransaction();
+        this.session.saveOrUpdate(object);
         t.commit();
-        session.close();
+        this.session.close();
     }
 
 
@@ -120,26 +120,26 @@ public class DALRepository<T>{
      * @param object Objekat koji se brise
      * @param session Hibernate sesija
      */
-    public void obrisi(T object, Session session) {
-    	session = DMSSessionFactory.getSession();
-        Transaction t = session.beginTransaction();
-        session.delete(object);
+    public void obrisi(T object) {
+    	this.session = DMSSessionFactory.getSession();
+        Transaction t = this.session.beginTransaction();
+        this.session.delete(object);
         t.commit();
-        session.close();
+        this.session.close();
     }
 
     /**
      * Obrisi sve objekte
      * @param session Hibernate sesija
      */
-    public void obrisiSve(Session session) {
-    	session = DMSSessionFactory.getSession();
-        Transaction t = session.beginTransaction();
+    public void obrisiSve() {
+    	this.session = DMSSessionFactory.getSession();
+        Transaction t = this.session.beginTransaction();
         String queryString = DELETE + SPACE + FROM + PARAMETER;
-        Query query = session.createQuery(queryString);
+        Query query = this.session.createQuery(queryString);
         query.setString(0, entityClass.getCanonicalName());
         query.executeUpdate();
         t.commit();
-        session.close();
+        this.session.close();
     }
 }

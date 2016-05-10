@@ -73,14 +73,18 @@ public class LoginForma {
 		JButton btnPrijaviSe = new JButton("Prijavi se");
 		btnPrijaviSe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 				if(KorisnikRepository.korisnikAutenticiran(txtUsername.getText(), passwordField.getText())){
 					JOptionPane.showMessageDialog(null, "Uspjesno", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
 					GlavnaForma glavnaForma = new GlavnaForma();
 					glavnaForma.PokreniFormu();
 					
+					
 				}else{
 					JOptionPane.showMessageDialog(null, "GRESKA", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
 				}
+				
+				
 			}
 		});
 		btnPrijaviSe.setBounds(107, 87, 98, 23);

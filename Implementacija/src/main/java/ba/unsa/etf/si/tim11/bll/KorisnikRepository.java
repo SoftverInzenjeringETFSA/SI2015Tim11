@@ -1,6 +1,7 @@
 package ba.unsa.etf.si.tim11.bll;
 
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.KorisnikViewModel;
 import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 
@@ -48,9 +49,9 @@ public class KorisnikRepository {
 	 * 
 	 * @param korisnik
 	 */
-	public void dodajKorisnika(KorisnikViewModel korisnik) {
-		// TODO - implement KorisnikRepository.dodajKorisnika
-		throw new UnsupportedOperationException();
+	public void dodajKorisnika(KorisnikDbModel korisnik) {
+		korisnik.setAktivan(true);
+		DbDMSContext.getInstance().getKorisnici().sacuvaj(korisnik);
 	}
 
 	/**
@@ -77,7 +78,10 @@ public class KorisnikRepository {
 	 */
 	public KorisnikRepository(Sesija session) {
 		// TODO - implement KorisnikRepository.KorisnikRepository
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
 	}
-
+	
+	public List<KorisnikTipDbModel> dajSveKorisnikTipove() {
+		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
+	}
 }

@@ -16,7 +16,7 @@ public class UnitOfWork {
 	 */
 	public UnitOfWork(Sesija sesija) {
 		// TODO - implement UnitOfWork.UnitOfWork
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
 	}
 
 }

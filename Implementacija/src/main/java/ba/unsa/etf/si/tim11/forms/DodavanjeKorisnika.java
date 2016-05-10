@@ -9,6 +9,11 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import com.toedter.calendar.JCalendar;
+
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.bll.UnitOfWork;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
@@ -19,10 +24,12 @@ public class DodavanjeKorisnika {
 	private JTextField txtDodavanjePrezime;
 	private JTextField txtDodavanjeAdresa;
 
+	KorisnikRepository korisnikRepository = new KorisnikRepository(null);
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void PokreniFormu() {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -105,9 +112,22 @@ public class DodavanjeKorisnika {
 		label_4.setBounds(10, 287, 117, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_4);
 		
+		/*--------------------------------------------------------------*/
+		//primjer koristenja comboboxa
 		JComboBox cmbDodavanjePozicija = new JComboBox();
 		cmbDodavanjePozicija.setFont(new Font("Dialog", Font.PLAIN, 11));
 		cmbDodavanjePozicija.setBounds(133, 287, 267, 21);
+		
+		
+		for (KorisnikTipDbModel korisnikTip : korisnikRepository.dajSveKorisnikTipove() ) {
+			cmbDodavanjePozicija.addItem(korisnikTip);
+		}
+		
+		//kad ti treba selektovano nesto
+		//sto ti treba da upises u bazu
+		long tipId = ((KorisnikTipDbModel)cmbDodavanjePozicija.getSelectedItem()).getKorisnikTipId();
+		/*--------------------------------------------------------------*/
+		
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(cmbDodavanjePozicija);
 		
 		JButton btnDodavanjeSpremi = new JButton("Spremi");
