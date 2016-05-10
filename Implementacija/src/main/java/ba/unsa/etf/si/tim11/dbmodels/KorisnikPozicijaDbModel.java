@@ -38,8 +38,8 @@ public class KorisnikPozicijaDbModel implements java.io.Serializable {
 	}
 	
 	@Override
-	public String toString()
-	{
-		return korisnikPozicijaNaziv;
-	}
+    public String toString()
+    {
+        return korisnikPozicijaNaziv;
+    }
 }

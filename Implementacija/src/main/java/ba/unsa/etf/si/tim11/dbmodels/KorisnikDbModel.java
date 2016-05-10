@@ -138,7 +138,9 @@ public class KorisnikDbModel implements java.io.Serializable {
 		this.aktivan = aktivan;
 	}
 	
-	
-	
-	
+	@Override
+    public String toString()
+    {
+        return ime+" "+prezime;
+    }
 }

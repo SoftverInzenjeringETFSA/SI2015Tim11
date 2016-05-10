@@ -68,4 +68,9 @@ public class DokumentDbModel implements java.io.Serializable{
 	public void setAktivan(Boolean aktivan) {
 		this.aktivan = aktivan;
 	}
+	@Override
+    public String toString()
+    {
+        return dokumentNaziv;
+    }
 }

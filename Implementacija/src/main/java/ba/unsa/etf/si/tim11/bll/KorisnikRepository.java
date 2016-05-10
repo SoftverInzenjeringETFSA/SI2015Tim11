@@ -1,12 +1,17 @@
 package ba.unsa.etf.si.tim11.bll;
 
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.KorisnikViewModel;
 import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 public class KorisnikRepository {
 
@@ -36,8 +41,12 @@ public class KorisnikRepository {
 	}
 	
 	public static Boolean korisnikAutenticiran(String username, String password){
-		if(korisnikPostoji(username, password))
+		if(korisnikPostoji(username, password)){
+			Sesija.setUsername(username);
+			Sesija.setCertifikatAktivan(true);
+			
 			return true;
+		}
 		return false;
 	}
 	
@@ -51,7 +60,7 @@ public class KorisnikRepository {
 	 * @param korisnik
 	 */
 	public void dodajKorisnika(KorisnikDbModel korisnik) {
-		// TODO - implement KorisnikRepository.dodajKorisnika
+		korisnik.setAktivan(true);
 			KorisnikDbModel k=new KorisnikDbModel();
 			k=korisnik;
 			DbDMSContext.getInstance().getKorisnici().sacuvaj(k);
@@ -79,7 +88,7 @@ public class KorisnikRepository {
 	 * 
 	 * @param session
 	 */
-	public KorisnikRepository(Sesija session) {
+	public KorisnikRepository() {
 		// TODO - implement KorisnikRepository.KorisnikRepository
 		//throw new UnsupportedOperationException();
 	}
@@ -92,5 +101,20 @@ public class KorisnikRepository {
 	{
 		return DbDMSContext.getInstance().getKorisnikPozicije().ucitajSve();
 	}
+	public Integer dajIdKorisnikaPoUsername(String username){
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		java.util.List<KorisnikDbModel> lista = DbDMSContext.getInstance()
+						.getKorisnici()
+						.ucitajSveSaKriterujumom(kriterijum);
 
+		if(lista.size() != 0){
+			for (KorisnikDbModel korisnikDbModel : lista) {
+				return (int)(long)korisnikDbModel.getKorisnikID();
+			}
+		}
+		return null;
+	}
+	public List<KorisnikTipDbModel> dajSveKorisnikTipove() {
+		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
+	}
 }

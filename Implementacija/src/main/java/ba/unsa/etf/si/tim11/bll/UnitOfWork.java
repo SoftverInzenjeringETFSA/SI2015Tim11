@@ -1,22 +1,48 @@
 package ba.unsa.etf.si.tim11.bll;
 
 public class UnitOfWork {
-
-	public KorisnikRepository korisnikRepository;
-	public FolderRepository folderRepository;
-	public DokumentRepository dokumentRepository;
-	public ZahtjevRepository zahtjevRepository;
-	public KomentarRepository komentarRepository;
-	public GrupaRepository grupaRepository;
-	private Sesija sesija;
+	private KorisnikRepository korisnikRepository;
+	private FolderRepository folderRepository;
+	private DokumentRepository dokumentRepository;
+	private ZahtjevRepository zahtjevRepository;
+	private KomentarRepository komentarRepository;
+	private GrupaRepository grupaRepository;
 
 	/**
 	 * 
 	 * @param sesija
 	 */
-	public UnitOfWork(Sesija sesija) {
-		// TODO - implement UnitOfWork.UnitOfWork
-		throw new UnsupportedOperationException();
+	public UnitOfWork() {
+		korisnikRepository = new KorisnikRepository();
+		folderRepository = new FolderRepository();
+		dokumentRepository = new DokumentRepository();
+		zahtjevRepository = new ZahtjevRepository();
+		komentarRepository = new KomentarRepository();
+		grupaRepository = new GrupaRepository();
+	}
+
+	public KorisnikRepository getKorisnikRepository() {
+		return korisnikRepository;
+	}
+
+	public FolderRepository getFolderRepository() {
+		return folderRepository;
+	}
+
+	public DokumentRepository getDokumentRepository() {
+		return dokumentRepository;
+	}
+
+	public ZahtjevRepository getZahtjevRepository() {
+		return zahtjevRepository;
+	}
+
+	public KomentarRepository getKomentarRepository() {
+		return komentarRepository;
+	}
+
+	public GrupaRepository getGrupaRepository() {
+		return grupaRepository;
 	}
 
 }

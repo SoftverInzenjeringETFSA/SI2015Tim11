@@ -12,6 +12,11 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import com.toedter.calendar.JCalendar;
+
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.bll.UnitOfWork;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
@@ -42,10 +47,12 @@ public class DodavanjeKorisnika {
 	private JPasswordField passwordFieldDodavanjeKorisnikaPass;
 	private JPasswordField passwordFieldDodavanjePonoviSifru;
 
+	KorisnikRepository korisnikRepository = new KorisnikRepository();
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args) {
 	{
 		EventQueue.invokeLater(new Runnable() 
 		{
