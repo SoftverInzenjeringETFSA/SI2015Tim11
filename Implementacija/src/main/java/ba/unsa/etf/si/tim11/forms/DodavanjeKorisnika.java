@@ -51,26 +51,7 @@ public class DodavanjeKorisnika {
 	
 	/**
 	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-	{
-		EventQueue.invokeLater(new Runnable() 
-		{
-			public void run() 
-			{
-				try 
-				{
-					DodavanjeKorisnika window = new DodavanjeKorisnika();
-					window.frmDodavanjeizmjenaKorisnika.setVisible(true);
-					
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
+	 */	
 	public void pokreniFormu()
 	{
 		EventQueue.invokeLater(new Runnable() 
@@ -95,7 +76,7 @@ public class DodavanjeKorisnika {
 	public DodavanjeKorisnika() {
 		initialize();
 	}
-	KorisnikRepository kr=new KorisnikRepository(null);
+	KorisnikRepository kr=new KorisnikRepository();
 	private Boolean uredu[]={false,false,false,false,false,false};//Niz za provjeru validnosti svakog polja
 	
 	private Boolean provjeriPolja()
@@ -464,8 +445,8 @@ public class DodavanjeKorisnika {
 					Integer korisnikPozicijaId=(int)((KorisnikPozicijaDbModel)cmbDodavanjePozicija.getSelectedItem()).getKorisnikPozicijaId();
 					
 					String username=textFieldDodavanjeKorisnikaUsername.getText();
-					String sifra=passwordFieldDodavanjeKorisnikaPass.getPassword().toString();
-					String ponovnaSifra=passwordFieldDodavanjePonoviSifru.getPassword().toString();
+					String sifra=passwordFieldDodavanjeKorisnikaPass.getText();
+					String ponovnaSifra=passwordFieldDodavanjePonoviSifru.getText().toString();
 					String porukaUspjeh="Uspjesno ste spremili korisnika";
 					String porukaNe="Greska prilikom spremanja korisnika";
 					KorisnikDbModel k=new KorisnikDbModel();
