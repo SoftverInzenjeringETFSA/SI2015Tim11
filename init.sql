@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2016 at 09:43 PM
+-- Generation Time: May 11, 2016 at 10:48 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `dms`
+-- Database: `dms_old`
 --
 CREATE DATABASE IF NOT EXISTS `dms` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `dms`;
@@ -101,11 +101,6 @@ CREATE TABLE IF NOT EXISTS `folder` (
 --
 -- Dumping data for table `folder`
 --
-
-INSERT INTO `folder` (`FolderID`, `FolderNaziv`, `KreiraoKorisnikID`, `RoditeljFolderID`, `Aktivan`) VALUES
-(2, 'Menadžment', 1, NULL, b'1'),
-(4, 'Fakture', 1, 2, b'1');
-
 -- --------------------------------------------------------
 
 --
@@ -127,11 +122,6 @@ CREATE TABLE IF NOT EXISTS `folderxgrupa` (
 --
 -- Dumping data for table `folderxgrupa`
 --
-
-INSERT INTO `folderxgrupa` (`FolderXGrupaID`, `GrupaID`, `FolderID`, `PravoSkidanja`, `PravoDodavanja`, `Aktivan`) VALUES
-(1, 1, 2, b'1', b'1', b'1'),
-(3, 1, 4, b'1', b'1', b'1');
-
 -- --------------------------------------------------------
 
 --
@@ -151,10 +141,6 @@ CREATE TABLE IF NOT EXISTS `grupa` (
 --
 -- Dumping data for table `grupa`
 --
-
-INSERT INTO `grupa` (`GrupaID`, `GrupaNaziv`, `OdgovorniKorisnikID`, `DatumKreiranja`, `Aktivan`) VALUES
-(1, 'Menadzment', 3, NULL, b'1'),
-(2, 'Razvoj', 4, NULL, b'1');
 
 -- --------------------------------------------------------
 
@@ -177,10 +163,6 @@ CREATE TABLE IF NOT EXISTS `grupaxkorisnik` (
 --
 -- Dumping data for table `grupaxkorisnik`
 --
-
-INSERT INTO `grupaxkorisnik` (`GrupaXKorisnikID`, `GrupaID`, `KorisnikID`, `DatumPristupa`, `DatumZadnjeIzmjene`, `Aktivan`) VALUES
-(1, 1, 1, NULL, NULL, b'1'),
-(2, 2, 1, NULL, NULL, b'1');
 
 -- --------------------------------------------------------
 
@@ -225,14 +207,6 @@ CREATE TABLE IF NOT EXISTS `korisnik` (
 --
 -- Dumping data for table `korisnik`
 --
-
-INSERT INTO `korisnik` (`KorisnikID`, `Ime`, `Prezime`, `Adresa`, `DatumRodjenja`, `Username`, `Password`, `KorisnikTipID`, `KorisnikPozicijaID`, `Aktivan`) VALUES
-(1, 'Muhamed', 'Smajevic', 'Minhen 12', NULL, 'muhamed', 'muhamed123', NULL, NULL, b'1'),
-(2, 'Muhamed', 'Smajevic', 'Minhen 12', NULL, 'muha', 'muha123', 1, 1, b'1'),
-(3, 'Elvedin', 'Sinanovic', 'Sarajevo Kampus', '2016-05-11 00:12:39', 'elvedin', '[C@254c2498', 1, 1, b'1'),
-(4, 'Ragib', 'Smajic', 'Vils', '2016-05-11 00:15:17', 'ragib', 'ragib123', 1, 1, b'1'),
-(5, 'Kenan', 'Prses', 'Vratnik', '2016-05-11 18:29:15', 'kenan', 'kenan123', 1, 1, b'1');
-
 -- --------------------------------------------------------
 
 --
@@ -249,10 +223,6 @@ CREATE TABLE IF NOT EXISTS `korisnikpozicija` (
 --
 -- Dumping data for table `korisnikpozicija`
 --
-
-INSERT INTO `korisnikpozicija` (`KorisnikPozicijaID`, `KorisnikPozicijaNaziv`, `Aktivan`) VALUES
-(1, 'Direktor', b'1');
-
 -- --------------------------------------------------------
 
 --
@@ -269,10 +239,6 @@ CREATE TABLE IF NOT EXISTS `korisniktip` (
 --
 -- Dumping data for table `korisniktip`
 --
-
-INSERT INTO `korisniktip` (`KorisnikTipID`, `KorisnikTipNaziv`, `Aktivan`) VALUES
-(1, 'Administrator', b'1');
-
 -- --------------------------------------------------------
 
 --
@@ -329,68 +295,6 @@ CREATE TABLE IF NOT EXISTS `zahtjevtip` (
 --
 -- Constraints for table `dokument`
 --
-ALTER TABLE `dokument`
-  ADD CONSTRAINT `fk_Dokument_Folder1` FOREIGN KEY (`FolderID`) REFERENCES `folder` (`FolderID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `dokumentverzija`
---
-ALTER TABLE `dokumentverzija`
-  ADD CONSTRAINT `fk_DokumentVerzija_Dokument1` FOREIGN KEY (`DokumentID`) REFERENCES `dokument` (`DokumentID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_DokumentVerzija_DokumentVerzijaStatus1` FOREIGN KEY (`DokumentVerzijaStatusID`) REFERENCES `dokumentverzijastatus` (`DokumentVerzijaStatusID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_DokumentVerzija_Korisnik1` FOREIGN KEY (`PostavioKorisnikID`) REFERENCES `mdms`.`korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `folder`
---
-ALTER TABLE `folder`
-  ADD CONSTRAINT `fk_Folder_Folder1` FOREIGN KEY (`RoditeljFolderID`) REFERENCES `folder` (`FolderID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Folder_Korisnik1` FOREIGN KEY (`KreiraoKorisnikID`) REFERENCES `korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `folderxgrupa`
---
-ALTER TABLE `folderxgrupa`
-  ADD CONSTRAINT `fk_FolderXGrupa_Folder1` FOREIGN KEY (`FolderID`) REFERENCES `folder` (`FolderID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_FolderXGrupa_Grupa1` FOREIGN KEY (`GrupaID`) REFERENCES `grupa` (`GrupaID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `grupa`
---
-ALTER TABLE `grupa`
-  ADD CONSTRAINT `fk_Grupa_Korisnik1` FOREIGN KEY (`OdgovorniKorisnikID`) REFERENCES `korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `grupaxkorisnik`
---
-ALTER TABLE `grupaxkorisnik`
-  ADD CONSTRAINT `fk_GrupaXKorisnik_Grupa1` FOREIGN KEY (`GrupaID`) REFERENCES `grupa` (`GrupaID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_GrupaXKorisnik_Korisnik1` FOREIGN KEY (`KorisnikID`) REFERENCES `korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `komentar`
---
-ALTER TABLE `komentar`
-  ADD CONSTRAINT `fk_Komentar_DokumentVerzija1` FOREIGN KEY (`DokumentVerzijaID`) REFERENCES `dokumentverzija` (`DokumentVerzijaID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Komentar_Korisnik1` FOREIGN KEY (`KorisnikID`) REFERENCES `korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `korisnik`
---
-ALTER TABLE `korisnik`
-  ADD CONSTRAINT `fk_Korisnik_KorisnikPozicija1` FOREIGN KEY (`KorisnikPozicijaID`) REFERENCES `korisnikpozicija` (`KorisnikPozicijaID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Korisnik_KorisnikTip` FOREIGN KEY (`KorisnikTipID`) REFERENCES `korisniktip` (`KorisnikTipID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `zahtjev`
---
-ALTER TABLE `zahtjev`
-  ADD CONSTRAINT `fk_Zahtjev_DokumentVerzija1` FOREIGN KEY (`DokumentVerzijaID`) REFERENCES `dokumentverzija` (`DokumentVerzijaID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Zahtjev_Korisnik1` FOREIGN KEY (`KreiraoKorisnikID`) REFERENCES `korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Zahtjev_Korisnik2` FOREIGN KEY (`UpucenoKorisnikID`) REFERENCES `korisnik` (`KorisnikID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Zahtjev_ZahjtevStatus1` FOREIGN KEY (`ZahtjevStatusID`) REFERENCES `zahtjevstatus` (`ZahjtevStatusID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Zahtjev_ZahtjevTip1` FOREIGN KEY (`ZahtjevTipID`) REFERENCES `zahtjevtip` (`ZahtjevTipID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
