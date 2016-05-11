@@ -13,6 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +27,8 @@ import ba.unsa.etf.si.tim11.bll.GrupaRepository;
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
 import ba.unsa.etf.si.tim11.bll.Sesija;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.FolderXGrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 import javax.swing.JList;
@@ -36,13 +42,15 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import java.awt.Color;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class KreiranjeGrupa
 {
 
 	private JFrame frmKreiranjeGrupa;
 	private JTextField txt_nazivGrupe;
-	private JCheckBox chckbxPravoitanja;
+	private JCheckBox checkBox_Citanje;
 	private JList list_sviKorisnici;
 	private JList list_dodaniKorisnici;
 	private JList list_folderi;
@@ -52,6 +60,7 @@ public class KreiranjeGrupa
 	private DefaultListModel listaDodanihFoldera = new DefaultListModel();
 	private DefaultListModel listaSvihKorisnika = new DefaultListModel();
 	private DefaultListModel listaDodanihKorisnika = new DefaultListModel();
+	private List<FolderXGrupaDbModel> listaDefinisanihPravaPristupa = new ArrayList<FolderXGrupaDbModel>();
 	private KorisnikRepository korisnikRep = new KorisnikRepository();
 	private FolderRepository folderRep = new FolderRepository();
 	private GrupaRepository grupaRep = new GrupaRepository();
@@ -92,12 +101,11 @@ public class KreiranjeGrupa
 	private void postaviUserNameKorisnika() {
 		
 		try{
-			Sesija nova = new Sesija();
-			userNameKorisnika = "rsmajic"; //nova.getUsername();
+			userNameKorisnika = Sesija.getUsername();
 		}
 		catch(Exception ex)
 		{
-			
+			userNameKorisnika = "";
 		}
 		
 	}
@@ -108,17 +116,11 @@ public class KreiranjeGrupa
 			List<KorisnikDbModel> lista = korisnikRep.dajSveKorisnike();
 			for(KorisnikDbModel kor : lista)
 				listaSvihKorisnika.addElement(kor);	
-			System.out.println(lista.get(0).getKorisnikPozicija());
 			
-			System.out.println(userNameKorisnika);
 			// Ucitaj sve foldere
 			List<FolderDbModel> listaFolderaa = folderRep.dajSveFoldereNaKojeImaPravo(userNameKorisnika);
 			 for(FolderDbModel f : listaFolderaa)
-				listaFoldera.addElement(f);
-			
-			//JOptionPane.showMessageDialog(null, "Radi", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
-			
-		
+				listaFoldera.addElement(f);	
 	}
 
 	/**
@@ -152,6 +154,7 @@ public class KreiranjeGrupa
 					.addComponent(txt_nazivGrupe, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(466, Short.MAX_VALUE))
 		);
+		txt_nazivGrupe.setText("");
 		gl_panel_podaciGrupe.setVerticalGroup(
 			gl_panel_podaciGrupe.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_podaciGrupe.createSequentialGroup()
@@ -171,6 +174,13 @@ public class KreiranjeGrupa
 		JButton btnDodajKorisnika = new JButton("Dodaj korisnika");
 		btnDodajKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				if(!listaDodanihKorisnika.contains(list_sviKorisnici.getSelectedValue()))
+					listaDodanihKorisnika.addElement(list_sviKorisnici.getSelectedValue());
+				else
+					JOptionPane.showMessageDialog(null, "Korisnik već postoji!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					
+				
 			}
 		});
 		
@@ -181,6 +191,14 @@ public class KreiranjeGrupa
 		JScrollPane scrollPane_dodaniKorisnici = new JScrollPane();
 		
 		JLabel lblDodaniKorisnici = new JLabel("Dodani korisnici:");
+		
+		JButton btnUkloniKorisnika = new JButton("Ukloni korisnika");
+		btnUkloniKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(list_dodaniKorisnici.getSelectedIndex() != -1)
+					listaDodanihKorisnika.removeElementAt(list_dodaniKorisnici.getSelectedIndex());
+			}
+		});
 		GroupLayout gl_panel_korisnikGrupa = new GroupLayout(panel_korisnikGrupa);
 		gl_panel_korisnikGrupa.setHorizontalGroup(
 			gl_panel_korisnikGrupa.createParallelGroup(Alignment.LEADING)
@@ -195,8 +213,10 @@ public class KreiranjeGrupa
 					.addGap(10)
 					.addGroup(gl_panel_korisnikGrupa.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblDodaniKorisnici)
-						.addComponent(scrollPane_dodaniKorisnici, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(40, Short.MAX_VALUE))
+						.addGroup(gl_panel_korisnikGrupa.createParallelGroup(Alignment.TRAILING)
+							.addComponent(scrollPane_dodaniKorisnici, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnUkloniKorisnika)))
+					.addContainerGap(32, Short.MAX_VALUE))
 		);
 		gl_panel_korisnikGrupa.setVerticalGroup(
 			gl_panel_korisnikGrupa.createParallelGroup(Alignment.TRAILING)
@@ -210,9 +230,12 @@ public class KreiranjeGrupa
 						.addComponent(lblSviKorisnici)
 						.addComponent(lblDodaniKorisnici))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel_korisnikGrupa.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_dodaniKorisnici)
-						.addComponent(scrollPane_korisnici, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_korisnikGrupa.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(scrollPane_korisnici, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_panel_korisnikGrupa.createSequentialGroup()
+							.addComponent(scrollPane_dodaniKorisnici)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnUkloniKorisnika)))
 					.addContainerGap())
 		);
 		
@@ -230,17 +253,57 @@ public class KreiranjeGrupa
 		
 		JScrollPane scrollPane_folderi = new JScrollPane();
 		
-		chckbxPravoitanja = new JCheckBox("Pravo čitanja");
+		checkBox_Citanje = new JCheckBox("Pravo čitanja");
 		
 		checkBox_Pisanje = new JCheckBox("Pravo pisanja");
 		
 		JLabel lblFolderi = new JLabel("Folderi:");
 		
 		JButton btnDefinisiPristup = new JButton("Definiši pristup");
+		btnDefinisiPristup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(list_folderi.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Niste selektovali nijedan folder za definisanje prava pristupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				if(!checkBox_Pisanje.isSelected() && !checkBox_Citanje.isSelected())
+				{
+					JOptionPane.showMessageDialog(null, "Niste definisali prava pristupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				if(!listaDodanihFoldera.contains(list_folderi.getSelectedValue()))
+				{
+					
+					listaDodanihFoldera.addElement((FolderDbModel)list_folderi.getSelectedValue());
+					FolderXGrupaDbModel novi = new FolderXGrupaDbModel();
+					FolderDbModel trenutni = (FolderDbModel)list_folderi.getSelectedValue();
+					
+					novi.setFolder(trenutni);
+					novi.setFolderId((int)trenutni.getFolderId());
+					novi.setAktivan(true);
+					novi.setPravoDodavanja(checkBox_Pisanje.isSelected());
+					novi.setPravoSkidanja(checkBox_Citanje.isSelected());
+					listaDefinisanihPravaPristupa.add(novi);		
+				}
+				else
+					JOptionPane.showMessageDialog(null, "Folder već postoji među dodanim folderima!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		
 		JScrollPane scrollPane_dodaniFolderi = new JScrollPane();
 		
 		JLabel lblDodaniFolderi = new JLabel("Dodani folderi:");
+		
+		JButton btnUkloniFolder = new JButton("Ukloni folder");
+		btnUkloniFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(list_dodaniFolderi.getSelectedIndex() != -1)
+					listaDodanihFoldera.removeElementAt(list_dodaniFolderi.getSelectedIndex());
+			}
+		});
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -253,12 +316,15 @@ public class KreiranjeGrupa
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(btnDefinisiPristup)
 								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(chckbxPravoitanja)
+									.addComponent(checkBox_Citanje)
 									.addComponent(checkBox_Pisanje, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
 						.addComponent(lblFolderi))
-					.addPreferredGap(ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblDodaniFolderi)
+					.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblDodaniFolderi)
+							.addGap(133))
+						.addComponent(btnUkloniFolder)
 						.addComponent(scrollPane_dodaniFolderi, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
@@ -266,7 +332,7 @@ public class KreiranjeGrupa
 			gl_panel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(110)
-					.addComponent(chckbxPravoitanja)
+					.addComponent(checkBox_Citanje)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(checkBox_Pisanje)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -279,8 +345,11 @@ public class KreiranjeGrupa
 						.addComponent(lblDodaniFolderi))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_dodaniFolderi, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane_folderi, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane_folderi, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addComponent(scrollPane_dodaniFolderi)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnUkloniFolder)))
 					.addContainerGap())
 		);
 		
@@ -288,10 +357,84 @@ public class KreiranjeGrupa
 		scrollPane_dodaniFolderi.setViewportView(list_dodaniFolderi);
 		
 		list_folderi = new JList(listaFoldera);
+		list_folderi.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				KorisnikRepository kr = new KorisnikRepository();
+				int prava = kr.dajPravaKorisnikaNaFolder(userNameKorisnika, (FolderDbModel)list_folderi.getSelectedValue());
+				
+				if(prava == 1)
+				{
+					checkBox_Citanje.setSelected(false);
+					checkBox_Citanje.setEnabled(false);
+					checkBox_Pisanje.setEnabled(true);
+				}
+				else if(prava == 2)
+				{
+					checkBox_Pisanje.setSelected(false);
+					checkBox_Pisanje.setEnabled(false);
+					checkBox_Citanje.setEnabled(true);
+				}
+				else
+				{
+					
+					checkBox_Pisanje.setEnabled(true);
+					checkBox_Citanje.setEnabled(true);
+				}
+			}
+		});
 		scrollPane_folderi.setViewportView(list_folderi);
 		panel.setLayout(gl_panel);
 		
 		JButton btnKreirajGrupu = new JButton("Kreiraj grupu");
+		btnKreirajGrupu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(txt_nazivGrupe.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Naziv grupe ne može biti prazno polje!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				GrupaRepository gRep = new GrupaRepository();
+				if(gRep.dajGrupuPoNazivu(txt_nazivGrupe.getText()) != null)
+				{
+					JOptionPane.showMessageDialog(null, "Grupa sa unesenim nazivom već postoji! Odaberite drugi naziv!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				if(listaDodanihKorisnika.isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "Niste dodali nijednog korisnika u grupu!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				if(listaDodanihFoldera.isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "Niste dodali nijedan folder kojem grupa ima pravo pristupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				KorisnikRepository kor = new KorisnikRepository();
+				GrupaDbModel nova = new GrupaDbModel();
+				nova.setAktivan(true);
+				nova.setDatumKreiranja(new Date());
+				nova.setNaziv(txt_nazivGrupe.getText());
+				nova.setOdgovorniKorisnikId(kor.dajIdKorisnikaPoUsername(userNameKorisnika));
+				String naziv = nova.getNaziv();
+				gRep.dodajGrupu(nova);
+				Integer idNoveGrupe = (int)gRep.dajGrupuPoNazivu(naziv).getGrupaId();
+				//System.out.println(listaDefinisanihPravaPristupa.get(0).getFolder().getFolderNaziv());
+				
+				gRep.dodajFolderXGrupaDbModele(listaDefinisanihPravaPristupa, idNoveGrupe);
+				
+				List <KorisnikDbModel> listaKorisnika = new ArrayList<KorisnikDbModel>();
+				for(int i=0; i< listaDodanihKorisnika.size(); i++)
+					listaKorisnika.add((KorisnikDbModel)listaDodanihKorisnika.get(i));
+				gRep.dodajGrupaXKorisnikDbModele(listaKorisnika, idNoveGrupe);
+				
+				
+					
+			}
+		});
 		btnKreirajGrupu.setBounds(927, 525, 258, 46);
 		frmKreiranjeGrupa.getContentPane().add(btnKreirajGrupu);
 	}

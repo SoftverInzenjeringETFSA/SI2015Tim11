@@ -1,5 +1,7 @@
 package ba.unsa.etf.si.tim11.bll;
 
+import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.FolderXGrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
@@ -127,5 +129,39 @@ public class KorisnikRepository {
 	}
 	public List<KorisnikTipDbModel> dajSveKorisnikTipove() {
 		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
+	}
+
+	public int dajPravaKorisnikaNaFolder(String userName, FolderDbModel selectedValue) {
+		
+		Integer idKorisnika = this.dajIdKorisnikaPoUsername(userName);
+		FolderRepository f = new FolderRepository();
+		
+		List<FolderXGrupaDbModel> gf = f.dajSveGrupeFoldereKorisnika(idKorisnika);
+		List<FolderXGrupaDbModel> novaLista = new ArrayList<FolderXGrupaDbModel>();
+		for(FolderXGrupaDbModel fg : gf)
+			if(fg.getFolder().getFolderId() == selectedValue.getFolderId())
+				novaLista.add(fg);
+		
+		boolean pravoCitanja = false;
+		boolean pravoPisanja = false;
+		
+		for(FolderXGrupaDbModel fg : novaLista)
+			if(fg.getPravoDodavanja() && fg.getPravoSkidanja())
+			{
+				pravoPisanja = true;
+				pravoCitanja = true;
+				break;
+			}
+			else if(fg.getPravoDodavanja())
+				pravoPisanja = true;
+			else if(fg.getPravoSkidanja())
+				pravoCitanja = true;
+		
+		if(pravoPisanja && pravoCitanja)
+			return 0; // Korisnik ima pravo i citanja i pisanja
+		else if(pravoPisanja)
+			return 1; // Korisnik ima pravo pisanja samo
+		else 
+			return 2; // Korisnik ima pravo citanja samo
 	}
 }

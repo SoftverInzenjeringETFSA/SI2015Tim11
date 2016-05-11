@@ -258,6 +258,11 @@ public class GlavnaForma {
 		menuBar.add(mnGrupe);
 		
 		mntmDodavanjeGrupe = new JMenuItem("Dodavanje grupe");
+		mntmDodavanjeGrupe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				KreiranjeGrupa.main(null);
+			}
+		});
 		mnGrupe.add(mntmDodavanjeGrupe);
 		
 		mntmIzmjenaGrupe = new JMenuItem("Izmjena grupe");
