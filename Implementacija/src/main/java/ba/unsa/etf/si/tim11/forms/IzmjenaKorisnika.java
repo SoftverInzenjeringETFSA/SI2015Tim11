@@ -94,30 +94,13 @@ public class IzmjenaKorisnika
 		tableIzmjenaPretraga = new JTable();
 		tableIzmjenaPretraga.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Korisni\u010Dko Ime", "Ime", "Prezime", "Adresa", "Datum Ro\u0111enja", "Pozicija u Organizaciji"},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
+				{},
+				{},
+				{},
 			},
 			new String[] {
-				"Korisni\u010Dko Ime", "Ime", "Prezime", "Adresa", "Datum Ro\u0111enja", "Pozicija u Organizaciji"
 			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		tableIzmjenaPretraga.getColumnModel().getColumn(0).setPreferredWidth(87);
-		tableIzmjenaPretraga.getColumnModel().getColumn(4).setPreferredWidth(95);
-		tableIzmjenaPretraga.getColumnModel().getColumn(5).setPreferredWidth(115);
+		));
 		tableIzmjenaPretraga.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		tableIzmjenaPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
 		tableIzmjenaPretraga.setCellSelectionEnabled(true);
@@ -168,6 +151,7 @@ public class IzmjenaKorisnika
 					if(korisnikRepository.dajIdKorisnikaPoUsername(pretraga)!=null)
 					{
 						korisnikId=korisnikRepository.dajIdKorisnikaPoUsername(pretraga);
+						JOptionPane.showMessageDialog(frmIzmjenaKorisnika, korisnikId);
 					}
 					else
 					{

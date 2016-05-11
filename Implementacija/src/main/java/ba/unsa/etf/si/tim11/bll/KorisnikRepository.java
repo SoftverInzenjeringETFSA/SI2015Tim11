@@ -107,9 +107,11 @@ public class KorisnikRepository {
 	}
 	public Integer dajIdKorisnikaPoUsername(String username){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eqOrIsNull("username", username));
 		java.util.List<KorisnikDbModel> lista = DbDMSContext.getInstance()
 						.getKorisnici()
 						.ucitajSveSaKriterujumom(kriterijum);
+		
 
 		if(lista.size() != 0){
 			for (KorisnikDbModel korisnikDbModel : lista) {
