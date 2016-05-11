@@ -95,7 +95,7 @@ public class GrupaRepository {
 	public GrupaDbModel dajGrupuPoNazivu(String text) {
 		
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
-		kriterijum.add(Restrictions.eq("naziv", text));
+		kriterijum.add(Restrictions.eq("grupaNaziv", text));
 		List<GrupaDbModel> listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		if(listaGrupa.isEmpty())

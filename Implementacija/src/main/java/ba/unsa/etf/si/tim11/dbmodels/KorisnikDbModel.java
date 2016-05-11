@@ -141,6 +141,6 @@ public class KorisnikDbModel implements java.io.Serializable {
 	@Override
     public String toString()
     {
-        return username + " "+ime+" "+prezime+" "+datumRodjenja+" "+adresa;
+        return ime+" "+prezime;
     }
 }

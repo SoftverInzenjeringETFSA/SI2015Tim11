@@ -132,7 +132,7 @@ public class KreiranjeGrupa
 		frmKreiranjeGrupa.setResizable(false);
 		frmKreiranjeGrupa.setTitle("Kreiranje Grupa");
 		frmKreiranjeGrupa.setBounds(100, 100, 1209, 630);
-		frmKreiranjeGrupa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmKreiranjeGrupa.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmKreiranjeGrupa.getContentPane().setLayout(null);
 		
 		JPanel panel_podaciGrupe = new JPanel();
