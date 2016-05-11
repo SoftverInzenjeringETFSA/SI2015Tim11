@@ -97,8 +97,7 @@ public class IzmjenaKorisnika
 		textFieldIzmjenaPretragaKorisnika.setBounds(155, 52, 461, 27);
 		frmIzmjenaKorisnika.getContentPane().add(textFieldIzmjenaPretragaKorisnika);
 		
-		tableIzmjenaPretraga = new JTable();
-		
+		tableIzmjenaPretraga = new JTable();		
 		tableIzmjenaPretraga.setModel(new DefaultTableModel(
 			new Object[][] {
 				{},
@@ -117,29 +116,29 @@ public class IzmjenaKorisnika
 		JLabel label_1 = new JLabel("Nova Šifra:");
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		label_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_1.setBounds(10, 285, 135, 21);
+		label_1.setBounds(10, 328, 135, 21);
 		frmIzmjenaKorisnika.getContentPane().add(label_1);
 		
 		passwordFieldIzmjenaNovaSifra = new JPasswordField();
 		passwordFieldIzmjenaNovaSifra.setFont(new Font("Dialog", Font.PLAIN, 11));
-		passwordFieldIzmjenaNovaSifra.setBounds(155, 282, 566, 27);
+		passwordFieldIzmjenaNovaSifra.setBounds(155, 325, 566, 27);
 		frmIzmjenaKorisnika.getContentPane().add(passwordFieldIzmjenaNovaSifra);
 		
 		JLabel label_2 = new JLabel("Ponovi Šifru:");
 		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		label_2.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_2.setBounds(52, 323, 95, 21);
+		label_2.setBounds(52, 366, 95, 21);
 		frmIzmjenaKorisnika.getContentPane().add(label_2);
 		
 		passwordField_1 = new JPasswordField();
 		passwordField_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-		passwordField_1.setBounds(155, 320, 566, 27);
+		passwordField_1.setBounds(155, 363, 566, 27);
 		frmIzmjenaKorisnika.getContentPane().add(passwordField_1);
 		
 		JButton buttonIzmjenaIzmjeniPodatke = new JButton("Izmijeni Podatke");
 		buttonIzmjenaIzmjeniPodatke.setEnabled(false);
 		buttonIzmjenaIzmjeniPodatke.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaIzmjeniPodatke.setBounds(605, 358, 115, 27);
+		buttonIzmjenaIzmjeniPodatke.setBounds(605, 401, 115, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaIzmjeniPodatke);
 		
 		final JLabel lblIzmjenaPretraga = new JLabel("");
@@ -162,6 +161,7 @@ public class IzmjenaKorisnika
 						ModelTabele mt=new ModelTabele();
 						mt.dodajElement(korisnik);
 						tableIzmjenaPretraga.setModel(mt);
+						
 					}
 					else
 					{
@@ -180,13 +180,7 @@ public class IzmjenaKorisnika
 		buttonIzmjenaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaTrazi.setBounds(626, 50, 95, 29);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaTrazi);
-		tableIzmjenaPretraga.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Integer red=tableIzmjenaPretraga.getSelectedRow();
-				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Izabrani red: "+ red);
-			}
-		});
+		
 		textFieldIzmjenaPretragaKorisnika.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -209,8 +203,29 @@ public class IzmjenaKorisnika
 		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
 		buttonIzmjenaBrisiKorisnika.setEnabled(false);
 		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaBrisiKorisnika.setBounds(605, 396, 116, 27);
+		buttonIzmjenaBrisiKorisnika.setBounds(605, 439, 116, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaBrisiKorisnika);
+		
+		final JButton btnIzmijeniKorisnika = new JButton("Spremi Promjene");
+		btnIzmijeniKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				korisnikRepository.izmijeniKorisnika(korisnik);
+				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Podaci spremljeni");
+			}
+		});
+		btnIzmijeniKorisnika.setEnabled(false);
+		tableIzmjenaPretraga.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(!korisnik.equals(null))
+				{
+					btnIzmijeniKorisnika.setEnabled(true);
+				}
+				
+			}
+		});
+		btnIzmijeniKorisnika.setBounds(605, 282, 116, 27);
+		frmIzmjenaKorisnika.getContentPane().add(btnIzmijeniKorisnika);
 		
 		
 	}
