@@ -120,7 +120,8 @@ public class KreiranjeGrupa
 			// Ucitaj sve foldere
 			List<FolderDbModel> listaFolderaa = folderRep.dajSveFoldereNaKojeImaPravo(userNameKorisnika);
 			 for(FolderDbModel f : listaFolderaa)
-				listaFoldera.addElement(f);	
+				if(!listaFoldera.contains(f))
+				 listaFoldera.addElement(f);	
 	}
 
 	/**
