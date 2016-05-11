@@ -69,6 +69,7 @@ public class DodavanjeKorisnika {
 			}
 		});
 	}
+	
 
 	/**
 	 * Create the application.
@@ -464,7 +465,6 @@ public class DodavanjeKorisnika {
 					txtDodavanjeIme.setText("");
 					txtDodavanjePrezime.setText("");
 					txtDodavanjeAdresa.setText("");
-					calendarDodavanjeDatumRodjenja.setDate(null);
 					comboBoxDodavanjeTip.setSelectedIndex(0);
 					cmbDodavanjePozicija.setSelectedIndex(0);
 					textFieldDodavanjeKorisnikaUsername.setText("");

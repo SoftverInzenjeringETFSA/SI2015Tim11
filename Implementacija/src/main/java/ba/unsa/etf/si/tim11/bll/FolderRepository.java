@@ -62,6 +62,47 @@ public class FolderRepository {
 		// TODO - implement FolderRepository.izmijeniPravaPristupaGrupiFolderu
 		throw new UnsupportedOperationException();
 	}
+
+	public List<FolderDbModel> dajSveFoldereNaKojeImaPravo(String userNameKorisnika) {
+		
+		KorisnikRepository kor = new KorisnikRepository();
+		GrupaRepository gru = new GrupaRepository();
+		
+		Integer idKorisnika = kor.dajIdKorisnikaPoUsername(userNameKorisnika);
+		
+		List<GrupaDbModel> listaGrupa = gru.dajGrupeZaKorisnika(idKorisnika);
+		
+		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSve();
+		
+		List<FolderDbModel> listaFoldera = new ArrayList<FolderDbModel>();;
+		
+		for(GrupaDbModel grupa : listaGrupa)
+			for(FolderXGrupaDbModel fg : folGru)
+				if(grupa.getGrupaId() == fg.getGrupa().getGrupaId())
+			     	listaFoldera.add(fg.getFolder());	
+		
+		return listaFoldera;
+	}
+	
+	public List<FolderXGrupaDbModel> dajSveGrupeFoldereKorisnika(Integer idKorisnika)
+	{
+		KorisnikRepository kor = new KorisnikRepository();
+		GrupaRepository gru = new GrupaRepository();
+		
+		List<GrupaDbModel> listaGrupa = gru.dajGrupeZaKorisnika(idKorisnika);
+		
+		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSve();
+		
+		List<FolderXGrupaDbModel> novaLista = new ArrayList<FolderXGrupaDbModel>();
+		
+		for(FolderXGrupaDbModel fg : folGru)
+			for(GrupaDbModel g : listaGrupa)
+				if(fg.getGrupa().getGrupaId() == g.getGrupaId())
+					novaLista.add(fg);
+		
+		return novaLista;
+		
+	}
 	/*
 	 * Metoda daje foldere trenutno logovanog korisnika
 	 */
