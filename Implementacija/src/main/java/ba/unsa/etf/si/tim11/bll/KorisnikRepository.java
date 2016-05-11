@@ -8,6 +8,8 @@ import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -52,6 +54,12 @@ public class KorisnikRepository {
 		// TODO - implement KorisnikRepository.dajKorisnike
 		throw new UnsupportedOperationException();
 	}
+	
+	public List<KorisnikDbModel> dajSveKorisnike()
+	{
+		List<KorisnikDbModel> lista = DbDMSContext.getInstance().getKorisnici().ucitajSve();
+		return lista;
+	}
 
 	/**
 	 * 
@@ -90,6 +98,9 @@ public class KorisnikRepository {
 	}
 	public Integer dajIdKorisnikaPoUsername(String username){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		
+		kriterijum.add(Restrictions.eq("username", username));
+		
 		java.util.List<KorisnikDbModel> lista = DbDMSContext.getInstance()
 						.getKorisnici()
 						.ucitajSveSaKriterujumom(kriterijum);

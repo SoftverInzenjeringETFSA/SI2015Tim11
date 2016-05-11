@@ -1,9 +1,11 @@
 package ba.unsa.etf.si.tim11.bll;
 
+import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.GrupaViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GrupaRepository {
@@ -67,5 +69,17 @@ public class GrupaRepository {
 		// TODO - implement GrupaRepository.odbrisiKorisnikaIzGrupe
 		throw new UnsupportedOperationException();
 	}
+	
+	public List<GrupaDbModel> dajGrupeZaKorisnika(Integer idKorisnika)
+	{
+		List<GrupaDbModel> listaGrupa = new ArrayList<GrupaDbModel>();
+		List<GrupaXKorisnikDbModel> lista = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSve();
+		for(GrupaXKorisnikDbModel grupKor : lista)
+			if(idKorisnika == grupKor.getKorisnikId())
+				listaGrupa.add(grupKor.getGrupa());
+		
+		return listaGrupa;
+	}
+	
 
 }
