@@ -23,12 +23,12 @@ public class KorisnikRepository {
 	 * 
 	 * @param korisnikId
 	 */
-	public KorisnikViewModel dajKorisnika(Integer korisnikId) {
+	public KorisnikDbModel dajKorisnika(Integer korisnikId) {
 		KorisnikDbModel korisnik = DbDMSContext.getInstance().getKorisnici().ucitaj((long)korisnikId);
 		
-		
+		return korisnik;
 		// TODO - implement KorisnikRepository.dajKorisnika
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
 	}
 	
 	public static Boolean korisnikPostoji(String username, String password) {
@@ -82,7 +82,11 @@ public class KorisnikRepository {
 	 */
 	public Boolean izmijeniKorisnika(KorisnikDbModel korisnik) {
 		// TODO - implement KorisnikRepository.izmijeniKorisnika
-		throw new UnsupportedOperationException();
+		KorisnikDbModel k=new KorisnikDbModel();
+		k=korisnik;
+		DbDMSContext.getInstance().getKorisnici().sacuvajIliAzuriraj(k);
+		return true;
+
 	}
 
 	/**
@@ -119,6 +123,7 @@ public class KorisnikRepository {
 		java.util.List<KorisnikDbModel> lista = DbDMSContext.getInstance()
 						.getKorisnici()
 						.ucitajSveSaKriterujumom(kriterijum);
+		
 
 		if(lista.size() != 0){
 			for (KorisnikDbModel korisnikDbModel : lista) {

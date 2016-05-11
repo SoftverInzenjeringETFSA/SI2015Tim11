@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -12,8 +14,22 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.Validator;
+
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class IzmjenaKorisnika
 {
@@ -25,7 +41,10 @@ public class IzmjenaKorisnika
 	private JPasswordField passwordField_1;
 	private JButton buttonIzmjenaTrazi;
 	private JButton buttonIzmjenaBrisiKorisnika;
-
+	
+	KorisnikRepository korisnikRepository = new KorisnikRepository();
+	KorisnikDbModel korisnik;
+	Integer korisnikId;
 	/**
 	 * Launch the application.
 	 */
@@ -62,7 +81,7 @@ public class IzmjenaKorisnika
 	{
 		frmIzmjenaKorisnika = new JFrame();
 		frmIzmjenaKorisnika.setTitle("Izmjena Korisnika");
-		frmIzmjenaKorisnika.setBounds(100, 100, 748, 484);
+		frmIzmjenaKorisnika.setBounds(100, 100, 748, 516);
 		frmIzmjenaKorisnika.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmIzmjenaKorisnika.getContentPane().setLayout(null);
 		
@@ -79,32 +98,16 @@ public class IzmjenaKorisnika
 		frmIzmjenaKorisnika.getContentPane().add(textFieldIzmjenaPretragaKorisnika);
 		
 		tableIzmjenaPretraga = new JTable();
+		
 		tableIzmjenaPretraga.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Korisni\u010Dko Ime", "Ime", "Prezime", "Adresa", "Datum Ro\u0111enja", "Pozicija u Organizaciji"},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
+				{},
+				{},
+				{},
 			},
 			new String[] {
-				"Korisni\u010Dko Ime", "Ime", "Prezime", "Adresa", "Datum Ro\u0111enja", "Pozicija u Organizaciji"
 			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		tableIzmjenaPretraga.getColumnModel().getColumn(0).setPreferredWidth(87);
-		tableIzmjenaPretraga.getColumnModel().getColumn(4).setPreferredWidth(95);
-		tableIzmjenaPretraga.getColumnModel().getColumn(5).setPreferredWidth(115);
+		));
 		tableIzmjenaPretraga.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		tableIzmjenaPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
 		tableIzmjenaPretraga.setCellSelectionEnabled(true);
@@ -134,19 +137,81 @@ public class IzmjenaKorisnika
 		frmIzmjenaKorisnika.getContentPane().add(passwordField_1);
 		
 		JButton buttonIzmjenaIzmjeniPodatke = new JButton("Izmijeni Podatke");
+		buttonIzmjenaIzmjeniPodatke.setEnabled(false);
 		buttonIzmjenaIzmjeniPodatke.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaIzmjeniPodatke.setBounds(605, 358, 115, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaIzmjeniPodatke);
 		
+		final JLabel lblIzmjenaPretraga = new JLabel("");
+		lblIzmjenaPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblIzmjenaPretraga.setBounds(155, 27, 461, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblIzmjenaPretraga);
+		frmIzmjenaKorisnika.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{label, textFieldIzmjenaPretragaKorisnika, buttonIzmjenaTrazi, tableIzmjenaPretraga, label_1, passwordFieldIzmjenaNovaSifra, label_2, passwordField_1, buttonIzmjenaIzmjeniPodatke, buttonIzmjenaBrisiKorisnika}));
+		
 		buttonIzmjenaTrazi = new JButton("Traži");
+		buttonIzmjenaTrazi.setEnabled(false);
+		buttonIzmjenaTrazi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try
+				{
+					String pretraga=textFieldIzmjenaPretragaKorisnika.getText();
+					if(korisnikRepository.dajIdKorisnikaPoUsername(pretraga)!=null)
+					{
+						korisnikId=korisnikRepository.dajIdKorisnikaPoUsername(pretraga);
+						korisnik=korisnikRepository.dajKorisnika(korisnikId);
+						ModelTabele mt=new ModelTabele();
+						mt.dodajElement(korisnik);
+						tableIzmjenaPretraga.setModel(mt);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(frmIzmjenaKorisnika,"Nema korisnika s tim korisničkim imenom!");
+						textFieldIzmjenaPretragaKorisnika.setText("");
+					}
+				}
+				catch(Exception e)
+				{
+					String poruka=e.getMessage();
+					JOptionPane.showMessageDialog(frmIzmjenaKorisnika,poruka);
+				}
+				
+			}
+		});
 		buttonIzmjenaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaTrazi.setBounds(626, 50, 95, 29);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaTrazi);
+		tableIzmjenaPretraga.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Integer red=tableIzmjenaPretraga.getSelectedRow();
+				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Izabrani red: "+ red);
+			}
+		});
+		textFieldIzmjenaPretragaKorisnika.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				String pretraga=textFieldIzmjenaPretragaKorisnika.getText();
+				if(!Validator.daLiJeStringPrazan(pretraga)&&Validator.daLiJeStringSlovaIBrojevi(pretraga))
+				{
+					lblIzmjenaPretraga.setText("OK");
+					lblIzmjenaPretraga.setForeground(new Color(0, 128, 0));
+					buttonIzmjenaTrazi.setEnabled(true);
+				}
+				else
+				{
+					lblIzmjenaPretraga.setForeground(Color.red);
+					lblIzmjenaPretraga.setText("Niste unijeli korisničko ime za pretragu");
+					buttonIzmjenaTrazi.setEnabled(false);
+				}
+			}
+		});
 		
 		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
+		buttonIzmjenaBrisiKorisnika.setEnabled(false);
 		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaBrisiKorisnika.setBounds(605, 396, 116, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaBrisiKorisnika);
-		frmIzmjenaKorisnika.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{label, textFieldIzmjenaPretragaKorisnika, buttonIzmjenaTrazi, tableIzmjenaPretraga, label_1, passwordFieldIzmjenaNovaSifra, label_2, passwordField_1, buttonIzmjenaIzmjeniPodatke, buttonIzmjenaBrisiKorisnika}));
+		
+		
 	}
 }
