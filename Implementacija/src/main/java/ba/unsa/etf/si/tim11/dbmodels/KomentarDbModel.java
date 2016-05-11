@@ -16,6 +16,7 @@ public class KomentarDbModel implements java.io.Serializable{
 	private long komentarId;
 	private Integer korisnikId;
 	private Integer dokumentVerzijaId;
+	private String komentar;
 	private Date dokumentVrijemeKreiranja;
 	private Boolean aktivan;
 
@@ -31,6 +32,14 @@ public class KomentarDbModel implements java.io.Serializable{
 		this.korisnik = korisnik;
 	}
 
+	public String getKomentar() {
+		return komentar;
+	}
+
+	public void setKomentar(String komentar) {
+		this.komentar = komentar;
+	}
+	
 	public DokumentVerzijaDbModel getDokumentVerzija() {
 		return dokumentVerzija;
 	}

@@ -417,9 +417,9 @@ public class KreiranjeGrupa
 				GrupaDbModel nova = new GrupaDbModel();
 				nova.setAktivan(true);
 				nova.setDatumKreiranja(new Date());
-				nova.setNaziv(txt_nazivGrupe.getText());
+				nova.setGrupaNaziv(txt_nazivGrupe.getText());
 				nova.setOdgovorniKorisnikId(kor.dajIdKorisnikaPoUsername(userNameKorisnika));
-				String naziv = nova.getNaziv();
+				String naziv = nova.getGrupaNaziv();
 				gRep.dodajGrupu(nova);
 				Integer idNoveGrupe = (int)gRep.dajGrupuPoNazivu(naziv).getGrupaId();
 				//System.out.println(listaDefinisanihPravaPristupa.get(0).getFolder().getFolderNaziv());

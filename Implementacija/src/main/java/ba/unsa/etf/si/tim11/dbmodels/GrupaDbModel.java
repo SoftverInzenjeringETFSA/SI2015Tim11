@@ -14,7 +14,7 @@ public class GrupaDbModel implements java.io.Serializable {
 	@Id
     @GeneratedValue
 	private long grupaId;
-	private String naziv;
+	private String grupaNaziv;
 	private Integer odgovorniKorisnikId;
 	private Date datumKreiranja;
 	private Boolean aktivan;
@@ -38,13 +38,13 @@ public class GrupaDbModel implements java.io.Serializable {
 	public void setGrupaId(long grupaId) {
 		this.grupaId = grupaId;
 	}
-
-	public String getNaziv() {
-		return naziv;
+	
+	public String getGrupaNaziv() {
+		return grupaNaziv;
 	}
 
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
+	public void setGrupaNaziv(String grupaNaziv) {
+		this.grupaNaziv = grupaNaziv;
 	}
 
 	public Integer getOdgovorniKorisnikId() {
@@ -74,6 +74,6 @@ public class GrupaDbModel implements java.io.Serializable {
 	@Override
     public String toString()
     {
-        return naziv;
+        return grupaNaziv;
     }
 }

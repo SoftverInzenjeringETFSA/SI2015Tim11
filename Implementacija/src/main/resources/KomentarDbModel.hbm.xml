@@ -14,6 +14,9 @@
         <property name="dokumentVerzijaId" type="java.lang.Integer">
             <column name="DOKUMENTVERZIJAID" />
         </property>
+        <property name="komentar" type="java.lang.String">
+            <column name="KOMENTAR" />
+        </property>
         <property name="dokumentVrijemeKreiranja" type="java.util.Date">
             <column name="DOKUMENTVRIJEMEKREIRANJA" />
         </property>
