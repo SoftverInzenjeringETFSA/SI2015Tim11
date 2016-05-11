@@ -21,13 +21,13 @@ public class GrupaDbModel implements java.io.Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="odgovorniKorisnikId")
-	private KorisnikTipDbModel odgovorniKorisnik;
+	private KorisnikDbModel odgovorniKorisnik;
 	
-	public KorisnikTipDbModel getOdgovorniKorisnik() {
+	public KorisnikDbModel getOdgovorniKorisnik() {
 		return odgovorniKorisnik;
 	}
 
-	public void setOdgovorniKorisnik(KorisnikTipDbModel odgovorniKorisnik) {
+	public void setOdgovorniKorisnik(KorisnikDbModel odgovorniKorisnik) {
 		this.odgovorniKorisnik = odgovorniKorisnik;
 	}
 

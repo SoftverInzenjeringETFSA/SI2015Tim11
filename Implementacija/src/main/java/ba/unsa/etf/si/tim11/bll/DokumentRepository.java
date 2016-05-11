@@ -1,6 +1,17 @@
 package ba.unsa.etf.si.tim11.bll;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
+
+import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 public class DokumentRepository {
 	/**
@@ -39,5 +50,15 @@ public class DokumentRepository {
 		// TODO - implement DokumentRepository.obrisiVerzijuDokumenta
 		throw new UnsupportedOperationException();
 	}
-
+	
+	public List<DokumentDbModel> dajDokumente(Integer folderId){
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("roditeljFolderId", folderId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<DokumentDbModel> listaDokumenata = DbDMSContext.getInstance()
+				.getDokumenti()
+				.ucitajSveSaKriterujumom(kriterijum);
+		return listaDokumenata;
+	}
 }

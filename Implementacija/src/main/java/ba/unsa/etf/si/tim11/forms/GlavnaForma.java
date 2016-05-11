@@ -1,10 +1,17 @@
 package ba.unsa.etf.si.tim11.forms;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+
+import ba.unsa.etf.si.tim11.bll.Sesija;
+import ba.unsa.etf.si.tim11.bll.UnitOfWork;
+import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +22,10 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JEditorPane;
@@ -60,7 +70,10 @@ public class GlavnaForma {
 	private JMenuItem mntmObrisiDokument;
 	private JMenuItem mntmDodajVerzijuDokumenta;
 	private JMenuItem mntmDodajVerzijuDokumenta_1;
+	private JTextField textField_1;
 
+	
+	private UnitOfWork uow = new UnitOfWork();
 	/**
 	 * Launch the application.
 	 */
@@ -99,17 +112,47 @@ public class GlavnaForma {
 		JTree treeFolderView = new JTree();
 		treeFolderView.setShowsRootHandles(true);
 		treeFolderView.setRootVisible(false);
+		
+		
+		
+		
 		treeFolderView.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Root") {
 				{
 					DefaultMutableTreeNode node_1;
-					DefaultMutableTreeNode node_2;
-					node_1 = new DefaultMutableTreeNode("Racunovodstvo");
+					DefaultMutableTreeNode node_2; 
+					
+					List<FolderDbModel> pocetniFolderi = null;
+					
+					try {
+						pocetniFolderi = uow.getFolderRepository().dajFoldere();
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(), "GRESKA", JOptionPane.INFORMATION_MESSAGE);
+						e.printStackTrace();
+					}
+					for (FolderDbModel folderDbModel : pocetniFolderi) {
+						node_1 = new DefaultMutableTreeNode(folderDbModel);
+						add(node_1);
+					}
+					node_1 = new DefaultMutableTreeNode("faktura1.txt");
+					add(node_1);
+					
+					try {
+						JOptionPane.showMessageDialog(null, Sesija.getUsername().toString(), "GRESKA", JOptionPane.INFORMATION_MESSAGE);
+					} catch (HeadlessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					/*node_1 = new DefaultMutableTreeNode("Racunovodstvo");
 						node_2 = new DefaultMutableTreeNode("fakture");
 							node_2.add(new DefaultMutableTreeNode("faktura1.txt"));
 							node_2.add(new DefaultMutableTreeNode("faktura1.txt"));
 							node_2.add(new DefaultMutableTreeNode("faktura1.txt"));
-						node_1.add(node_2);
+						node_1.add(node_2); 
 						node_2 = new DefaultMutableTreeNode("Ugovori");
 							node_2.add(new DefaultMutableTreeNode("ugovor1.docx"));
 							node_2.add(new DefaultMutableTreeNode("ugovor2.docx"));
@@ -124,10 +167,12 @@ public class GlavnaForma {
 							node_2.add(new DefaultMutableTreeNode("Zahtjev za ugovor3.docx"));
 							node_2.add(new DefaultMutableTreeNode("Zahtjev za ugovor4.docx"));
 						node_1.add(node_2);
-					add(node_1);
+					add(node_1);*/
 				}
 			}
 		));
+		treeFolderView.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION); //moguce odabrati samo jednu stavku
+		
 		treeFolderView.setBounds(10, 53, 343, 407);
 		frmDobrodoaolaUDms.getContentPane().add(treeFolderView);
 		
@@ -181,7 +226,7 @@ public class GlavnaForma {
 		frmDobrodoaolaUDms.getContentPane().add(table);
 		
 		lblDokumenti = new JLabel("Moji dokumenti: Muhamed Smajevic, Development Team");
-		lblDokumenti.setBounds(10, 28, 822, 14);
+		lblDokumenti.setBounds(363, 28, 469, 14);
 		frmDobrodoaolaUDms.getContentPane().add(lblDokumenti);
 		
 		lblKomentari = new JLabel("Komentari za izabranu verziju");
@@ -294,6 +339,15 @@ public class GlavnaForma {
 		JEditorPane txtKomentar = new JEditorPane();
 		txtKomentar.setBounds(363, 377, 469, 49);
 		frmDobrodoaolaUDms.getContentPane().add(txtKomentar);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(81, 25, 272, 20);
+		frmDobrodoaolaUDms.getContentPane().add(textField_1);
+		
+		JLabel lblPretraga = new JLabel("Pretraga");
+		lblPretraga.setBounds(10, 28, 65, 14);
+		frmDobrodoaolaUDms.getContentPane().add(lblPretraga);
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
