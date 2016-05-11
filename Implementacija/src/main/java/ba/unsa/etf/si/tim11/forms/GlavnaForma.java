@@ -270,7 +270,7 @@ public class GlavnaForma {
 		mntmDodavanjeKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				DodavanjeKorisnika dodavanjeKorisnikaForma = new DodavanjeKorisnika();
-			//	dodavanjeKorisnikaForma.PokreniFormu();
+				dodavanjeKorisnikaForma.pokreniFormu();
 			}
 		});
 		mnKorisnici.add(mntmDodavanjeKorisnika);

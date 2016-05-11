@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+
 import java.util.Date;
 
 @Entity
@@ -30,6 +32,7 @@ public class KorisnikDbModel implements java.io.Serializable {
 	private Integer korisnikTipId;
 	private Integer korisnikPozicijaId;
 	private Boolean aktivan;
+	
 	
 	@ManyToOne
 	@JoinColumn(name="korisnikTipId")

@@ -2,6 +2,8 @@ package ba.unsa.etf.si.tim11.bll;
 
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.KorisnikViewModel;
 import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 
@@ -67,7 +69,9 @@ public class KorisnikRepository {
 	 */
 	public void dodajKorisnika(KorisnikDbModel korisnik) {
 		korisnik.setAktivan(true);
-		DbDMSContext.getInstance().getKorisnici().sacuvaj(korisnik);
+			KorisnikDbModel k=new KorisnikDbModel();
+			k=korisnik;
+			DbDMSContext.getInstance().getKorisnici().sacuvaj(k);
 	}
 
 	/**
@@ -95,6 +99,15 @@ public class KorisnikRepository {
 	public KorisnikRepository() {
 		// TODO - implement KorisnikRepository.KorisnikRepository
 		//throw new UnsupportedOperationException();
+	}
+	
+	public List<KorisnikTipDbModel> dajSveTipoveKorisnika()
+	{
+		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
+	}
+	public List<KorisnikPozicijaDbModel> dajSvePozicijeKorisnika()
+	{
+		return DbDMSContext.getInstance().getKorisnikPozicije().ucitajSve();
 	}
 	public Integer dajIdKorisnikaPoUsername(String username){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
