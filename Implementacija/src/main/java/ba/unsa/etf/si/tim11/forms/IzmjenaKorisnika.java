@@ -14,9 +14,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.Validator;
 
 import java.awt.Color;
@@ -25,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class IzmjenaKorisnika
 {
@@ -38,6 +43,7 @@ public class IzmjenaKorisnika
 	private JButton buttonIzmjenaBrisiKorisnika;
 	
 	KorisnikRepository korisnikRepository = new KorisnikRepository();
+	KorisnikDbModel korisnik;
 	Integer korisnikId;
 	/**
 	 * Launch the application.
@@ -92,6 +98,7 @@ public class IzmjenaKorisnika
 		frmIzmjenaKorisnika.getContentPane().add(textFieldIzmjenaPretragaKorisnika);
 		
 		tableIzmjenaPretraga = new JTable();
+		
 		tableIzmjenaPretraga.setModel(new DefaultTableModel(
 			new Object[][] {
 				{},
@@ -151,7 +158,10 @@ public class IzmjenaKorisnika
 					if(korisnikRepository.dajIdKorisnikaPoUsername(pretraga)!=null)
 					{
 						korisnikId=korisnikRepository.dajIdKorisnikaPoUsername(pretraga);
-						JOptionPane.showMessageDialog(frmIzmjenaKorisnika, korisnikId);
+						korisnik=korisnikRepository.dajKorisnika(korisnikId);
+						ModelTabele mt=new ModelTabele();
+						mt.dodajElement(korisnik);
+						tableIzmjenaPretraga.setModel(mt);
 					}
 					else
 					{
@@ -170,6 +180,13 @@ public class IzmjenaKorisnika
 		buttonIzmjenaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaTrazi.setBounds(626, 50, 95, 29);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaTrazi);
+		tableIzmjenaPretraga.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Integer red=tableIzmjenaPretraga.getSelectedRow();
+				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Izabrani red: "+ red);
+			}
+		});
 		textFieldIzmjenaPretragaKorisnika.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {

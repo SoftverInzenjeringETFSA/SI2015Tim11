@@ -19,12 +19,12 @@ public class KorisnikRepository {
 	 * 
 	 * @param korisnikId
 	 */
-	public KorisnikViewModel dajKorisnika(Integer korisnikId) {
+	public KorisnikDbModel dajKorisnika(Integer korisnikId) {
 		KorisnikDbModel korisnik = DbDMSContext.getInstance().getKorisnici().ucitaj((long)korisnikId);
 		
-		
+		return korisnik;
 		// TODO - implement KorisnikRepository.dajKorisnika
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
 	}
 	
 	public static Boolean korisnikPostoji(String username, String password) {
