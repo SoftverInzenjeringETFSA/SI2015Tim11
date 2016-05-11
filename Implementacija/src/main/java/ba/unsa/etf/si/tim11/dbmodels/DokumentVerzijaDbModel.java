@@ -26,7 +26,7 @@ public class DokumentVerzijaDbModel implements java.io.Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="postavioKorisnikId")
-	private KorisnikTipDbModel postavioKorisnik;
+	private KorisnikDbModel postavioKorisnik;
 	
 	@ManyToOne
 	@JoinColumn(name="dokumentVerzijaStatusId")
@@ -41,11 +41,11 @@ public class DokumentVerzijaDbModel implements java.io.Serializable {
 		this.dokument = dokument;
 	}
 
-	public KorisnikTipDbModel getPostavioKorisnik() {
+	public KorisnikDbModel getPostavioKorisnik() {
 		return postavioKorisnik;
 	}
 
-	public void setPostavioKorisnik(KorisnikTipDbModel postavioKorisnik) {
+	public void setPostavioKorisnik(KorisnikDbModel postavioKorisnik) {
 		this.postavioKorisnik = postavioKorisnik;
 	}
 

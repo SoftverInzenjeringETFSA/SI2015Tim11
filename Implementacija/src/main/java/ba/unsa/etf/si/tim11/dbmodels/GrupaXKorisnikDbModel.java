@@ -26,7 +26,7 @@ public class GrupaXKorisnikDbModel implements java.io.Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="korisnikId")
-	private KorisnikTipDbModel korisnik;
+	private KorisnikDbModel korisnik;
 	
 	public GrupaDbModel getGrupa() {
 		return grupa;
@@ -36,11 +36,11 @@ public class GrupaXKorisnikDbModel implements java.io.Serializable {
 		this.grupa = grupa;
 	}
 	
-	public KorisnikTipDbModel getKorisnik() {
+	public KorisnikDbModel getKorisnik() {
 		return korisnik;
 	}
 
-	public void setKorisnik(KorisnikTipDbModel korisnik) {
+	public void setKorisnik(KorisnikDbModel korisnik) {
 		this.korisnik = korisnik;
 	}
 

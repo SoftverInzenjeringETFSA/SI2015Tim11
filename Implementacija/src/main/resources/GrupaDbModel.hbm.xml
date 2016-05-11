@@ -8,8 +8,8 @@
             <column name="GRUPAID" />
             <generator class="native" />
         </id>
-        <property name="naziv" type="java.lang.String">
-            <column name="NAZIV" />
+        <property name="grupaNaziv" type="java.lang.String">
+            <column name="GRUPANAZIV" />
         </property>
         <property name="odgovorniKorisnikId" type="java.lang.Integer">
             <column name="ODGOVORNIKORISNIKID" />
