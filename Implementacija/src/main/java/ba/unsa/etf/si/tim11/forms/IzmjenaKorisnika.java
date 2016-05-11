@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -13,7 +15,16 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.dbmodels.Validator;
+
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class IzmjenaKorisnika
 {
@@ -25,7 +36,9 @@ public class IzmjenaKorisnika
 	private JPasswordField passwordField_1;
 	private JButton buttonIzmjenaTrazi;
 	private JButton buttonIzmjenaBrisiKorisnika;
-
+	
+	KorisnikRepository korisnikRepository = new KorisnikRepository();
+	Integer korisnikId;
 	/**
 	 * Launch the application.
 	 */
@@ -62,7 +75,7 @@ public class IzmjenaKorisnika
 	{
 		frmIzmjenaKorisnika = new JFrame();
 		frmIzmjenaKorisnika.setTitle("Izmjena Korisnika");
-		frmIzmjenaKorisnika.setBounds(100, 100, 748, 484);
+		frmIzmjenaKorisnika.setBounds(100, 100, 748, 516);
 		frmIzmjenaKorisnika.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmIzmjenaKorisnika.getContentPane().setLayout(null);
 		
@@ -134,19 +147,70 @@ public class IzmjenaKorisnika
 		frmIzmjenaKorisnika.getContentPane().add(passwordField_1);
 		
 		JButton buttonIzmjenaIzmjeniPodatke = new JButton("Izmijeni Podatke");
+		buttonIzmjenaIzmjeniPodatke.setEnabled(false);
 		buttonIzmjenaIzmjeniPodatke.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaIzmjeniPodatke.setBounds(605, 358, 115, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaIzmjeniPodatke);
 		
+		final JLabel lblIzmjenaPretraga = new JLabel("");
+		lblIzmjenaPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblIzmjenaPretraga.setBounds(155, 27, 461, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblIzmjenaPretraga);
+		frmIzmjenaKorisnika.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{label, textFieldIzmjenaPretragaKorisnika, buttonIzmjenaTrazi, tableIzmjenaPretraga, label_1, passwordFieldIzmjenaNovaSifra, label_2, passwordField_1, buttonIzmjenaIzmjeniPodatke, buttonIzmjenaBrisiKorisnika}));
+		
 		buttonIzmjenaTrazi = new JButton("Traži");
+		buttonIzmjenaTrazi.setEnabled(false);
+		buttonIzmjenaTrazi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try
+				{
+					String pretraga=textFieldIzmjenaPretragaKorisnika.getText();
+					if(korisnikRepository.dajIdKorisnikaPoUsername(pretraga)!=null)
+					{
+						korisnikId=korisnikRepository.dajIdKorisnikaPoUsername(pretraga);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(frmIzmjenaKorisnika,"Nema korisnika s tim korisničkim imenom!");
+						textFieldIzmjenaPretragaKorisnika.setText("");
+					}
+				}
+				catch(Exception e)
+				{
+					String poruka=e.getMessage();
+					JOptionPane.showMessageDialog(frmIzmjenaKorisnika,poruka);
+				}
+				
+			}
+		});
 		buttonIzmjenaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaTrazi.setBounds(626, 50, 95, 29);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaTrazi);
+		textFieldIzmjenaPretragaKorisnika.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				String pretraga=textFieldIzmjenaPretragaKorisnika.getText();
+				if(!Validator.daLiJeStringPrazan(pretraga)&&Validator.daLiJeStringSlovaIBrojevi(pretraga))
+				{
+					lblIzmjenaPretraga.setText("OK");
+					lblIzmjenaPretraga.setForeground(new Color(0, 128, 0));
+					buttonIzmjenaTrazi.setEnabled(true);
+				}
+				else
+				{
+					lblIzmjenaPretraga.setForeground(Color.red);
+					lblIzmjenaPretraga.setText("Niste unijeli korisničko ime za pretragu");
+					buttonIzmjenaTrazi.setEnabled(false);
+				}
+			}
+		});
 		
 		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
+		buttonIzmjenaBrisiKorisnika.setEnabled(false);
 		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaBrisiKorisnika.setBounds(605, 396, 116, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaBrisiKorisnika);
-		frmIzmjenaKorisnika.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{label, textFieldIzmjenaPretragaKorisnika, buttonIzmjenaTrazi, tableIzmjenaPretraga, label_1, passwordFieldIzmjenaNovaSifra, label_2, passwordField_1, buttonIzmjenaIzmjeniPodatke, buttonIzmjenaBrisiKorisnika}));
+		
+		
 	}
 }

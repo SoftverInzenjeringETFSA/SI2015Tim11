@@ -72,7 +72,11 @@ public class KorisnikRepository {
 	 */
 	public Boolean izmijeniKorisnika(KorisnikDbModel korisnik) {
 		// TODO - implement KorisnikRepository.izmijeniKorisnika
-		throw new UnsupportedOperationException();
+		KorisnikDbModel k=new KorisnikDbModel();
+		k=korisnik;
+		DbDMSContext.getInstance().getKorisnici().sacuvajIliAzuriraj(k);
+		return true;
+
 	}
 
 	/**
