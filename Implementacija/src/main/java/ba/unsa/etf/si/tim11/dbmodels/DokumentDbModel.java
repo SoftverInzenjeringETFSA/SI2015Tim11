@@ -71,6 +71,6 @@ public class DokumentDbModel implements java.io.Serializable{
 	@Override
     public String toString()
     {
-        return dokumentNaziv;
+        return dokumentNaziv+ekstenzija;
     }
 }

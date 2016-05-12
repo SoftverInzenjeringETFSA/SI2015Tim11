@@ -14,6 +14,7 @@ public class DbDMSContext {
 	private GrupaDALRepository grupe;
 	private KorisnikPozicijaDALRepository korisnikPozicije;
 	private KorisnikDALRepository korisnici;
+	private KomentarDALRepository komentari;
 	private GrupaXKorisnikDALRepository grupeKorisnici;
 	private FolderDALRepository folderi;
 	private FolderXGrupaDALRepository folderiGrupe;
@@ -32,6 +33,15 @@ public class DbDMSContext {
 		grupeKorisnici = new GrupaXKorisnikDALRepository();
 		folderi = new FolderDALRepository();
 		folderiGrupe = new FolderXGrupaDALRepository();
+		komentari = new KomentarDALRepository();
+	}
+
+	public KomentarDALRepository getKomentari() {
+		return komentari;
+	}
+
+	public void setKomentari(KomentarDALRepository komentari) {
+		this.komentari = komentari;
 	}
 
 	public static DbDMSContext getInstance() {

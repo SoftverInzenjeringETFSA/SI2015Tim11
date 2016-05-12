@@ -22,7 +22,7 @@ public class FolderDbModel implements java.io.Serializable {
 	private KorisnikDbModel kreiraoKorisnik;
 	
 	@ManyToOne
-	@JoinColumn(name="folderId")
+	@JoinColumn(name="roditeljFolderId")
 	private FolderDbModel roditeljFolder;
 	
 	public KorisnikDbModel getKreiraoKorisnik() {
