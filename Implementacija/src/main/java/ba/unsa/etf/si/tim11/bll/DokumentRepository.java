@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 
 import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
@@ -53,12 +54,23 @@ public class DokumentRepository {
 	
 	public List<DokumentDbModel> dajDokumente(Integer folderId){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
-		kriterijum.add(Restrictions.eq("roditeljFolderId", folderId));
+		kriterijum.add(Restrictions.eq("folderId", folderId));
 		kriterijum.add(Restrictions.eq("aktivan", true));
 		
-		List<DokumentDbModel> listaDokumenata = DbDMSContext.getInstance()
+		List<DokumentDbModel> lista = DbDMSContext.getInstance()
 				.getDokumenti()
 				.ucitajSveSaKriterujumom(kriterijum);
-		return listaDokumenata;
+		return lista;
+	}
+	
+	public List<DokumentVerzijaDbModel> dajVerzijeDokumenta(Integer dokumentId){
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("dokumentId", dokumentId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<DokumentVerzijaDbModel> lista = DbDMSContext.getInstance()
+				.getDokumentiVerzije()
+				.ucitajSveSaKriterujumom(kriterijum);
+		return lista;
 	}
 }

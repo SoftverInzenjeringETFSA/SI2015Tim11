@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `komentar` (
   `DokumentVerzijaID` int(11) DEFAULT NULL,
   `Komentar` varchar(400) DEFAULT NULL,
   `DatumVrijemeKomentara` datetime DEFAULT NULL,
-  `Aktivan` varchar(45) NOT NULL,
+  `Aktivan` bit(1) NOT NULL,
   PRIMARY KEY (`KomentarID`),
   KEY `fk_Komentar_DokumentVerzija1_idx` (`DokumentVerzijaID`),
   KEY `fk_Komentar_Korisnik1_idx` (`KorisnikID`)

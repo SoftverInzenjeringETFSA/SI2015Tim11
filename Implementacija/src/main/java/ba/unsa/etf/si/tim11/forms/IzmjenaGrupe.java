@@ -60,7 +60,7 @@ public class IzmjenaGrupe
 		frmIzmjenaGrupa.setTitle("Izmjena Grupa");
 		frmIzmjenaGrupa.setResizable(false);
 		frmIzmjenaGrupa.setBounds(100, 100, 664, 432);
-		frmIzmjenaGrupa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmIzmjenaGrupa.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmIzmjenaGrupa.getContentPane().setLayout(null);
 		
 		JLabel label = new JLabel("Izbor grupe:");

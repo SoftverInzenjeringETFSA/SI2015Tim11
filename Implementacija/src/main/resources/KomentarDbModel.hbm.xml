@@ -17,8 +17,8 @@
         <property name="komentar" type="java.lang.String">
             <column name="KOMENTAR" />
         </property>
-        <property name="dokumentVrijemeKreiranja" type="java.util.Date">
-            <column name="DOKUMENTVRIJEMEKREIRANJA" />
+        <property name="datumVrijemeKomentara" type="java.util.Date">
+            <column name="datumVrijemeKomentara" />
         </property>
         <property name="aktivan" type="java.lang.Boolean">
             <column name="AKTIVAN" />

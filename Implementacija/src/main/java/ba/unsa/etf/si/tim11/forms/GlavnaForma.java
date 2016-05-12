@@ -10,7 +10,10 @@ import javax.swing.tree.TreeSelectionModel;
 
 import ba.unsa.etf.si.tim11.bll.Sesija;
 import ba.unsa.etf.si.tim11.bll.UnitOfWork;
+import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KomentarDbModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTable;
@@ -31,6 +34,10 @@ import javax.swing.JMenu;
 import javax.swing.JEditorPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class GlavnaForma {
 
@@ -96,7 +103,94 @@ public class GlavnaForma {
 	public GlavnaForma() {
 		initialize();
 	}
-
+	/*
+	 * OVA METODA JE ZMAJ!!!!!
+	 */
+	private DefaultMutableTreeNode PopuniDrvo(DefaultMutableTreeNode roditeljNode, FolderDbModel folder){
+		System.out.println("Usao");
+		List<DokumentDbModel> dokumenti = uow.getDokumentRepository().dajDokumente((Integer)(int)folder.getFolderId());
+		DefaultMutableTreeNode node = null;
+		for (DokumentDbModel dokumentDbModel : dokumenti) {
+			node = new DefaultMutableTreeNode(dokumentDbModel);
+			node.setAllowsChildren(false);
+			roditeljNode.add(node);
+		}
+		System.out.println("Dodao dokumente");
+		List<FolderDbModel> podfolderi = uow.getFolderRepository().dajPodfoldere((Integer)(int)folder.getFolderId());
+		if(podfolderi.size() != 0){
+			for (FolderDbModel folderDbModel : podfolderi) {
+				node = new DefaultMutableTreeNode(folderDbModel);
+				roditeljNode.add(node);
+				
+				roditeljNode.add(PopuniDrvo(node, folderDbModel));
+			}
+		}
+		System.out.println("Dodao foldere");
+		return roditeljNode;
+	}
+	
+	/*
+	 * Metoda puni tabelu verzija izabragog dokumenta.
+	 */
+	private void ucitajKomentareNaVerziju(long dokumentVerzijaId){
+		
+		table.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Korisnik postavio", "Vrijeme", "Komentar"}
+				},
+				new String[] {
+					"Korisnik postavio", "Vrijeme", "Komentar"
+				}
+			));
+			table.getColumnModel().getColumn(0).setPreferredWidth(115);
+			table.getColumnModel().getColumn(1).setPreferredWidth(112);
+			table.getColumnModel().getColumn(2).setPreferredWidth(233);
+			
+			System.out.println("Nasao komentare");
+		List<KomentarDbModel> komentariNaVerziju = uow.getKomentarRepository().dajKomentare((Integer)(int)dokumentVerzijaId);
+		for (KomentarDbModel komentarDbModel : komentariNaVerziju) {
+			Object[] row = {komentarDbModel.getKorisnik().getIme()+" "+
+					komentarDbModel.getKorisnik().getPrezime(), 
+					komentarDbModel.getDatumVrijemeKomentara(),
+					komentarDbModel.getKomentar()};
+	
+			((DefaultTableModel)table.getModel()).addRow(row);
+			System.out.println("dodao: "+komentarDbModel.getKomentar());
+		}
+	}
+	
+	/*
+	 * Metoda puni tabelu verzija izabragog dokumenta.
+	 */
+	private void ucitajVerzijeDokumenta(long dokumentId){
+		
+		table_1.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"ID", "Postavio korisnik", "Verzija", "Vrijeme postavljanja"}
+				},
+				new String[] {
+					"New column", "New column", "New column", "New column"
+				}
+			));
+		table_1.getColumnModel().getColumn(0).setPreferredWidth(30);
+		table_1.getColumnModel().getColumn(1).setPreferredWidth(174);
+		table_1.getColumnModel().getColumn(2).setPreferredWidth(112);
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(322);
+		
+		List<DokumentVerzijaDbModel> verzijeDokumenta = uow.getDokumentRepository().dajVerzijeDokumenta((Integer)(int)dokumentId);
+		
+		System.out.println("Nasao verzije");
+		for (DokumentVerzijaDbModel dokumentVerzijaDbModel : verzijeDokumenta) {
+			Object[] row = {(Integer)(int)dokumentVerzijaDbModel.getDokumentVerzijaId(),
+							dokumentVerzijaDbModel.getPostavioKorisnik().getIme()+" "+
+							dokumentVerzijaDbModel.getPostavioKorisnik().getPrezime(), 
+							"v"+dokumentVerzijaDbModel.getDokumentVerzijaId(), 
+							"22.05.2015. 22:57"};
+			
+			((DefaultTableModel)table_1.getModel()).addRow(row);
+		}
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -109,71 +203,51 @@ public class GlavnaForma {
 		
 		frmDobrodoaolaUDms.getContentPane().setLayout(null);
 		
-		JTree treeFolderView = new JTree();
+		final JTree treeFolderView = new JTree();
 		treeFolderView.setShowsRootHandles(true);
 		treeFolderView.setRootVisible(false);
-		
-		
-		
-		
 		treeFolderView.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Root") {
 				{
-					DefaultMutableTreeNode node_1;
-					DefaultMutableTreeNode node_2; 
-					
+					DefaultMutableTreeNode node;
 					List<FolderDbModel> pocetniFolderi = null;
 					
 					try {
 						pocetniFolderi = uow.getFolderRepository().dajFoldere();
 					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null, e.getMessage(), "GRESKA", JOptionPane.INFORMATION_MESSAGE);
-						e.printStackTrace();
-					}
-					for (FolderDbModel folderDbModel : pocetniFolderi) {
-						node_1 = new DefaultMutableTreeNode(folderDbModel);
-						add(node_1);
-					}
-					node_1 = new DefaultMutableTreeNode("faktura1.txt");
-					add(node_1);
-					
-					try {
-						JOptionPane.showMessageDialog(null, Sesija.getUsername().toString(), "GRESKA", JOptionPane.INFORMATION_MESSAGE);
-					} catch (HeadlessException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
 					
-					/*node_1 = new DefaultMutableTreeNode("Racunovodstvo");
-						node_2 = new DefaultMutableTreeNode("fakture");
-							node_2.add(new DefaultMutableTreeNode("faktura1.txt"));
-							node_2.add(new DefaultMutableTreeNode("faktura1.txt"));
-							node_2.add(new DefaultMutableTreeNode("faktura1.txt"));
-						node_1.add(node_2); 
-						node_2 = new DefaultMutableTreeNode("Ugovori");
-							node_2.add(new DefaultMutableTreeNode("ugovor1.docx"));
-							node_2.add(new DefaultMutableTreeNode("ugovor2.docx"));
-							node_2.add(new DefaultMutableTreeNode("ugovor3.docx"));
-							node_2.add(new DefaultMutableTreeNode("ugovor4.docx"));
-						node_1.add(node_2);
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Menadzment");
-						node_2 = new DefaultMutableTreeNode("Upiti");
-							node_2.add(new DefaultMutableTreeNode("Zahtjev za ugovor1.docx"));
-							node_2.add(new DefaultMutableTreeNode("Zahtjev za ugovor2.docx"));
-							node_2.add(new DefaultMutableTreeNode("Zahtjev za ugovor3.docx"));
-							node_2.add(new DefaultMutableTreeNode("Zahtjev za ugovor4.docx"));
-						node_1.add(node_2);
-					add(node_1);*/
+					if(pocetniFolderi != null){
+						for (FolderDbModel folderDbModel : pocetniFolderi) {
+							node = new DefaultMutableTreeNode(folderDbModel);
+							add(PopuniDrvo(node, folderDbModel));
+						}
+					}
 				}
 			}
 		));
 		treeFolderView.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION); //moguce odabrati samo jednu stavku
 		
+		treeFolderView.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent arg0) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+						treeFolderView.getLastSelectedPathComponent();
+				
+				if(node.getUserObject() instanceof DokumentDbModel){
+					DokumentDbModel dokument = (DokumentDbModel)node.getUserObject();
+					ucitajVerzijeDokumenta(dokument.getDokumentId());
+					//JOptionPane.showMessageDialog(null, dokument.getDokumentNaziv(), "Naziv", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+				if(node.getUserObject() instanceof FolderDbModel){
+					FolderDbModel folder = (FolderDbModel)node.getUserObject();
+					JOptionPane.showMessageDialog(null, folder.getFolderNaziv(), "Naziv", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		
 		treeFolderView.setBounds(10, 53, 343, 407);
+		
 		frmDobrodoaolaUDms.getContentPane().add(treeFolderView);
 		
 		popupMenu = new JPopupMenu();
@@ -211,14 +285,7 @@ public class GlavnaForma {
 			new String[] {
 				"Korisnik postavio", "Vrijeme", "Komentar"
 			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+		));
 		table.getColumnModel().getColumn(0).setPreferredWidth(115);
 		table.getColumnModel().getColumn(1).setPreferredWidth(112);
 		table.getColumnModel().getColumn(2).setPreferredWidth(233);
@@ -247,19 +314,31 @@ public class GlavnaForma {
 		frmDobrodoaolaUDms.getContentPane().add(btnDodajDokument);
 		
 		table_1 = new JTable();
+		table_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				/*Integer verzijaId = null;
+				try {
+					verzijaId = (Integer)table_1.getValueAt(table_1.getSelectedRow(), 0);
+					ucitajKomentareNaVerziju(verzijaId);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Nista", "Naziv", JOptionPane.INFORMATION_MESSAGE);
+				}*/
+				ucitajKomentareNaVerziju(2);
+			}
+		});
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Postavio korisnik", "Verzija", "Vrijeme postavljanja"},
-				{"Abid Sakalas", "v22", "22.05.2015. 22:35"},
-				{"Buto Devijanovic", "v23", "22.05.2015. 22:57"},
+				{"ID", "Postavio korisnik", "Verzija", "Vrijeme postavljanja"}
 			},
 			new String[] {
-				"New column", "New column", "New column"
+				"New column", "New column", "New column", "New column"
 			}
 		));
-		table_1.getColumnModel().getColumn(0).setPreferredWidth(174);
-		table_1.getColumnModel().getColumn(1).setPreferredWidth(112);
-		table_1.getColumnModel().getColumn(2).setPreferredWidth(322);
+		table_1.getColumnModel().getColumn(0).setPreferredWidth(30);
+		table_1.getColumnModel().getColumn(1).setPreferredWidth(174);
+		table_1.getColumnModel().getColumn(2).setPreferredWidth(112);
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(322);
 		table_1.setBounds(363, 99, 469, 115);
 		frmDobrodoaolaUDms.getContentPane().add(table_1);
 		

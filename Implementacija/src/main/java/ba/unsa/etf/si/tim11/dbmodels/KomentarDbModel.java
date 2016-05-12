@@ -17,18 +17,18 @@ public class KomentarDbModel implements java.io.Serializable{
 	private Integer korisnikId;
 	private Integer dokumentVerzijaId;
 	private String komentar;
-	private Date dokumentVrijemeKreiranja;
+	private Date datumVrijemeKomentara;
 	private Boolean aktivan;
 
 	@ManyToOne
 	@JoinColumn(name="korisnikId")
-	private KorisnikTipDbModel korisnik;
+	private KorisnikDbModel korisnik;
 	
-	public KorisnikTipDbModel getKorisnik() {
+	public KorisnikDbModel getKorisnik() {
 		return korisnik;
 	}
 
-	public void setKorisnik(KorisnikTipDbModel korisnik) {
+	public void setKorisnik(KorisnikDbModel korisnik) {
 		this.korisnik = korisnik;
 	}
 
@@ -77,12 +77,12 @@ public class KomentarDbModel implements java.io.Serializable{
 		this.dokumentVerzijaId = dokumentVerzijaId;
 	}
 
-	public Date getDokumentVrijemeKreiranja() {
-		return dokumentVrijemeKreiranja;
+	public Date getDatumVrijemeKomentara() {
+		return datumVrijemeKomentara;
 	}
 
-	public void setDokumentVrijemeKreiranja(Date dokumentVrijemeKreiranja) {
-		this.dokumentVrijemeKreiranja = dokumentVrijemeKreiranja;
+	public void setDatumVrijemeKomentara(Date datumVrijemeKomentara) {
+		this.datumVrijemeKomentara = datumVrijemeKomentara;
 	}
 
 	public Boolean getAktivan() {

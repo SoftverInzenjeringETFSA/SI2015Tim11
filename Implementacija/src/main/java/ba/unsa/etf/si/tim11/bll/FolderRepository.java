@@ -159,7 +159,7 @@ public class FolderRepository {
 	}
 	public List<FolderDbModel> dajPodfoldere(Integer folderId){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
-		kriterijum.add(Restrictions.eq("folderId", folderId));
+		kriterijum.add(Restrictions.eq("roditeljFolderId", folderId));
 		kriterijum.add(Restrictions.eq("aktivan", true));
 		
 		List<FolderDbModel> listaFoldera = DbDMSContext.getInstance()
