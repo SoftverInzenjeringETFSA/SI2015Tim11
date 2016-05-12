@@ -45,7 +45,7 @@ public class IzmjenaKorisnika
 	KorisnikRepository korisnikRepository = new KorisnikRepository();
 	KorisnikDbModel korisnik;
 	Integer korisnikId;
-	ModelTabele mt=new ModelTabele();
+	
 	private Boolean uredu[]={false,false};
 	
 	private Boolean provjeriPolja()
@@ -177,14 +177,17 @@ public class IzmjenaKorisnika
 					{
 						korisnikId=korisnikRepository.dajIdKorisnikaPoUsername(pretraga);
 						korisnik=korisnikRepository.dajKorisnika(korisnikId);
+						ModelTabele mt=new ModelTabele();
 						mt.dodajElement(korisnik);
 						tableIzmjenaPretraga.setModel(mt);
+						buttonIzmjenaBrisiKorisnika.setEnabled(true);
 						
 					}
 					else
 					{
 						JOptionPane.showMessageDialog(frmIzmjenaKorisnika,"Nema korisnika s tim korisničkim imenom!");
 						textFieldIzmjenaPretragaKorisnika.setText("");
+						buttonIzmjenaBrisiKorisnika.setEnabled(false);
 					}
 				}
 				catch(Exception e)
@@ -208,20 +211,28 @@ public class IzmjenaKorisnika
 					lblIzmjenaPretraga.setText("OK");
 					lblIzmjenaPretraga.setForeground(new Color(0, 128, 0));
 					buttonIzmjenaTrazi.setEnabled(true);
+					
+					
 				}
 				else
 				{
 					lblIzmjenaPretraga.setForeground(Color.red);
 					lblIzmjenaPretraga.setText("Niste unijeli korisničko ime za pretragu");
 					buttonIzmjenaTrazi.setEnabled(false);
+					
 				}
 			}
 		});
 		
 		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
+		buttonIzmjenaBrisiKorisnika.setEnabled(false);
 		buttonIzmjenaBrisiKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				korisnikRepository.obrisiKorisnika(korisnikId);
+				ModelTabele mt=new ModelTabele();
+				tableIzmjenaPretraga.setModel(mt);
+				textFieldIzmjenaPretragaKorisnika.setText("");
+				buttonIzmjenaBrisiKorisnika.setEnabled(false);
 			}
 		});
 		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
@@ -234,6 +245,10 @@ public class IzmjenaKorisnika
 			public void actionPerformed(ActionEvent arg0) {
 				korisnikRepository.izmijeniKorisnika(korisnik);
 				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Podaci spremljeni");
+				ModelTabele mt=new ModelTabele();
+				tableIzmjenaPretraga.setModel(mt);
+				textFieldIzmjenaPretragaKorisnika.setText("");
+				buttonIzmjenaBrisiKorisnika.setEnabled(false);
 				
 			}
 		});
@@ -241,7 +256,7 @@ public class IzmjenaKorisnika
 		tableIzmjenaPretraga.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(1==1/*!korisnik.equals(null)*/)
+				if(!korisnik.equals(null))
 				{
 					btnIzmijeniKorisnika.setEnabled(true);
 				}
@@ -324,6 +339,15 @@ public class IzmjenaKorisnika
 				passwordFieldIzmjenaNovaSifra.setText("");
 				passwordFieldIzmjenaPonoviSifru.setText("");
 				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Sifra Promijenjena");
+				ModelTabele mt=new ModelTabele();
+				tableIzmjenaPretraga.setModel(mt);
+				textFieldIzmjenaPretragaKorisnika.setText("");
+				buttonIzmjenaIzmjeniSifru.setEnabled(false);
+				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+				for(int i=0;i<uredu.length;i++)
+				{
+					uredu[i]=false;
+				}
 			}
 		});
 		

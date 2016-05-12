@@ -462,6 +462,11 @@ public class DodavanjeKorisnika {
 					textFieldDodavanjeKorisnikaUsername.setText("");
 					passwordFieldDodavanjeKorisnikaPass.setText("");
 					passwordFieldDodavanjePonoviSifru.setText("");
+					btnDodavanjeSpremi.setEnabled(false);
+					for(int i=0;i<uredu.length;i++)
+					{
+						uredu[i]=false;
+					}
 					
 					
 				}
