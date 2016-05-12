@@ -69,7 +69,7 @@ public class KreiranjeGrupa
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args)
+	public void PokreniFormu()
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
@@ -176,6 +176,11 @@ public class KreiranjeGrupa
 		btnDodajKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				if(list_sviKorisnici.getSelectedIndex() == -1)
+				{
+				  JOptionPane.showMessageDialog(null, "Nije izabran nijedan korisnik iz liste svih korisnika!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+				  return;
+				}
 				if(!listaDodanihKorisnika.contains(list_sviKorisnici.getSelectedValue()))
 					listaDodanihKorisnika.addElement(list_sviKorisnici.getSelectedValue());
 				else

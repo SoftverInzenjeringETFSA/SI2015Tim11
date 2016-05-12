@@ -384,7 +384,8 @@ public class GlavnaForma {
 		mntmDodavanjeGrupe = new JMenuItem("Dodavanje grupe");
 		mntmDodavanjeGrupe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				KreiranjeGrupa.main(null);
+				KreiranjeGrupa forma = new KreiranjeGrupa();
+				forma.PokreniFormu();
 			}
 		});
 		mnGrupe.add(mntmDodavanjeGrupe);
@@ -392,7 +393,8 @@ public class GlavnaForma {
 		mntmIzmjenaGrupe = new JMenuItem("Izmjena grupe");
 		mntmIzmjenaGrupe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IzmjenaGrupe.main(null);
+				IzmjenaGrupe forma = new IzmjenaGrupe();
+				forma.PokreniFormu();
 			}
 		});
 		mnGrupe.add(mntmIzmjenaGrupe);
