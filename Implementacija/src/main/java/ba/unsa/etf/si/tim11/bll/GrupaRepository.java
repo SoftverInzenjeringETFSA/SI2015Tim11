@@ -45,9 +45,30 @@ public class GrupaRepository {
 	 * 
 	 * @param grupaId
 	 */
-	public Boolean obrisiGrupu(Integer grupaId) {
-		// TODO - implement GrupaRepository.obrisiGrupu
-		throw new UnsupportedOperationException();
+	public Boolean obrisiGrupu(GrupaDbModel grupa) {
+		DbDMSContext.getInstance().getGrupe().obrisi(grupa);
+		return true;
+	}
+	
+	public void ukloniSveKorisnikeIzGrupe(Integer grupaId)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		List<GrupaXKorisnikDbModel> grupeKorisnici = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+		
+		for(GrupaXKorisnikDbModel gk : grupeKorisnici)
+			DbDMSContext.getInstance().getGrupeKorisnici().obrisi(gk);
+	}
+	
+	public void ukloniSvaPravaPristupaGrupe(Integer grupaId)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		List<FolderXGrupaDbModel> folderiGrupe = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		for(FolderXGrupaDbModel fg : folderiGrupe)
+			DbDMSContext.getInstance().getFolderiGrupe().obrisi(fg);
+		
 	}
 
 	/**
@@ -76,6 +97,16 @@ public class GrupaRepository {
 	public void odbrisiKorisnikaIzGrupe(Integer korisnikId, Integer grupaId) {
 		// TODO - implement GrupaRepository.odbrisiKorisnikaIzGrupe
 		throw new UnsupportedOperationException();
+	}
+	
+	public List<GrupaDbModel> dajGrupeVlasnika(Integer idKorisnika)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("odgovorniKorisnikId", idKorisnika));
+		
+		List<GrupaDbModel> listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		return listaGrupa;
 	}
 	
 	public List<GrupaDbModel> dajGrupeZaKorisnika(Integer idKorisnika)

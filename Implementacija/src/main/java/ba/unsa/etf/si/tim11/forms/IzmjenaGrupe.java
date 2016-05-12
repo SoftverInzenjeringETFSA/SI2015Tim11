@@ -12,16 +12,52 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import ba.unsa.etf.si.tim11.bll.FolderRepository;
+import ba.unsa.etf.si.tim11.bll.GrupaRepository;
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.bll.Sesija;
+import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import java.awt.Color;
+
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class IzmjenaGrupe
 {
 
 	private JFrame frmIzmjenaGrupa;
-	private JTextField textFieldIzmjenaGrPretraga;
-	private JTable tableIzmjenaGrKorisnici;
-
+	private JTextField text_noviNazivGrupe;
+	private JList list_grupeKorisnika;
+	private JList list_sviKorisnici;
+	private JList list_dodaniKorisnici;
+	private JList list_sviFolderi;
+	private JList list_dodaniFolderi;
+	private JCheckBox chckbxPravoPisanja;
+	private JCheckBox chckbxPraviitanja;
+	private DefaultListModel listaGrupaKorisnika = new DefaultListModel();
+	private DefaultListModel listaSvihKorisnika = new DefaultListModel();
+	private DefaultListModel listaDodanihKorisnikaGrupe = new DefaultListModel();
+	private DefaultListModel listaSvihFoldera = new DefaultListModel();
+	private DefaultListModel listaDodanihFolderaGrupe = new DefaultListModel();
+	private KorisnikRepository korisnikRep = new KorisnikRepository();
+	private GrupaRepository grupaRep = new GrupaRepository();
+	private FolderRepository folderRep = new FolderRepository();
+	String userNameKorisnika;
 	/**
 	 * Launch the application.
 	 */
@@ -49,6 +85,43 @@ public class IzmjenaGrupe
 	public IzmjenaGrupe()
 	{
 		initialize();
+		postaviUserNameKorisnika();
+		ucitajListeForme(userNameKorisnika);
+		ucitajGrupeKorisnika(userNameKorisnika);
+	}
+	
+	private void ucitajListeForme(String userNameKorisnika)
+	{
+		List<KorisnikDbModel> listaKorisnika = korisnikRep.dajSveKorisnike();
+		for(KorisnikDbModel kor : listaKorisnika)
+			listaSvihKorisnika.addElement(kor);
+		
+		List<FolderDbModel> listaFolderaa = folderRep.dajSveFoldereNaKojeImaPravo(userNameKorisnika);
+		 for(FolderDbModel f : listaFolderaa)
+			if(!listaSvihFoldera.contains(f))
+			 listaSvihFoldera.addElement(f);
+	}
+	private void izbrisiGrupuNaFormi(Integer index)
+	{
+		listaGrupaKorisnika.removeElementAt(index);
+	}
+	private void ucitajGrupeKorisnika(String userNameKorisnika2) 
+	{
+		 
+		List<GrupaDbModel> listaGrupaVlasnika = grupaRep.dajGrupeVlasnika(korisnikRep.dajIdKorisnikaPoUsername(userNameKorisnika));
+		for(GrupaDbModel grupa : listaGrupaVlasnika)
+			listaGrupaKorisnika.addElement(grupa);
+		
+	}
+
+	private void postaviUserNameKorisnika() {
+		try{
+		    userNameKorisnika = "rsmajic"; //Sesija.getUsername();
+		}
+		catch(Exception ex){
+			userNameKorisnika = "";
+		}
+		
 	}
 
 	/**
@@ -59,133 +132,213 @@ public class IzmjenaGrupe
 		frmIzmjenaGrupa = new JFrame();
 		frmIzmjenaGrupa.setTitle("Izmjena Grupa");
 		frmIzmjenaGrupa.setResizable(false);
-		frmIzmjenaGrupa.setBounds(100, 100, 664, 432);
-		frmIzmjenaGrupa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmIzmjenaGrupa.setBounds(100, 100, 1194, 480);
+		frmIzmjenaGrupa.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmIzmjenaGrupa.getContentPane().setLayout(null);
 		
-		JLabel label = new JLabel("Izbor grupe:");
-		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		label.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label.setBounds(51, 39, 75, 21);
-		frmIzmjenaGrupa.getContentPane().add(label);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(new TitledBorder(null, "Odabir grupe", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		scrollPane.setBounds(10, 11, 196, 375);
+		frmIzmjenaGrupa.getContentPane().add(scrollPane);
 		
-		JComboBox comboBoxIzmjenaGrIzbor = new JComboBox();
-		comboBoxIzmjenaGrIzbor.setFont(new Font("Dialog", Font.PLAIN, 11));
-		comboBoxIzmjenaGrIzbor.setBounds(136, 39, 498, 21);
-		frmIzmjenaGrupa.getContentPane().add(comboBoxIzmjenaGrIzbor);
+		list_grupeKorisnika = new JList(listaGrupaKorisnika);
+		scrollPane.setViewportView(list_grupeKorisnika);
 		
-		JLabel label_1 = new JLabel("Pretraga korisnika:");
-		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_1.setBounds(25, 71, 101, 21);
-		frmIzmjenaGrupa.getContentPane().add(label_1);
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Izmjena naziva grupe", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBounds(216, 11, 459, 96);
+		frmIzmjenaGrupa.getContentPane().add(panel);
 		
-		textFieldIzmjenaGrPretraga = new JTextField();
-		textFieldIzmjenaGrPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
-		textFieldIzmjenaGrPretraga.setColumns(10);
-		textFieldIzmjenaGrPretraga.setBounds(136, 71, 328, 21);
-		frmIzmjenaGrupa.getContentPane().add(textFieldIzmjenaGrPretraga);
+		JLabel lblNoviNaziv = new JLabel("Novi naziv:");
 		
-		JButton buttonIzmjenaGRTrazi = new JButton("Traži");
-		buttonIzmjenaGRTrazi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		text_noviNazivGrupe = new JTextField();
+		text_noviNazivGrupe.setColumns(10);
+		
+		JButton btnSpremiIzmjenu = new JButton("Spremi izmjenu");
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblNoviNaziv)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(text_noviNazivGrupe, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+						.addComponent(btnSpremiIzmjenu, Alignment.TRAILING))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNoviNaziv)
+						.addComponent(text_noviNazivGrupe, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnSpremiIzmjenu)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
+		
+		JButton btnBrisanjeGrupe = new JButton("Obriši grupu");
+		btnBrisanjeGrupe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(list_grupeKorisnika.getSelectedIndex() != -1)
+				{
+				    grupaRep.ukloniSveKorisnikeIzGrupe((int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId());
+				    grupaRep.ukloniSvaPravaPristupaGrupe((int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId());
+				    grupaRep.obrisiGrupu((GrupaDbModel)list_grupeKorisnika.getSelectedValue());
+				    izbrisiGrupuNaFormi(list_grupeKorisnika.getSelectedIndex());
+				    JOptionPane.showMessageDialog(null, "Grupa uspješno obrisana!", "Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Nije odabrana nijedna grupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					
+				}
 			}
 		});
-		buttonIzmjenaGRTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaGRTrazi.setBounds(559, 71, 75, 23);
-		frmIzmjenaGrupa.getContentPane().add(buttonIzmjenaGRTrazi);
+		btnBrisanjeGrupe.setBounds(48, 397, 157, 26);
+		frmIzmjenaGrupa.getContentPane().add(btnBrisanjeGrupe);
 		
-		JCheckBox checkBoxIzmjenaGRClan = new JCheckBox("Član Grupe");
-		checkBoxIzmjenaGRClan.setFont(new Font("Dialog", Font.PLAIN, 11));
-		checkBoxIzmjenaGRClan.setBounds(470, 71, 87, 21);
-		frmIzmjenaGrupa.getContentPane().add(checkBoxIzmjenaGRClan);
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Izmjena korisnika u grupi", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setBounds(216, 118, 459, 308);
+		frmIzmjenaGrupa.getContentPane().add(panel_1);
 		
-		JLabel label_2 = new JLabel("Korisnici:");
-		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_2.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_2.setBounds(71, 103, 55, 21);
-		frmIzmjenaGrupa.getContentPane().add(label_2);
+		JScrollPane scrollPane_1 = new JScrollPane();
 		
-		tableIzmjenaGrKorisnici = new JTable();
-		tableIzmjenaGrKorisnici.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Korisni\u010Dko Ime", "Ime", "Prezime", "Adresa", "Datum Ro\u0111enja", "Pozicija u Organizaciji"},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"Korisni\u010Dko Ime", "Ime", "Prezime", "Adresa", "Datum Ro\u0111enja", "Pozicija u Organizaciji"
-			}
-		));
-		tableIzmjenaGrKorisnici.getColumnModel().getColumn(0).setPreferredWidth(85);
-		tableIzmjenaGrKorisnici.getColumnModel().getColumn(1).setPreferredWidth(49);
-		tableIzmjenaGrKorisnici.getColumnModel().getColumn(3).setPreferredWidth(59);
-		tableIzmjenaGrKorisnici.getColumnModel().getColumn(4).setPreferredWidth(91);
-		tableIzmjenaGrKorisnici.getColumnModel().getColumn(5).setPreferredWidth(113);
-		tableIzmjenaGrKorisnici.setFont(new Font("Dialog", Font.PLAIN, 11));
-		tableIzmjenaGrKorisnici.setBounds(136, 103, 498, 139);
-		frmIzmjenaGrupa.getContentPane().add(tableIzmjenaGrKorisnici);
+		JLabel lblSviKorisnici = new JLabel("Svi korisnici:");
 		
-		JLabel label_3 = new JLabel("Izmijena Prava Pristupa:");
-		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_3.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_3.setBounds(12, 253, 114, 21);
-		frmIzmjenaGrupa.getContentPane().add(label_3);
+		JButton btnDodajKorisnika = new JButton("Dodaj korisnika");
 		
-		JCheckBox checkBoxIzmjenaGrIzmjenaPPPostavljanje = new JCheckBox("Postavljanje");
-		checkBoxIzmjenaGrIzmjenaPPPostavljanje.setHorizontalAlignment(SwingConstants.LEFT);
-		checkBoxIzmjenaGrIzmjenaPPPostavljanje.setFont(new Font("Dialog", Font.PLAIN, 11));
-		checkBoxIzmjenaGrIzmjenaPPPostavljanje.setBounds(136, 253, 87, 21);
-		frmIzmjenaGrupa.getContentPane().add(checkBoxIzmjenaGrIzmjenaPPPostavljanje);
+		JScrollPane scrollPane_2 = new JScrollPane();
 		
-		JCheckBox checkBoxIzmjenaGrIzmjenaPPSkidanje = new JCheckBox("Skidanje");
-		checkBoxIzmjenaGrIzmjenaPPSkidanje.setHorizontalAlignment(SwingConstants.LEFT);
-		checkBoxIzmjenaGrIzmjenaPPSkidanje.setFont(new Font("Dialog", Font.PLAIN, 11));
-		checkBoxIzmjenaGrIzmjenaPPSkidanje.setBounds(225, 253, 65, 21);
-		frmIzmjenaGrupa.getContentPane().add(checkBoxIzmjenaGrIzmjenaPPSkidanje);
+		JLabel lblPostojeiKorisniciU = new JLabel("Postojeći korisnici u grupi:");
 		
-		JButton buttonIzmjenaGrIzmjeniKorisnika = new JButton("Izmijeni Korisnika");
-		buttonIzmjenaGrIzmjeniKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaGrIzmjeniKorisnika.setBounds(505, 253, 129, 21);
-		frmIzmjenaGrupa.getContentPane().add(buttonIzmjenaGrIzmjeniKorisnika);
+		JButton btnObriiKorisnika = new JButton("Obriši korisnika");
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnDodajKorisnika))
+						.addComponent(lblSviKorisnici))
+					.addGap(6)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblPostojeiKorisniciU)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+							.addComponent(btnObriiKorisnika)
+							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(25, Short.MAX_VALUE))
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addGap(119)
+							.addComponent(btnDodajKorisnika))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblSviKorisnici)
+								.addComponent(lblPostojeiKorisniciU))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(scrollPane_2)
+								.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE))))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnObriiKorisnika)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
 		
-		JLabel label_4 = new JLabel("Dodavanje Korisnika:");
-		label_4.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_4.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_4.setBounds(12, 285, 114, 21);
-		frmIzmjenaGrupa.getContentPane().add(label_4);
+		list_dodaniKorisnici = new JList(listaDodanihKorisnikaGrupe);
+		scrollPane_2.setViewportView(list_dodaniKorisnici);
 		
-		JCheckBox checkBoxIzmjenaGrDodavanjeKorisnikaPostavljanje = new JCheckBox("Postavljanje");
-		checkBoxIzmjenaGrDodavanjeKorisnikaPostavljanje.setHorizontalAlignment(SwingConstants.LEFT);
-		checkBoxIzmjenaGrDodavanjeKorisnikaPostavljanje.setFont(new Font("Dialog", Font.PLAIN, 11));
-		checkBoxIzmjenaGrDodavanjeKorisnikaPostavljanje.setBounds(136, 285, 87, 21);
-		frmIzmjenaGrupa.getContentPane().add(checkBoxIzmjenaGrDodavanjeKorisnikaPostavljanje);
+		list_sviKorisnici = new JList(listaSvihKorisnika);
+		scrollPane_1.setViewportView(list_sviKorisnici);
+		panel_1.setLayout(gl_panel_1);
 		
-		JCheckBox checkBoxIzmjenaGrDodavanjeKorisnikaSkidanje = new JCheckBox("Skidanje");
-		checkBoxIzmjenaGrDodavanjeKorisnikaSkidanje.setFont(new Font("Dialog", Font.PLAIN, 11));
-		checkBoxIzmjenaGrDodavanjeKorisnikaSkidanje.setBounds(225, 285, 65, 21);
-		frmIzmjenaGrupa.getContentPane().add(checkBoxIzmjenaGrDodavanjeKorisnikaSkidanje);
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new TitledBorder(null, "Izmjena/Uklanjanje prava pristupa nad folderima", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_2.setBounds(685, 11, 486, 412);
+		frmIzmjenaGrupa.getContentPane().add(panel_2);
 		
-		JButton buttonIzmjenaGrDodajKorisnika = new JButton("Dodaj Korisnika");
-		buttonIzmjenaGrDodajKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaGrDodajKorisnika.setBounds(505, 285, 129, 21);
-		frmIzmjenaGrupa.getContentPane().add(buttonIzmjenaGrDodajKorisnika);
+		JScrollPane scrollPane_3 = new JScrollPane();
 		
-		JLabel label_5 = new JLabel("Brisanje Grupe:");
-		label_5.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_5.setFont(new Font("Dialog", Font.PLAIN, 11));
-		label_5.setBounds(39, 331, 87, 21);
-		frmIzmjenaGrupa.getContentPane().add(label_5);
+		JLabel lblSviFolderi = new JLabel("Svi folderi:");
 		
-		JCheckBox checkBoxIzmjenaGrOmoguciBrisanje = new JCheckBox("Omogući Brisanje");
-		checkBoxIzmjenaGrOmoguciBrisanje.setFont(new Font("Dialog", Font.PLAIN, 11));
-		checkBoxIzmjenaGrOmoguciBrisanje.setBounds(136, 331, 114, 21);
-		frmIzmjenaGrupa.getContentPane().add(checkBoxIzmjenaGrOmoguciBrisanje);
+		JButton btnDodajFolder = new JButton("Dodaj folder");
 		
-		JButton buttonIzmjenaGrObrisiGrupu = new JButton("Obriši Grupu");
-		buttonIzmjenaGrObrisiGrupu.setEnabled(false);
-		buttonIzmjenaGrObrisiGrupu.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaGrObrisiGrupu.setBounds(505, 331, 129, 21);
-		frmIzmjenaGrupa.getContentPane().add(buttonIzmjenaGrObrisiGrupu);
+		JScrollPane scrollPane_4 = new JScrollPane();
+		
+		chckbxPravoPisanja = new JCheckBox("Pravo pisanja");
+		
+		chckbxPraviitanja = new JCheckBox("Pravi čitanja");
+		
+		JLabel lblDodaniFolderi = new JLabel("Dodani folderi:");
+		
+		JButton btnUkloniPravoPristupa = new JButton("Ukloni pravo pristupa");
+		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
+		gl_panel_2.setHorizontalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addComponent(chckbxPraviitanja)
+										.addComponent(chckbxPravoPisanja)
+										.addComponent(btnDodajFolder, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(lblSviFolderi))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+								.addComponent(lblDodaniFolderi)))
+						.addComponent(btnUkloniPravoPristupa, Alignment.TRAILING))
+					.addContainerGap())
+		);
+		gl_panel_2.setVerticalGroup(
+			gl_panel_2.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblSviFolderi)
+								.addComponent(lblDodaniFolderi))
+							.addGap(7)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 305, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+							.addComponent(btnUkloniPravoPristupa))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(109)
+							.addComponent(chckbxPravoPisanja)
+							.addGap(18)
+							.addComponent(chckbxPraviitanja)
+							.addGap(18)
+							.addComponent(btnDodajFolder)))
+					.addContainerGap())
+		);
+		
+		list_dodaniFolderi = new JList(listaDodanihFolderaGrupe);
+		scrollPane_4.setViewportView(list_dodaniFolderi);
+		
+		list_sviFolderi = new JList(listaSvihFoldera);
+		scrollPane_3.setViewportView(list_sviFolderi);
+		panel_2.setLayout(gl_panel_2);
 	}
 }
