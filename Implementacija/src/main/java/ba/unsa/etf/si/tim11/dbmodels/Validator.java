@@ -38,6 +38,23 @@ public class Validator
 		}
 		return false;
 	}
+	public static Boolean samoJedanBroj(String s)
+	{
+		String broj="^[0-9]+$";
+		if(s.length()==1&&s.matches(broj))
+		{
+			return true;
+		}
+		return false;
+	}
+	public static Boolean daLiJeTrueFalse(String s)
+	{
+		if(s.matches("^true")||s.matches("^false"))
+		{
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * 
 	 * @param s
