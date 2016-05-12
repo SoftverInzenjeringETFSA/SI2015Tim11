@@ -112,10 +112,20 @@ public class GrupaRepository {
 	
 	public List<GrupaDbModel> dajGrupeVlasnika(Integer idKorisnika)
 	{
+		KorisnikRepository korRep = new KorisnikRepository();
+		KorisnikDbModel kor = korRep.dajKorisnika(idKorisnika);
+		List<GrupaDbModel> listaGrupa;
+		
+		if(kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		{
+			listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSve();
+			return listaGrupa;
+		}
+					
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("odgovorniKorisnikId", idKorisnika));
 		
-		List<GrupaDbModel> listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
+		listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		return listaGrupa;
 	}
