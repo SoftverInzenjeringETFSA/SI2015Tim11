@@ -17,7 +17,7 @@ public class Validator
 	public static Boolean daLiJeStringPrazan(String s)
 	{
 		String prazan="^[\\s]+$";
-		if(s.equals(null)||s.matches(prazan))
+		if(s.isEmpty()||s.matches(prazan))
 		{
 			return true;
 		}

@@ -92,15 +92,7 @@ public class DodavanjeKorisnika {
 		return true;
 		
 	}
-	
-	
-	
-	
-	/*List<KorisnikPozicijaDbModel> kp = DbDMSContext.getInstance().getKorisnikPozicije().ucitajSve();
-	String [] pozicije={kp.get(0).getKorisnikPozicijaNaziv(),kp.get(1).getKorisnikPozicijaNaziv(),kp.get(2).getKorisnikPozicijaNaziv()};
-	*/		
-	/*List<KorisnikTipDbModel> kt= DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
-	String [] tipovi={kt.get(0).getKorisnikTipNaziv(),kt.get(1).getKorisnikTipNaziv()};*/
+
 	
 
 	/**
