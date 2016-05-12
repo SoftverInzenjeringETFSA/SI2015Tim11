@@ -13,6 +13,7 @@ import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.FolderXGrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 public class FolderRepository {
 
@@ -67,14 +68,21 @@ public class FolderRepository {
 		
 		KorisnikRepository kor = new KorisnikRepository();
 		GrupaRepository gru = new GrupaRepository();
+		List<FolderDbModel> listaFoldera = new ArrayList<FolderDbModel>();
 		
 		Integer idKorisnika = kor.dajIdKorisnikaPoUsername(userNameKorisnika);
+		
+		KorisnikDbModel korisnik = kor.dajKorisnika(idKorisnika);
+		
+		if(korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		{
+			listaFoldera = DbDMSContext.getInstance().getFolderi().ucitajSve();
+			return listaFoldera;
+		}	
 		
 		List<GrupaDbModel> listaGrupa = gru.dajGrupeZaKorisnika(idKorisnika);
 		
 		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSve();
-		
-		List<FolderDbModel> listaFoldera = new ArrayList<FolderDbModel>();;
 		
 		for(GrupaDbModel grupa : listaGrupa)
 			for(FolderXGrupaDbModel fg : folGru)

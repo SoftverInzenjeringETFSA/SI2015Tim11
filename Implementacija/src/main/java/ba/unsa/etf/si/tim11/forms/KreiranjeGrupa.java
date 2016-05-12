@@ -120,7 +120,8 @@ public class KreiranjeGrupa
 			// Ucitaj sve foldere
 			List<FolderDbModel> listaFolderaa = folderRep.dajSveFoldereNaKojeImaPravo(userNameKorisnika);
 			 for(FolderDbModel f : listaFolderaa)
-				listaFoldera.addElement(f);	
+				if(!listaFoldera.contains(f))
+				 listaFoldera.addElement(f);	
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class KreiranjeGrupa
 		frmKreiranjeGrupa.setResizable(false);
 		frmKreiranjeGrupa.setTitle("Kreiranje Grupa");
 		frmKreiranjeGrupa.setBounds(100, 100, 1209, 630);
-		frmKreiranjeGrupa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmKreiranjeGrupa.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmKreiranjeGrupa.getContentPane().setLayout(null);
 		
 		JPanel panel_podaciGrupe = new JPanel();

@@ -169,4 +169,5 @@ public class KorisnikRepository {
 		else 
 			return 2; // Korisnik ima pravo citanja samo
 	}
+
 }
