@@ -165,6 +165,7 @@ public class FolderRepository {
 		}
 		return false;
 	}
+	
 	public List<FolderDbModel> dajPodfoldere(Integer folderId){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("roditeljFolderId", folderId));
@@ -174,5 +175,18 @@ public class FolderRepository {
 				.getFolderi()
 				.ucitajSveSaKriterujumom(kriterijum);
 		return listaFoldera;
+	}
+
+	public List<FolderDbModel> dajFoldereGrupe(int grupaId) {
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		List<FolderXGrupaDbModel> grupeFolderi = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		List<FolderDbModel> folderi = new ArrayList<FolderDbModel>();
+		
+		for(FolderXGrupaDbModel gf : grupeFolderi)
+			folderi.add(gf.getFolder());
+		
+		return folderi;
 	}
 }

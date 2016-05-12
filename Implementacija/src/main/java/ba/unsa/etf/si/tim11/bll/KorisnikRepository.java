@@ -2,6 +2,7 @@ package ba.unsa.etf.si.tim11.bll;
 
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.FolderXGrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
@@ -168,6 +169,20 @@ public class KorisnikRepository {
 			return 1; // Korisnik ima pravo pisanja samo
 		else 
 			return 2; // Korisnik ima pravo citanja samo
+	}
+
+	public List<KorisnikDbModel> dajKorisnikeGrupe(int grupaId) {
+		
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		List<GrupaXKorisnikDbModel> grupeKorisnici = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+		
+		List<KorisnikDbModel> korisnici = new ArrayList<KorisnikDbModel>();
+		
+		for(GrupaXKorisnikDbModel gk : grupeKorisnici)
+			korisnici.add(gk.getKorisnik());
+		
+		return korisnici;
 	}
 
 }

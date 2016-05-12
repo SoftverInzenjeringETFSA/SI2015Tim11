@@ -95,8 +95,18 @@ public class GrupaRepository {
 	 * @param grupaId
 	 */
 	public void odbrisiKorisnikaIzGrupe(Integer korisnikId, Integer grupaId) {
-		// TODO - implement GrupaRepository.odbrisiKorisnikaIzGrupe
-		throw new UnsupportedOperationException();
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add( Restrictions.eq("korisnikId", korisnikId));
+		kriterijum.add( Restrictions.eq("grupaId", grupaId));
+		
+		List<GrupaXKorisnikDbModel> grupeKorisnici = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+		GrupaXKorisnikDbModel gk = null;
+		
+		if(!grupeKorisnici.isEmpty())
+		  gk = grupeKorisnici.get(0);
+		
+		if(gk != null)
+			DbDMSContext.getInstance().getGrupeKorisnici().obrisi(gk);
 	}
 	
 	public List<GrupaDbModel> dajGrupeVlasnika(Integer idKorisnika)
@@ -161,6 +171,11 @@ public class GrupaRepository {
 			
 			DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(novi);
 		}
+		
+	}
+
+	public void azurirajGrupu(GrupaDbModel grupaZaIzmjenu) {
+		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);
 		
 	}
 	

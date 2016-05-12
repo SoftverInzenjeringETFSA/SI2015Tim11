@@ -36,6 +36,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class IzmjenaGrupe
 {
@@ -101,13 +103,45 @@ public class IzmjenaGrupe
 			if(!listaSvihFoldera.contains(f))
 			 listaSvihFoldera.addElement(f);
 	}
+	private void ucitajKorisnikeGrupe()
+	{
+		if(list_grupeKorisnika.getSelectedIndex() != -1)
+		{
+			List<KorisnikDbModel> korisniciGrupe = korisnikRep.dajKorisnikeGrupe((int)(((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId()));
+			
+			listaDodanihKorisnikaGrupe.clear();
+			
+			for(KorisnikDbModel korisnik : korisniciGrupe)
+				if(!listaDodanihKorisnikaGrupe.contains(korisnik))
+				listaDodanihKorisnikaGrupe.addElement(korisnik);
+		}
+		else
+			listaDodanihKorisnikaGrupe.clear();
+	}
+	
+	private void ucitajFoldereGrupe()
+	{
+		if(list_grupeKorisnika.getSelectedIndex() != -1)
+		{
+			List<FolderDbModel> folderiGrupe = folderRep.dajFoldereGrupe((int)(((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId()));
+			
+			listaDodanihFolderaGrupe.clear();
+			
+			for(FolderDbModel folder : folderiGrupe)
+				if(!listaDodanihFolderaGrupe.contains(folder))
+				listaDodanihFolderaGrupe.addElement(folder);
+		}
+		else
+			listaDodanihFolderaGrupe.clear();
+		
+	}
 	private void izbrisiGrupuNaFormi(Integer index)
 	{
 		listaGrupaKorisnika.removeElementAt(index);
 	}
 	private void ucitajGrupeKorisnika(String userNameKorisnika2) 
 	{
-		 
+		listaGrupaKorisnika.clear();
 		List<GrupaDbModel> listaGrupaVlasnika = grupaRep.dajGrupeVlasnika(korisnikRep.dajIdKorisnikaPoUsername(userNameKorisnika));
 		for(GrupaDbModel grupa : listaGrupaVlasnika)
 			listaGrupaKorisnika.addElement(grupa);
@@ -142,6 +176,12 @@ public class IzmjenaGrupe
 		frmIzmjenaGrupa.getContentPane().add(scrollPane);
 		
 		list_grupeKorisnika = new JList(listaGrupaKorisnika);
+		list_grupeKorisnika.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				ucitajKorisnikeGrupe();
+				ucitajFoldereGrupe();
+			}
+		});
 		scrollPane.setViewportView(list_grupeKorisnika);
 		
 		JPanel panel = new JPanel();
@@ -155,6 +195,34 @@ public class IzmjenaGrupe
 		text_noviNazivGrupe.setColumns(10);
 		
 		JButton btnSpremiIzmjenu = new JButton("Spremi izmjenu");
+		btnSpremiIzmjenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(list_grupeKorisnika.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Nije izabrana nijedna grupa za izmjenu!", "Greška", JOptionPane.INFORMATION_MESSAGE);			
+					return;
+				}
+				
+				if(text_noviNazivGrupe.getText().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Novi naziv grupe ne može biti prazno polje!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;	
+				}
+				
+				if(grupaRep.dajGrupuPoNazivu(text_noviNazivGrupe.getText()) != null)
+				{
+					JOptionPane.showMessageDialog(null, "Grupa sa navedenim nazivom postoji! Izaberite drugo ime grupe!", "Greška", JOptionPane.INFORMATION_MESSAGE);			
+					return;
+				}	
+				
+				GrupaDbModel grupaZaIzmjenu = (GrupaDbModel)listaGrupaKorisnika.getElementAt(list_grupeKorisnika.getSelectedIndex());
+				grupaZaIzmjenu.setGrupaNaziv(text_noviNazivGrupe.getText());
+				grupaRep.azurirajGrupu(grupaZaIzmjenu);
+				ucitajGrupeKorisnika(userNameKorisnika);
+				
+					
+			}
+		});
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -219,6 +287,23 @@ public class IzmjenaGrupe
 		JLabel lblPostojeiKorisniciU = new JLabel("Postojeći korisnici u grupi:");
 		
 		JButton btnObriiKorisnika = new JButton("Obriši korisnika");
+		btnObriiKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(list_grupeKorisnika.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Nije odabrana nijedna grupa, te njeni korisnici ne mogu biti prikazani!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				if(list_dodaniKorisnici.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Nije odabran nijedan korisnik! Odaberite korisnika za brisanje iz grupe!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				grupaRep.odbrisiKorisnikaIzGrupe((int)((KorisnikDbModel)list_dodaniKorisnici.getSelectedValue()).getKorisnikID(), (int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId());
+				ucitajKorisnikeGrupe();
+			}
+		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.LEADING)
