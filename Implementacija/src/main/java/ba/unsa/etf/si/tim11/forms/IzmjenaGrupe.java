@@ -116,7 +116,7 @@ public class IzmjenaGrupe
 
 	private void postaviUserNameKorisnika() {
 		try{
-		    userNameKorisnika = "rsmajic"; //Sesija.getUsername();
+		    userNameKorisnika = Sesija.getUsername();
 		}
 		catch(Exception ex){
 			userNameKorisnika = "";
