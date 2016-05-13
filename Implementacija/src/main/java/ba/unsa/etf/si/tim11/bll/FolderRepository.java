@@ -33,8 +33,17 @@ public class FolderRepository {
 	 * @param folder
 	 */
 	public Boolean dodajFolder(Integer roditeljFolderId, FolderDbModel folder) {
-		// TODO - implement FolderRepository.dodajFolder
-		throw new UnsupportedOperationException();
+		try {
+			KorisnikRepository kor = new KorisnikRepository();
+			folder.setRoditeljFolderId(roditeljFolderId);
+			folder.setKreiraoKorisnikId(kor.dajIdKorisnikaPoUsername(Sesija.getUsername()));
+			
+			DbDMSContext.getInstance().getFolderi().sacuvaj(folder);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
 	}
 
 	/**

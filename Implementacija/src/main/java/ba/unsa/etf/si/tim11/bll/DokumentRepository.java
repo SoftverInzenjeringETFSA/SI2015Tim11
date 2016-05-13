@@ -19,9 +19,28 @@ public class DokumentRepository {
 	 * 
 	 * @param dokument
 	 */
-	public Boolean dodajDokument(DokumentDbModel dokument) {
-		// TODO - implement DokumentRepository.dodajDokument
-		throw new UnsupportedOperationException();
+	public Boolean dodajDokument(DokumentDbModel dokument, String sadrzaj) {
+		try {
+			KorisnikRepository kor = new KorisnikRepository();
+			
+			//dodavanje dokuemnta
+			long dokumentId = DbDMSContext.getInstance().getDokumenti().sacuvaj(dokument);
+			
+			//dodavanje inicijalne verzije
+			DokumentVerzijaDbModel verzija = new DokumentVerzijaDbModel();
+			verzija.setAktivan(true);
+			verzija.setDokumentId((Integer)(int)dokumentId);
+			verzija.setPostavioKorisnikId(kor.dajIdKorisnikaPoUsername(Sesija.getUsername()));
+			//fali status
+			//fali sadrzaj
+			
+			dodajverzijuDokumenta(verzija);
+			
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
 	}
 
 	/**
@@ -29,9 +48,14 @@ public class DokumentRepository {
 	 * @param dokumentId
 	 * @param dokumentVerzija
 	 */
-	public void dodajverzijuDokumenta(Integer dokumentId, DokumentDbModel dokumentVerzija) {
-		// TODO - implement DokumentRepository.dodajverzijuDokumenta
-		throw new UnsupportedOperationException();
+	public Boolean dodajverzijuDokumenta(DokumentVerzijaDbModel dokumentVerzija) {
+		try {
+			DbDMSContext.getInstance().getDokumentiVerzije().sacuvaj(dokumentVerzija);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
 	}
 
 	/**

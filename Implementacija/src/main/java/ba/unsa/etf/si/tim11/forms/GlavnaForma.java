@@ -16,15 +16,19 @@ import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KomentarDbModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPopupMenu;
+
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -32,12 +36,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.beans.PropertyChangeEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GlavnaForma {
 
@@ -77,8 +90,8 @@ public class GlavnaForma {
 	private JMenuItem mntmObrisiDokument;
 	private JMenuItem mntmDodajVerzijuDokumenta;
 	private JMenuItem mntmDodajVerzijuDokumenta_1;
-	private JTextField textField_1;
-
+	public JTextField txtPretraga;
+	public final JTree treeFolderView = new JTree();;
 	
 	private UnitOfWork uow = new UnitOfWork();
 	/**
@@ -103,6 +116,24 @@ public class GlavnaForma {
 	public GlavnaForma() {
 		initialize();
 	}
+	
+	private void otvoriProzorZaDodavanjeFoldera() {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+				treeFolderView.getLastSelectedPathComponent();
+		
+		if(node.getUserObject() instanceof DokumentDbModel){
+			
+		}
+		
+		if(node.getUserObject() instanceof FolderDbModel){
+			FolderDbModel folder = (FolderDbModel)node.getUserObject();
+			//DodavanjeFoldera dodavanjeFoldera = new DodavanjeFoldera(forma, (Integer)(int)folder.getFolderId());
+			//dodavanjeFoldera.getFrmDodavanjeFoldera().setVisible(true);
+			
+			DodavanjeFoldera.pokreni(this, (Integer)(int)folder.getFolderId());
+		}
+	}
+	
 	/*
 	 * OVA METODA JE ZMAJ!!!!!
 	 */
@@ -118,12 +149,15 @@ public class GlavnaForma {
 		System.out.println("Dodao dokumente");
 		List<FolderDbModel> podfolderi = uow.getFolderRepository().dajPodfoldere((Integer)(int)folder.getFolderId());
 		if(podfolderi.size() != 0){
+			System.out.println("Dodavane podfoldera-----------------------------");
 			for (FolderDbModel folderDbModel : podfolderi) {
+				System.out.println("podfolderi: "+folderDbModel.getFolderNaziv());
 				node = new DefaultMutableTreeNode(folderDbModel);
 				roditeljNode.add(node);
 				
 				roditeljNode.add(PopuniDrvo(node, folderDbModel));
 			}
+			System.out.println("Zavrseno dodavane podfoldera-----------------------------");
 		}
 		System.out.println("Dodao foldere");
 		return roditeljNode;
@@ -190,12 +224,95 @@ public class GlavnaForma {
 			((DefaultTableModel)table_1.getModel()).addRow(row);
 		}
 	}
+	private void expandAllNodes(JTree tree, int startingIndex, int rowCount){
+	    for(int i=startingIndex;i<rowCount;++i){
+	        tree.expandRow(i);
+	    }
+
+	    if(tree.getRowCount()!=rowCount){
+	        expandAllNodes(tree, rowCount, tree.getRowCount());
+	    }
+	}
 	
+	public void ucitajTreeViewModel(){
+		//JOptionPane.showMessageDialog(null, "UCITAVAM MODEL", "Naziv", JOptionPane.INFORMATION_MESSAGE);
+		System.out.print("UCITAVAM MODEL-----------------------");
+		treeFolderView.clearSelection();
+		treeFolderView.setModel(new DefaultTreeModel(
+				new DefaultMutableTreeNode("Root") {
+					{
+						DefaultMutableTreeNode node;
+						List<FolderDbModel> pocetniFolderi = null;
+						
+						try {
+							pocetniFolderi = uow.getFolderRepository().dajFoldere();
+						} catch (Exception e) {
+						}
+						
+						if(pocetniFolderi != null){
+							for (FolderDbModel folderDbModel : pocetniFolderi) {
+								node = new DefaultMutableTreeNode(folderDbModel);
+								add(PopuniDrvo(node, folderDbModel));
+							}
+						}
+					}
+				}
+			));
+		expandAllNodes(treeFolderView, 0, treeFolderView.getRowCount());
+	}
+	
+	public void ucitajTreeViewModel(final String filter){
+		treeFolderView.setCellRenderer(new DefaultTreeCellRenderer() {
+            private JLabel lblNull = new JLabel();
+
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree, Object value,
+                    boolean arg2, boolean arg3, boolean arg4, int arg5, boolean arg6) {
+
+                Component c = super.getTreeCellRendererComponent(tree, value, arg2, arg3, arg4, arg5, arg6);
+
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+                if (matchesFilter(node)) {
+                    c.setForeground(Color.BLACK);
+                    return c;
+                }
+                else if (containsMatchingChild(node)) {
+                    c.setForeground(Color.GRAY);
+                    return c;
+                }
+                else {
+                    return lblNull;
+                }
+            }
+
+            private boolean matchesFilter(DefaultMutableTreeNode node) {
+                return node.toString().contains(filter);
+            }
+
+            private boolean containsMatchingChild(DefaultMutableTreeNode node) {
+                Enumeration<DefaultMutableTreeNode> e = node.breadthFirstEnumeration();
+                while (e.hasMoreElements()) {
+                    if (matchesFilter(e.nextElement())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+		ucitajTreeViewModel();
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public void initialize() {
 		frmDobrodoaolaUDms = new JFrame();
+		frmDobrodoaolaUDms.addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+				ucitajTreeViewModel();
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+			}
+		});
 		frmDobrodoaolaUDms.setTitle("Dobrodošao/la u DMS");
 		frmDobrodoaolaUDms.setBounds(100, 100, 858, 510);
 
@@ -203,49 +320,30 @@ public class GlavnaForma {
 		
 		frmDobrodoaolaUDms.getContentPane().setLayout(null);
 		
-		final JTree treeFolderView = new JTree();
 		treeFolderView.setShowsRootHandles(true);
 		treeFolderView.setRootVisible(false);
-		treeFolderView.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("Root") {
-				{
-					DefaultMutableTreeNode node;
-					List<FolderDbModel> pocetniFolderi = null;
-					
-					try {
-						pocetniFolderi = uow.getFolderRepository().dajFoldere();
-					} catch (Exception e) {
-					}
-					
-					if(pocetniFolderi != null){
-						for (FolderDbModel folderDbModel : pocetniFolderi) {
-							node = new DefaultMutableTreeNode(folderDbModel);
-							add(PopuniDrvo(node, folderDbModel));
-						}
-					}
-				}
-			}
-		));
+		
 		treeFolderView.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION); //moguce odabrati samo jednu stavku
+		ucitajTreeViewModel();
 		
 		treeFolderView.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent arg0) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 						treeFolderView.getLastSelectedPathComponent();
-				
-				if(node.getUserObject() instanceof DokumentDbModel){
-					DokumentDbModel dokument = (DokumentDbModel)node.getUserObject();
-					ucitajVerzijeDokumenta(dokument.getDokumentId());
-					//JOptionPane.showMessageDialog(null, dokument.getDokumentNaziv(), "Naziv", JOptionPane.INFORMATION_MESSAGE);
-				}
-				
-				if(node.getUserObject() instanceof FolderDbModel){
-					FolderDbModel folder = (FolderDbModel)node.getUserObject();
-					JOptionPane.showMessageDialog(null, folder.getFolderNaziv(), "Naziv", JOptionPane.INFORMATION_MESSAGE);
+				if(node != null){
+					if(node.getUserObject() instanceof DokumentDbModel){
+						DokumentDbModel dokument = (DokumentDbModel)node.getUserObject();
+						ucitajVerzijeDokumenta(dokument.getDokumentId());
+						//JOptionPane.showMessageDialog(null, dokument.getDokumentNaziv(), "Naziv", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
+					if(node.getUserObject() instanceof FolderDbModel){
+						FolderDbModel folder = (FolderDbModel)node.getUserObject();
+						//JOptionPane.showMessageDialog(null, folder.getFolderNaziv(), "Naziv", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			}
 		});
-		
 		treeFolderView.setBounds(10, 53, 343, 407);
 		
 		frmDobrodoaolaUDms.getContentPane().add(treeFolderView);
@@ -257,12 +355,71 @@ public class GlavnaForma {
 		popupMenu.add(mntmPostavkePravaPristupa);
 		
 		mntmDodajFolder = new JMenuItem("Dodaj folder");
+		
+
+		mntmDodajFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				otvoriProzorZaDodavanjeFoldera();
+			}
+		});
 		popupMenu.add(mntmDodajFolder);
 		
 		mntmObrisiFolder = new JMenuItem("Obrisi folder");
 		popupMenu.add(mntmObrisiFolder);
 		
 		mntmDodajDokument_1 = new JMenuItem("Dodaj dokument");
+		mntmDodajDokument_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+						treeFolderView.getLastSelectedPathComponent();
+				if(node != null){
+					if(node.getUserObject() instanceof DokumentDbModel){ //dodavanje verzije
+						DokumentDbModel dokument = (DokumentDbModel)node.getUserObject();
+						
+						JFileChooser choser = new JFileChooser();
+						if(choser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+							File file = choser.getSelectedFile();
+							DokumentVerzijaDbModel verzija = new DokumentVerzijaDbModel();
+							verzija.setAktivan(true);
+							verzija.setDokumentId((Integer)(int)dokument.getDokumentId());
+							try {
+								verzija.setPostavioKorisnikId(uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							//sadrzaj
+							uow.getDokumentRepository().dodajverzijuDokumenta(verzija);
+							ucitajTreeViewModel();
+							JOptionPane.showMessageDialog(null, file.getName(), "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					
+					if(node.getUserObject() instanceof FolderDbModel){ //dodavanje novog dokumenta
+						FolderDbModel folder = (FolderDbModel)node.getUserObject();
+						
+						JFileChooser choser = new JFileChooser();
+						if(choser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+							File file = choser.getSelectedFile();
+							DokumentDbModel dokument = new DokumentDbModel();
+							int pozicija = file.getName().lastIndexOf('.');
+							dokument.setDokumentNaziv(file.getName().substring(0, pozicija));
+							
+							dokument.setEkstenzija(file.getName().substring(pozicija));
+							dokument.setFolderId((Integer)(int)folder.getFolderId());
+							dokument.setAktivan(true);
+							
+							
+							uow.getDokumentRepository().dodajDokument(dokument,"");
+							ucitajTreeViewModel();
+							JOptionPane.showMessageDialog(null, file.getName(), "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				}
+				
+				
+			}
+		});
 		popupMenu.add(mntmDodajDokument_1);
 		
 		mntmObrisiDokument = new JMenuItem("Obrisi dokument");
@@ -429,15 +586,28 @@ public class GlavnaForma {
 		txtKomentar.setBounds(363, 377, 469, 49);
 		frmDobrodoaolaUDms.getContentPane().add(txtKomentar);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(81, 25, 272, 20);
-		frmDobrodoaolaUDms.getContentPane().add(textField_1);
+		txtPretraga = new JTextField();
+		txtPretraga.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if(!txtPretraga.getText().equals("")){
+					//JOptionPane.showMessageDialog(null, "Filtriram", "Naziv", JOptionPane.INFORMATION_MESSAGE);
+					ucitajTreeViewModel(txtPretraga.getText());
+				}else{
+					treeFolderView.setCellRenderer(null);
+					ucitajTreeViewModel();
+				}
+			}
+		});
+		txtPretraga.setColumns(10);
+		txtPretraga.setBounds(81, 25, 272, 20);
+		frmDobrodoaolaUDms.getContentPane().add(txtPretraga);
 		
 		JLabel lblPretraga = new JLabel("Pretraga");
 		lblPretraga.setBounds(10, 28, 65, 14);
 		frmDobrodoaolaUDms.getContentPane().add(lblPretraga);
 	}
+
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
