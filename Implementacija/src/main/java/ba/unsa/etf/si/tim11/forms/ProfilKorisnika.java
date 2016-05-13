@@ -21,6 +21,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 
 public class ProfilKorisnika extends JFrame {
@@ -37,6 +38,7 @@ public class ProfilKorisnika extends JFrame {
 	private String userNameKorisnika = "";
 	private KorisnikDbModel prijavljeniKorisnik;
 	private KorisnikRepository korisnikRep = new KorisnikRepository();
+	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
 
 	/**
 	 * Launch the application.
@@ -48,6 +50,7 @@ public class ProfilKorisnika extends JFrame {
 					ProfilKorisnika frame = new ProfilKorisnika();
 					frame.setVisible(true);
 				} catch (Exception e) {
+					logger.info(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -87,6 +90,7 @@ public class ProfilKorisnika extends JFrame {
 		}
 		catch(Exception ex)
 		{
+			logger.info(ex.getMessage());
 			userNameKorisnika = "";
 		}
 		
@@ -142,7 +146,7 @@ public class ProfilKorisnika extends JFrame {
 				
 				if(password_novaSifra.getText().equals("") || password_ponovljenaSifra.getText().equals(" "))
 				{
-					JOptionPane.showMessageDialog(null, "Oba polja za promijenu šifre moraju biti popunjena!", "Greška", JOptionPane.INFORMATION_MESSAGE);			
+					JOptionPane.showMessageDialog(null, "Oba polja za promjenu šifre moraju biti popunjena!", "Greška", JOptionPane.INFORMATION_MESSAGE);			
 					return;
 				}
 				if(!password_novaSifra.getText().equals(password_ponovljenaSifra.getText()))

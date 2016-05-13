@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -66,7 +67,8 @@ public class KreiranjeGrupa
 	private GrupaRepository grupaRep = new GrupaRepository();
 	private String userNameKorisnika = "";
 	
-
+	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
+	
 	/**
 	 * Launch the application.
 	 */
@@ -82,6 +84,7 @@ public class KreiranjeGrupa
 					window.frmKreiranjeGrupa.setVisible(true);
 				} catch (Exception e)
 				{
+					logger.info(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -106,6 +109,7 @@ public class KreiranjeGrupa
 		}
 		catch(Exception ex)
 		{
+			logger.info(ex.getMessage());
 			userNameKorisnika = "";
 		}
 		

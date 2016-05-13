@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -65,6 +66,9 @@ public class IzmjenaGrupe
 	private GrupaRepository grupaRep = new GrupaRepository();
 	private FolderRepository folderRep = new FolderRepository();
 	String userNameKorisnika;
+	
+	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
+	
 	/**
 	 * Launch the application.
 	 */
@@ -80,6 +84,7 @@ public class IzmjenaGrupe
 					window.frmIzmjenaGrupa.setVisible(true);
 				} catch (Exception e)
 				{
+					logger.info(e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -184,6 +189,7 @@ public class IzmjenaGrupe
 		    userNameKorisnika = Sesija.getUsername();
 		}
 		catch(Exception ex){
+			logger.info(ex.getMessage());
 			userNameKorisnika = "";
 		}
 		
