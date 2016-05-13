@@ -93,12 +93,13 @@ public class DALRepository<T>{
      * @param object Objekat koji se spasava
      * @param session Hibernate sesija
      */
-    public void sacuvaj(T object) {
+     public long sacuvaj(T object) {
     	this.session = DMSSessionFactory.getSession();
         Transaction t = this.session.beginTransaction();
-        this.session.save(object);
+        long id = (Long) this.session.save(object);
         t.commit();
         session.close();
+        return id;
     }
 
     /**
