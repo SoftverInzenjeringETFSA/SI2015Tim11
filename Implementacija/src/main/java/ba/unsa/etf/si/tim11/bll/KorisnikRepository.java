@@ -85,7 +85,6 @@ public class KorisnikRepository {
 	 * @param korisnik
 	 */
 	public Boolean izmijeniKorisnika(KorisnikDbModel korisnik) {
-		// TODO - implement KorisnikRepository.izmijeniKorisnika
 		KorisnikDbModel k=new KorisnikDbModel();
 		k=korisnik;
 		DbDMSContext.getInstance().getKorisnici().sacuvajIliAzuriraj(k);
@@ -97,9 +96,11 @@ public class KorisnikRepository {
 	 * 
 	 * @param korinikId
 	 */
-	public Boolean obrisiKorisnika(Integer korinikId) {
-		// TODO - implement KorisnikRepository.obrisiKorisnika
-		throw new UnsupportedOperationException();
+	public Boolean obrisiKorisnika(Integer korisnikId) {
+		
+		KorisnikDbModel  k=DbDMSContext.getInstance().getKorisnici().ucitaj((long)korisnikId);
+		DbDMSContext.getInstance().getKorisnici().obrisi(k);
+		return true;
 	}
 
 	/**

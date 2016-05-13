@@ -92,15 +92,7 @@ public class DodavanjeKorisnika {
 		return true;
 		
 	}
-	
-	
-	
-	
-	/*List<KorisnikPozicijaDbModel> kp = DbDMSContext.getInstance().getKorisnikPozicije().ucitajSve();
-	String [] pozicije={kp.get(0).getKorisnikPozicijaNaziv(),kp.get(1).getKorisnikPozicijaNaziv(),kp.get(2).getKorisnikPozicijaNaziv()};
-	*/		
-	/*List<KorisnikTipDbModel> kt= DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
-	String [] tipovi={kt.get(0).getKorisnikTipNaziv(),kt.get(1).getKorisnikTipNaziv()};*/
+
 	
 
 	/**
@@ -293,7 +285,6 @@ public class DodavanjeKorisnika {
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_4);
 		
 		final JComboBox cmbDodavanjePozicija = new JComboBox();
-		//cmbDodavanjePozicija.setModel(new DefaultComboBoxModel(pozicije));
 		cmbDodavanjePozicija.setFont(new Font("Dialog", Font.PLAIN, 11));
 		cmbDodavanjePozicija.setBounds(133, 315, 267, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(cmbDodavanjePozicija);
@@ -442,7 +433,6 @@ public class DodavanjeKorisnika {
 					String adresa=txtDodavanjeAdresa.getText();
 					Date datumRodjenja=calendarDodavanjeDatumRodjenja.getDate();
 					Integer korisnikTipId=(int)((KorisnikTipDbModel)comboBoxDodavanjeTip.getSelectedItem()).getKorisnikTipId();
-					//Integer korisnikTipId=comboBoxDodavanjeTip.getSelectedIndex()+1;
 					Integer korisnikPozicijaId=(int)((KorisnikPozicijaDbModel)cmbDodavanjePozicija.getSelectedItem()).getKorisnikPozicijaId();
 					
 					String username=textFieldDodavanjeKorisnikaUsername.getText();
@@ -470,6 +460,11 @@ public class DodavanjeKorisnika {
 					textFieldDodavanjeKorisnikaUsername.setText("");
 					passwordFieldDodavanjeKorisnikaPass.setText("");
 					passwordFieldDodavanjePonoviSifru.setText("");
+					btnDodavanjeSpremi.setEnabled(false);
+					for(int i=0;i<uredu.length;i++)
+					{
+						uredu[i]=false;
+					}
 					
 					
 				}

@@ -38,13 +38,29 @@ public class IzmjenaKorisnika
 	private JTextField textFieldIzmjenaPretragaKorisnika;
 	private JTable tableIzmjenaPretraga;
 	private JPasswordField passwordFieldIzmjenaNovaSifra;
-	private JPasswordField passwordField_1;
+	private JPasswordField passwordFieldIzmjenaPonoviSifru;
 	private JButton buttonIzmjenaTrazi;
 	private JButton buttonIzmjenaBrisiKorisnika;
 	
 	KorisnikRepository korisnikRepository = new KorisnikRepository();
 	KorisnikDbModel korisnik;
 	Integer korisnikId;
+	
+	private Boolean uredu[]={false,false};
+	
+	private Boolean provjeriPolja()
+	{
+		for(int i=0;i<uredu.length;i++)
+		{
+			if(uredu[i]==false)
+			{
+				return false;
+			}
+		}
+		return true;
+		
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -98,6 +114,7 @@ public class IzmjenaKorisnika
 		frmIzmjenaKorisnika.getContentPane().add(textFieldIzmjenaPretragaKorisnika);
 		
 		tableIzmjenaPretraga = new JTable();		
+		tableIzmjenaPretraga.setToolTipText("Izmjene u tabeli imaju iste validacije kao i unos korisnika.");
 		tableIzmjenaPretraga.setModel(new DefaultTableModel(
 			new Object[][] {
 				{},
@@ -121,7 +138,7 @@ public class IzmjenaKorisnika
 		
 		passwordFieldIzmjenaNovaSifra = new JPasswordField();
 		passwordFieldIzmjenaNovaSifra.setFont(new Font("Dialog", Font.PLAIN, 11));
-		passwordFieldIzmjenaNovaSifra.setBounds(155, 325, 566, 27);
+		passwordFieldIzmjenaNovaSifra.setBounds(155, 325, 510, 27);
 		frmIzmjenaKorisnika.getContentPane().add(passwordFieldIzmjenaNovaSifra);
 		
 		JLabel label_2 = new JLabel("Ponovi Šifru:");
@@ -130,22 +147,24 @@ public class IzmjenaKorisnika
 		label_2.setBounds(52, 366, 95, 21);
 		frmIzmjenaKorisnika.getContentPane().add(label_2);
 		
-		passwordField_1 = new JPasswordField();
-		passwordField_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-		passwordField_1.setBounds(155, 363, 566, 27);
-		frmIzmjenaKorisnika.getContentPane().add(passwordField_1);
+		passwordFieldIzmjenaPonoviSifru = new JPasswordField();
 		
-		JButton buttonIzmjenaIzmjeniPodatke = new JButton("Izmijeni Podatke");
-		buttonIzmjenaIzmjeniPodatke.setEnabled(false);
-		buttonIzmjenaIzmjeniPodatke.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaIzmjeniPodatke.setBounds(605, 401, 115, 27);
-		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaIzmjeniPodatke);
+		passwordFieldIzmjenaPonoviSifru.setFont(new Font("Dialog", Font.PLAIN, 11));
+		passwordFieldIzmjenaPonoviSifru.setBounds(155, 363, 510, 27);
+		frmIzmjenaKorisnika.getContentPane().add(passwordFieldIzmjenaPonoviSifru);
+		
+		final JButton buttonIzmjenaIzmjeniSifru = new JButton("Izmijeni Šifru");
+		
+		buttonIzmjenaIzmjeniSifru.setEnabled(false);
+		buttonIzmjenaIzmjeniSifru.setFont(new Font("Dialog", Font.PLAIN, 11));
+		buttonIzmjenaIzmjeniSifru.setBounds(605, 401, 115, 27);
+		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaIzmjeniSifru);
 		
 		final JLabel lblIzmjenaPretraga = new JLabel("");
 		lblIzmjenaPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
 		lblIzmjenaPretraga.setBounds(155, 27, 461, 14);
 		frmIzmjenaKorisnika.getContentPane().add(lblIzmjenaPretraga);
-		frmIzmjenaKorisnika.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{label, textFieldIzmjenaPretragaKorisnika, buttonIzmjenaTrazi, tableIzmjenaPretraga, label_1, passwordFieldIzmjenaNovaSifra, label_2, passwordField_1, buttonIzmjenaIzmjeniPodatke, buttonIzmjenaBrisiKorisnika}));
+		frmIzmjenaKorisnika.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{label, textFieldIzmjenaPretragaKorisnika, buttonIzmjenaTrazi, tableIzmjenaPretraga, label_1, passwordFieldIzmjenaNovaSifra, label_2, passwordFieldIzmjenaPonoviSifru, buttonIzmjenaIzmjeniSifru, buttonIzmjenaBrisiKorisnika}));
 		
 		buttonIzmjenaTrazi = new JButton("Traži");
 		buttonIzmjenaTrazi.setEnabled(false);
@@ -161,12 +180,14 @@ public class IzmjenaKorisnika
 						ModelTabele mt=new ModelTabele();
 						mt.dodajElement(korisnik);
 						tableIzmjenaPretraga.setModel(mt);
+						buttonIzmjenaBrisiKorisnika.setEnabled(true);
 						
 					}
 					else
 					{
 						JOptionPane.showMessageDialog(frmIzmjenaKorisnika,"Nema korisnika s tim korisničkim imenom!");
 						textFieldIzmjenaPretragaKorisnika.setText("");
+						buttonIzmjenaBrisiKorisnika.setEnabled(false);
 					}
 				}
 				catch(Exception e)
@@ -190,42 +211,146 @@ public class IzmjenaKorisnika
 					lblIzmjenaPretraga.setText("OK");
 					lblIzmjenaPretraga.setForeground(new Color(0, 128, 0));
 					buttonIzmjenaTrazi.setEnabled(true);
+					
+					
 				}
 				else
 				{
 					lblIzmjenaPretraga.setForeground(Color.red);
 					lblIzmjenaPretraga.setText("Niste unijeli korisničko ime za pretragu");
 					buttonIzmjenaTrazi.setEnabled(false);
+					
 				}
 			}
 		});
 		
 		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
 		buttonIzmjenaBrisiKorisnika.setEnabled(false);
+		buttonIzmjenaBrisiKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				korisnikRepository.obrisiKorisnika(korisnikId);
+				ModelTabele mt=new ModelTabele();
+				tableIzmjenaPretraga.setModel(mt);
+				textFieldIzmjenaPretragaKorisnika.setText("");
+				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+			}
+		});
 		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonIzmjenaBrisiKorisnika.setBounds(605, 439, 116, 27);
 		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaBrisiKorisnika);
 		
 		final JButton btnIzmijeniKorisnika = new JButton("Spremi Promjene");
+		btnIzmijeniKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
 		btnIzmijeniKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				korisnikRepository.izmijeniKorisnika(korisnik);
 				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Podaci spremljeni");
+				ModelTabele mt=new ModelTabele();
+				tableIzmjenaPretraga.setModel(mt);
+				textFieldIzmjenaPretragaKorisnika.setText("");
+				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+				
 			}
 		});
 		btnIzmijeniKorisnika.setEnabled(false);
 		tableIzmjenaPretraga.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(!korisnik.equals(null))
-				{
-					btnIzmijeniKorisnika.setEnabled(true);
-				}
 				
+					if(!korisnik.equals(null))
+					{
+						btnIzmijeniKorisnika.setEnabled(true);
+					}
 			}
 		});
 		btnIzmijeniKorisnika.setBounds(605, 282, 116, 27);
 		frmIzmjenaKorisnika.getContentPane().add(btnIzmijeniKorisnika);
+		
+		final JLabel lblOKNS = new JLabel("");
+		lblOKNS.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblOKNS.setBounds(675, 332, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblOKNS);
+		
+		final JLabel labelOKPS = new JLabel("");
+		labelOKPS.setFont(new Font("Dialog", Font.PLAIN, 11));
+		labelOKPS.setBounds(675, 370, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(labelOKPS);
+		passwordFieldIzmjenaNovaSifra.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				String s=passwordFieldIzmjenaNovaSifra.getText();
+				if(!Validator.daLiJeStringPrazan(s))
+				{
+					lblOKNS.setText("OK");
+					lblOKNS.setForeground(new Color(0, 128, 0));
+					uredu[0]=true;
+				}
+				else
+				{
+					lblOKNS.setText("NOTOK");
+					lblOKNS.setForeground(Color.red);
+					uredu[0]=false;
+				}
+				if(provjeriPolja())
+				{
+					buttonIzmjenaIzmjeniSifru.setEnabled(true);
+				}
+				else
+				{
+					buttonIzmjenaIzmjeniSifru.setEnabled(false);
+				}
+				
+			}
+		});
+		
+		passwordFieldIzmjenaPonoviSifru.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				String s1=passwordFieldIzmjenaPonoviSifru.getText();
+				String s2=passwordFieldIzmjenaNovaSifra.getText();
+				
+				if(!Validator.daLiJeStringPrazan(s1)&&!Validator.daLiJeStringPrazan(s2)&&s1.equals(s2))
+				{
+					labelOKPS.setText("OK");
+					labelOKPS.setForeground(new Color(0, 128, 0));
+					uredu[1]=true;
+				}
+				else
+				{
+					labelOKPS.setText("NOTOK");
+					labelOKPS.setForeground(Color.red);
+					uredu[1]=false;
+				}
+				if(provjeriPolja())
+				{
+					buttonIzmjenaIzmjeniSifru.setEnabled(true);
+				}
+				else
+				{
+					buttonIzmjenaIzmjeniSifru.setEnabled(false);
+				}
+			}
+		});
+		
+		buttonIzmjenaIzmjeniSifru.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				korisnik.setPassword(passwordFieldIzmjenaPonoviSifru.getText());
+				korisnikRepository.izmijeniKorisnika(korisnik);
+				passwordFieldIzmjenaNovaSifra.setText("");
+				passwordFieldIzmjenaPonoviSifru.setText("");
+				JOptionPane.showMessageDialog(frmIzmjenaKorisnika, "Sifra Promijenjena");
+				ModelTabele mt=new ModelTabele();
+				tableIzmjenaPretraga.setModel(mt);
+				textFieldIzmjenaPretragaKorisnika.setText("");
+				buttonIzmjenaIzmjeniSifru.setEnabled(false);
+				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+				btnIzmijeniKorisnika.setEnabled(false);
+				for(int i=0;i<uredu.length;i++)
+				{
+					uredu[i]=false;
+				}
+			}
+		});
 		
 		
 	}
