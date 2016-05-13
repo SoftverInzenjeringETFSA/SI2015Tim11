@@ -23,6 +23,12 @@ public class ModelTabele extends AbstractTableModel
         lista.add(e);
         fireTableRowsInserted(lista.size()-1, lista.size()-1);
     }
+    
+    public void ocistiListu()
+    {
+    	lista.clear();
+    	fireTableRowsDeleted(lista.size()-1, lista.size()-1);
+    }
 
 
     public int getColumnCount() {
@@ -33,6 +39,10 @@ public class ModelTabele extends AbstractTableModel
     public int getRowCount() {
         return lista.size();
     }
+    /*public void setRowCount(int i)
+    {
+    	lista.clear();
+    }*/
     public boolean isCellEditable(int row, int col) {
             return true;
     }
@@ -104,7 +114,6 @@ public class ModelTabele extends AbstractTableModel
         
         
     }
-
 
 
 }
