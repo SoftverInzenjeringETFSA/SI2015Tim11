@@ -367,6 +367,12 @@ public class GlavnaForma {
 		menuBar.add(mnGlavna);
 		
 		mntmMojProfil = new JMenuItem("Moj profil");
+		mntmMojProfil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ProfilKorisnika forma = new ProfilKorisnika();
+				forma.PokreniFormu();
+			}
+		});
 		mnGlavna.add(mntmMojProfil);
 		
 		mntmIzlaz = new JMenuItem("Izlaz");
