@@ -71,8 +71,9 @@ public class DodavanjeKorisnika {
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
 					logger.info(e.getMessage());
+					e.printStackTrace();
+					
 				}
 			}
 		});

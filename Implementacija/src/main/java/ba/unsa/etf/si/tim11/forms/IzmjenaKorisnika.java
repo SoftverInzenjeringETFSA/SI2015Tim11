@@ -83,8 +83,9 @@ public class IzmjenaKorisnika
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
 					logger.info(e.getMessage());
+					e.printStackTrace();
+					
 				}
 			}
 		});
