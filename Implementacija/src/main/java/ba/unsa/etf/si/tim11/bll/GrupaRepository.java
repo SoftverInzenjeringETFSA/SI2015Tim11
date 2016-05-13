@@ -85,8 +85,9 @@ public class GrupaRepository {
 	 * @param grupaXKorisnikDbModel
 	 */
 	public Boolean dodajKorisnikaUGrupu(GrupaXKorisnikDbModel grupaXKorisnikDbModel) {
-		// TODO - implement GrupaRepository.dodajKorisnikaUGrupu
-		throw new UnsupportedOperationException();
+		
+		DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(grupaXKorisnikDbModel);
+		return true;
 	}
 
 	/**
@@ -111,10 +112,20 @@ public class GrupaRepository {
 	
 	public List<GrupaDbModel> dajGrupeVlasnika(Integer idKorisnika)
 	{
+		KorisnikRepository korRep = new KorisnikRepository();
+		KorisnikDbModel kor = korRep.dajKorisnika(idKorisnika);
+		List<GrupaDbModel> listaGrupa;
+		
+		if(kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		{
+			listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSve();
+			return listaGrupa;
+		}
+					
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("odgovorniKorisnikId", idKorisnika));
 		
-		List<GrupaDbModel> listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
+		listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		return listaGrupa;
 	}
@@ -177,6 +188,19 @@ public class GrupaRepository {
 	public void azurirajGrupu(GrupaDbModel grupaZaIzmjenu) {
 		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);
 		
+	}
+	
+	public boolean daLiPostojiKorisnikUGrupi(Integer idKorisnika, Integer idGrupe)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("korisnikId", idKorisnika));
+		kriterijum.add(Restrictions.eq("grupaId", idGrupe));
+		
+		List<GrupaXKorisnikDbModel> lista = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+
+		if(lista.size() > 0)
+			return true;
+		else return false;
 	}
 	
 

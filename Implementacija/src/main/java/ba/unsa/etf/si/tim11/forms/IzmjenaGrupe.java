@@ -19,9 +19,11 @@ import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
 import ba.unsa.etf.si.tim11.bll.Sesija;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -49,8 +51,8 @@ public class IzmjenaGrupe
 	private JList list_dodaniKorisnici;
 	private JList list_sviFolderi;
 	private JList list_dodaniFolderi;
-	private JCheckBox chckbxPravoPisanja;
-	private JCheckBox chckbxPraviitanja;
+	private JCheckBox checkBox_Pisanje;
+	private JCheckBox checkBox_Citanje;
 	private DefaultListModel listaGrupaKorisnika = new DefaultListModel();
 	private DefaultListModel listaSvihKorisnika = new DefaultListModel();
 	private DefaultListModel listaDodanihKorisnikaGrupe = new DefaultListModel();
@@ -63,7 +65,7 @@ public class IzmjenaGrupe
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args)
+	public void PokreniFormu()
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
@@ -87,9 +89,25 @@ public class IzmjenaGrupe
 	public IzmjenaGrupe()
 	{
 		initialize();
+		ocistiSve();
 		postaviUserNameKorisnika();
 		ucitajListeForme(userNameKorisnika);
 		ucitajGrupeKorisnika(userNameKorisnika);
+	}
+	
+	private void ocistiSve()
+	{
+		list_grupeKorisnika.removeAll();
+		list_sviKorisnici.removeAll();
+		list_dodaniKorisnici.removeAll();
+		list_sviFolderi.removeAll();
+		list_dodaniFolderi.removeAll();
+		
+		listaDodanihKorisnikaGrupe.clear();
+		listaSvihKorisnika.clear();
+		listaSvihFoldera.clear();
+		listaDodanihFolderaGrupe.clear();
+		listaGrupaKorisnika.clear();
 	}
 	
 	private void ucitajListeForme(String userNameKorisnika)
@@ -112,7 +130,7 @@ public class IzmjenaGrupe
 			listaDodanihKorisnikaGrupe.clear();
 			
 			for(KorisnikDbModel korisnik : korisniciGrupe)
-				if(!listaDodanihKorisnikaGrupe.contains(korisnik))
+				//if(!listaDodanihKorisnikaGrupe.contains(korisnik))
 				listaDodanihKorisnikaGrupe.addElement(korisnik);
 		}
 		else
@@ -139,10 +157,10 @@ public class IzmjenaGrupe
 	{
 		listaGrupaKorisnika.removeElementAt(index);
 	}
-	private void ucitajGrupeKorisnika(String userNameKorisnika2) 
+	private void ucitajGrupeKorisnika(String userName) 
 	{
 		listaGrupaKorisnika.clear();
-		List<GrupaDbModel> listaGrupaVlasnika = grupaRep.dajGrupeVlasnika(korisnikRep.dajIdKorisnikaPoUsername(userNameKorisnika));
+		List<GrupaDbModel> listaGrupaVlasnika = grupaRep.dajGrupeVlasnika(korisnikRep.dajIdKorisnikaPoUsername(userName));
 		for(GrupaDbModel grupa : listaGrupaVlasnika)
 			listaGrupaKorisnika.addElement(grupa);
 		
@@ -218,6 +236,7 @@ public class IzmjenaGrupe
 				GrupaDbModel grupaZaIzmjenu = (GrupaDbModel)listaGrupaKorisnika.getElementAt(list_grupeKorisnika.getSelectedIndex());
 				grupaZaIzmjenu.setGrupaNaziv(text_noviNazivGrupe.getText());
 				grupaRep.azurirajGrupu(grupaZaIzmjenu);
+				text_noviNazivGrupe.setText("");
 				ucitajGrupeKorisnika(userNameKorisnika);
 				
 					
@@ -281,6 +300,37 @@ public class IzmjenaGrupe
 		JLabel lblSviKorisnici = new JLabel("Svi korisnici:");
 		
 		JButton btnDodajKorisnika = new JButton("Dodaj korisnika");
+		btnDodajKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(list_grupeKorisnika.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Nije odabrana grupa u koju će se korisnik dodati!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}	
+				if(list_sviKorisnici.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Nije odabran nijedan korisnika za dodavanje iz liste svih korisnika!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				//KorisnikDbModel selektovaniKorisnik = (KorisnikDbModel)list_sviKorisnici.getSelectedValue();
+				if(grupaRep.daLiPostojiKorisnikUGrupi((int)((KorisnikDbModel)list_sviKorisnici.getSelectedValue()).getKorisnikID(), (int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId()))
+				{
+					JOptionPane.showMessageDialog(null, "Korisnik već postoji u grupi!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				GrupaXKorisnikDbModel novi = new GrupaXKorisnikDbModel();
+				novi.setAktivan(true);
+				novi.setDatumPristupa(new Date());
+				novi.setDatumZadnjeIzmjene(new Date());
+				novi.setGrupaId((int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId());
+				novi.setKorisnikId((int)((KorisnikDbModel)list_sviKorisnici.getSelectedValue()).getKorisnikID());
+				
+				grupaRep.dodajKorisnikaUGrupu(novi);
+				ucitajKorisnikeGrupe();
+			}
+		});
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		
@@ -364,9 +414,9 @@ public class IzmjenaGrupe
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
 		
-		chckbxPravoPisanja = new JCheckBox("Pravo pisanja");
+		checkBox_Pisanje = new JCheckBox("Pravo pisanja");
 		
-		chckbxPraviitanja = new JCheckBox("Pravi čitanja");
+		checkBox_Citanje = new JCheckBox("Pravi čitanja");
 		
 		JLabel lblDodaniFolderi = new JLabel("Dodani folderi:");
 		
@@ -383,8 +433,8 @@ public class IzmjenaGrupe
 									.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-										.addComponent(chckbxPraviitanja)
-										.addComponent(chckbxPravoPisanja)
+										.addComponent(checkBox_Citanje)
+										.addComponent(checkBox_Pisanje)
 										.addComponent(btnDodajFolder, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
 								.addComponent(lblSviFolderi))
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -411,9 +461,9 @@ public class IzmjenaGrupe
 							.addComponent(btnUkloniPravoPristupa))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGap(109)
-							.addComponent(chckbxPravoPisanja)
+							.addComponent(checkBox_Pisanje)
 							.addGap(18)
-							.addComponent(chckbxPraviitanja)
+							.addComponent(checkBox_Citanje)
 							.addGap(18)
 							.addComponent(btnDodajFolder)))
 					.addContainerGap())
@@ -423,6 +473,31 @@ public class IzmjenaGrupe
 		scrollPane_4.setViewportView(list_dodaniFolderi);
 		
 		list_sviFolderi = new JList(listaSvihFoldera);
+		list_sviFolderi.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				
+				int prava = korisnikRep.dajPravaKorisnikaNaFolder(userNameKorisnika, (FolderDbModel)list_sviFolderi.getSelectedValue());
+				
+				if(prava == 1)
+				{
+					checkBox_Citanje.setSelected(false);
+					checkBox_Citanje.setEnabled(false);
+					checkBox_Pisanje.setEnabled(true);
+				}
+				else if(prava == 2)
+				{
+					checkBox_Pisanje.setSelected(false);
+					checkBox_Pisanje.setEnabled(false);
+					checkBox_Citanje.setEnabled(true);
+				}
+				else
+				{
+					
+					checkBox_Pisanje.setEnabled(true);
+					checkBox_Citanje.setEnabled(true);
+				}
+			}
+		});
 		scrollPane_3.setViewportView(list_sviFolderi);
 		panel_2.setLayout(gl_panel_2);
 	}
