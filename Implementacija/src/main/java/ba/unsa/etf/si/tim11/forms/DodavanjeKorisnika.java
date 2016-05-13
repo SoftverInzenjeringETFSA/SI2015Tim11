@@ -285,7 +285,6 @@ public class DodavanjeKorisnika {
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(label_4);
 		
 		final JComboBox cmbDodavanjePozicija = new JComboBox();
-		//cmbDodavanjePozicija.setModel(new DefaultComboBoxModel(pozicije));
 		cmbDodavanjePozicija.setFont(new Font("Dialog", Font.PLAIN, 11));
 		cmbDodavanjePozicija.setBounds(133, 315, 267, 21);
 		frmDodavanjeizmjenaKorisnika.getContentPane().add(cmbDodavanjePozicija);
@@ -434,7 +433,6 @@ public class DodavanjeKorisnika {
 					String adresa=txtDodavanjeAdresa.getText();
 					Date datumRodjenja=calendarDodavanjeDatumRodjenja.getDate();
 					Integer korisnikTipId=(int)((KorisnikTipDbModel)comboBoxDodavanjeTip.getSelectedItem()).getKorisnikTipId();
-					//Integer korisnikTipId=comboBoxDodavanjeTip.getSelectedIndex()+1;
 					Integer korisnikPozicijaId=(int)((KorisnikPozicijaDbModel)cmbDodavanjePozicija.getSelectedItem()).getKorisnikPozicijaId();
 					
 					String username=textFieldDodavanjeKorisnikaUsername.getText();

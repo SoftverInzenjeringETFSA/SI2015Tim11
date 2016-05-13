@@ -39,10 +39,6 @@ public class ModelTabele extends AbstractTableModel
     public int getRowCount() {
         return lista.size();
     }
-    /*public void setRowCount(int i)
-    {
-    	lista.clear();
-    }*/
     public boolean isCellEditable(int row, int col) {
             return true;
     }

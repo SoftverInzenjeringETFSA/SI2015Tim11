@@ -256,11 +256,11 @@ public class IzmjenaKorisnika
 		tableIzmjenaPretraga.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(!korisnik.equals(null))
-				{
-					btnIzmijeniKorisnika.setEnabled(true);
-				}
 				
+					if(!korisnik.equals(null))
+					{
+						btnIzmijeniKorisnika.setEnabled(true);
+					}
 			}
 		});
 		btnIzmijeniKorisnika.setBounds(605, 282, 116, 27);
@@ -344,6 +344,7 @@ public class IzmjenaKorisnika
 				textFieldIzmjenaPretragaKorisnika.setText("");
 				buttonIzmjenaIzmjeniSifru.setEnabled(false);
 				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+				btnIzmijeniKorisnika.setEnabled(false);
 				for(int i=0;i<uredu.length;i++)
 				{
 					uredu[i]=false;
