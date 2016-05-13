@@ -30,6 +30,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 
 public class IzmjenaKorisnika
 {
@@ -42,6 +43,7 @@ public class IzmjenaKorisnika
 	private JButton buttonIzmjenaTrazi;
 	private JButton buttonIzmjenaBrisiKorisnika;
 	
+	final static Logger logger = Logger.getLogger(IzmjenaKorisnika.class.toString());
 	KorisnikRepository korisnikRepository = new KorisnikRepository();
 	KorisnikDbModel korisnik;
 	Integer korisnikId;
@@ -74,9 +76,15 @@ public class IzmjenaKorisnika
 				{
 					IzmjenaKorisnika window = new IzmjenaKorisnika();
 					window.frmIzmjenaKorisnika.setVisible(true);
-				} catch (Exception e)
+				} 
+				catch (RuntimeException e) 
+				{
+					throw e;
+				}
+				catch (Exception e)
 				{
 					e.printStackTrace();
+					logger.info(e.getMessage());
 				}
 			}
 		});
@@ -190,9 +198,14 @@ public class IzmjenaKorisnika
 						buttonIzmjenaBrisiKorisnika.setEnabled(false);
 					}
 				}
+				catch (RuntimeException e) 
+				{
+					throw e;
+				}
 				catch(Exception e)
 				{
 					String poruka=e.getMessage();
+					logger.info(poruka);
 					JOptionPane.showMessageDialog(frmIzmjenaKorisnika,poruka);
 				}
 				

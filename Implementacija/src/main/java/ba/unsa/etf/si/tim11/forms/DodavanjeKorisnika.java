@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
@@ -46,7 +47,8 @@ public class DodavanjeKorisnika {
 	private JTextField textFieldDodavanjeKorisnikaUsername;
 	private JPasswordField passwordFieldDodavanjeKorisnikaPass;
 	private JPasswordField passwordFieldDodavanjePonoviSifru;
-
+	
+	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
 	KorisnikRepository korisnikRepository = new KorisnikRepository();
 	
 	/**
@@ -62,13 +64,20 @@ public class DodavanjeKorisnika {
 				{
 					DodavanjeKorisnika window = new DodavanjeKorisnika();
 					window.frmDodavanjeizmjenaKorisnika.setVisible(true);
-				} catch (Exception e) 
+				} 
+				catch (RuntimeException e) 
+				{
+					throw e;
+				}
+				catch (Exception e)
 				{
 					e.printStackTrace();
+					logger.info(e.getMessage());
 				}
 			}
 		});
 	}
+	
 	
 
 	/**
@@ -468,9 +477,15 @@ public class DodavanjeKorisnika {
 					
 					
 				}
+				catch (RuntimeException e) 
+				{
+					throw e;
+				}
 				catch(Exception e)
 				{
+					
 					String poruka=e.getMessage();
+					logger.info(poruka);
 					JOptionPane.showMessageDialog(frmDodavanjeizmjenaKorisnika,poruka);
 				}
 				
