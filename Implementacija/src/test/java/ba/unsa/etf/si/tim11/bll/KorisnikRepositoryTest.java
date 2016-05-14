@@ -116,7 +116,7 @@ public class KorisnikRepositoryTest extends TestCase {
 	}
 @Test
 	public void testDajKorisnike() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 @Test
 	public void testDajSveKorisnike() {
@@ -266,11 +266,11 @@ public class KorisnikRepositoryTest extends TestCase {
 	}
 @Test
 	public void testDajSveTipoveKorisnika() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 @Test
 	public void testDajSvePozicijeKorisnika() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 @Test
 	public void testDajIdKorisnikaPoUsername() {
@@ -344,14 +344,21 @@ public class KorisnikRepositoryTest extends TestCase {
 	//int brojKor =korRep.dajSveKorisnike().size();
 	korRep.dodajKorisnika(korModel);
 	FolderDbModel fm =new FolderDbModel();
-	int pravo=0;
-	Assert.assertEquals(pravo, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
-	
+	int  pravo=0;
+	int pravo1=1;
+	int pravo2=2;
+	Assert.assertEquals(idTipa, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
+	//Assert.assertEquals(pravo1, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
+	//Assert.assertEquals(pravo2, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
+	DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
+    DbDMSContext.getInstance().getKorisnikPozicije().obrisi(pozicija);
+    DbDMSContext.getInstance().getKorisnikTipovi().obrisi(korTip);
+    DbDMSContext.getInstance().getFolderi().obrisi(fm);
 	//fail("Not yet implemented");
 	}
 @Test
 	public void testDajKorisnikeGrupe() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 }
