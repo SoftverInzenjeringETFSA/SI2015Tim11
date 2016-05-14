@@ -111,6 +111,7 @@ public class KreiranjeGrupa
 		{
 			logger.info(ex.getMessage());
 			userNameKorisnika = "";
+			throw new RuntimeException(ex);
 		}
 		
 	}
