@@ -32,6 +32,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused")
 public class IzmjenaKorisnika
 {
 
@@ -48,8 +49,9 @@ public class IzmjenaKorisnika
 	KorisnikDbModel korisnik;
 	Integer korisnikId;
 	
-	private Boolean uredu[]={false,false};
+	private Boolean uredu[]={false,false};//Niz za provjeru da li su polja ispravno popunjena
 	
+	//Funkcija koja provjerava da li su svi elementi niza "uredu" postavljeni na true ili false
 	private Boolean provjeriPolja()
 	{
 		for(int i=0;i<uredu.length;i++)
@@ -66,7 +68,9 @@ public class IzmjenaKorisnika
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args)
+
+	
+	public void pokreniFormu()
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
@@ -178,6 +182,35 @@ public class IzmjenaKorisnika
 		
 		buttonIzmjenaTrazi = new JButton("Traži");
 		buttonIzmjenaTrazi.setEnabled(false);
+		
+		buttonIzmjenaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
+		buttonIzmjenaTrazi.setBounds(626, 50, 95, 29);
+		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaTrazi);
+		
+		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
+		buttonIzmjenaBrisiKorisnika.setEnabled(false);
+		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
+		buttonIzmjenaBrisiKorisnika.setBounds(605, 439, 116, 27);
+		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaBrisiKorisnika);
+		
+		final JButton btnIzmijeniKorisnika = new JButton("Spremi Promjene");
+		btnIzmijeniKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
+		btnIzmijeniKorisnika.setEnabled(false);
+		btnIzmijeniKorisnika.setBounds(605, 282, 116, 27);
+		frmIzmjenaKorisnika.getContentPane().add(btnIzmijeniKorisnika);
+		
+		final JLabel lblOKNS = new JLabel("");
+		lblOKNS.setFont(new Font("Dialog", Font.PLAIN, 11));
+		lblOKNS.setBounds(675, 332, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblOKNS);
+		
+		final JLabel labelOKPS = new JLabel("");
+		labelOKPS.setFont(new Font("Dialog", Font.PLAIN, 11));
+		labelOKPS.setBounds(675, 370, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(labelOKPS);
+		
+		//Events
+		
 		buttonIzmjenaTrazi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try
@@ -198,6 +231,9 @@ public class IzmjenaKorisnika
 						JOptionPane.showMessageDialog(frmIzmjenaKorisnika,"Nema korisnika s tim korisničkim imenom!");
 						textFieldIzmjenaPretragaKorisnika.setText("");
 						buttonIzmjenaBrisiKorisnika.setEnabled(false);
+						ModelTabele mt=new ModelTabele();
+						tableIzmjenaPretraga.setModel(mt);
+						btnIzmijeniKorisnika.setEnabled(false);
 					}
 				}
 				catch (RuntimeException e) 
@@ -214,9 +250,6 @@ public class IzmjenaKorisnika
 				
 			}
 		});
-		buttonIzmjenaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaTrazi.setBounds(626, 50, 95, 29);
-		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaTrazi);
 		
 		textFieldIzmjenaPretragaKorisnika.addFocusListener(new FocusAdapter() {
 			@Override
@@ -240,23 +273,22 @@ public class IzmjenaKorisnika
 			}
 		});
 		
-		buttonIzmjenaBrisiKorisnika = new JButton("Izbriši Korisnika");
-		buttonIzmjenaBrisiKorisnika.setEnabled(false);
 		buttonIzmjenaBrisiKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				korisnikRepository.obrisiKorisnika(korisnikId);
-				ModelTabele mt=new ModelTabele();
-				tableIzmjenaPretraga.setModel(mt);
-				textFieldIzmjenaPretragaKorisnika.setText("");
-				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+				int dialogResult = JOptionPane.showConfirmDialog(frmIzmjenaKorisnika, "Da li ste sigurni da želite obrisati korisnika?");
+				if(dialogResult==JOptionPane.YES_OPTION)
+				{
+					korisnikRepository.obrisiKorisnika(korisnikId);
+					ModelTabele mt=new ModelTabele();
+					tableIzmjenaPretraga.setModel(mt);
+					textFieldIzmjenaPretragaKorisnika.setText("");
+					buttonIzmjenaBrisiKorisnika.setEnabled(false);
+					btnIzmijeniKorisnika.setEnabled(false);
+				}
+								
 			}
 		});
-		buttonIzmjenaBrisiKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
-		buttonIzmjenaBrisiKorisnika.setBounds(605, 439, 116, 27);
-		frmIzmjenaKorisnika.getContentPane().add(buttonIzmjenaBrisiKorisnika);
 		
-		final JButton btnIzmijeniKorisnika = new JButton("Spremi Promjene");
-		btnIzmijeniKorisnika.setFont(new Font("Dialog", Font.PLAIN, 11));
 		btnIzmijeniKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				korisnikRepository.izmijeniKorisnika(korisnik);
@@ -265,10 +297,11 @@ public class IzmjenaKorisnika
 				tableIzmjenaPretraga.setModel(mt);
 				textFieldIzmjenaPretragaKorisnika.setText("");
 				buttonIzmjenaBrisiKorisnika.setEnabled(false);
+				btnIzmijeniKorisnika.setEnabled(false);
 				
 			}
 		});
-		btnIzmijeniKorisnika.setEnabled(false);
+		
 		tableIzmjenaPretraga.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
@@ -279,19 +312,10 @@ public class IzmjenaKorisnika
 					}
 			}
 		});
-		btnIzmijeniKorisnika.setBounds(605, 282, 116, 27);
-		frmIzmjenaKorisnika.getContentPane().add(btnIzmijeniKorisnika);
 		
-		final JLabel lblOKNS = new JLabel("");
-		lblOKNS.setFont(new Font("Dialog", Font.PLAIN, 11));
-		lblOKNS.setBounds(675, 332, 46, 14);
-		frmIzmjenaKorisnika.getContentPane().add(lblOKNS);
 		
-		final JLabel labelOKPS = new JLabel("");
-		labelOKPS.setFont(new Font("Dialog", Font.PLAIN, 11));
-		labelOKPS.setBounds(675, 370, 46, 14);
-		frmIzmjenaKorisnika.getContentPane().add(labelOKPS);
 		passwordFieldIzmjenaNovaSifra.addFocusListener(new FocusAdapter() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				String s=passwordFieldIzmjenaNovaSifra.getText();
@@ -320,6 +344,7 @@ public class IzmjenaKorisnika
 		});
 		
 		passwordFieldIzmjenaPonoviSifru.addFocusListener(new FocusAdapter() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				String s1=passwordFieldIzmjenaPonoviSifru.getText();
@@ -349,6 +374,7 @@ public class IzmjenaKorisnika
 		});
 		
 		buttonIzmjenaIzmjeniSifru.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				korisnik.setPassword(passwordFieldIzmjenaPonoviSifru.getText());
 				korisnikRepository.izmijeniKorisnika(korisnik);
