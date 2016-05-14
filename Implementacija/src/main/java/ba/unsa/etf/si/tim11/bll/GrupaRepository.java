@@ -182,7 +182,7 @@ public class GrupaRepository {
 		KorisnikDbModel kor = korRep.dajKorisnika(idKorisnika);
 		List<GrupaDbModel> listaGrupa;
 		
-		if(kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		if(kor.getKorisnikTip() != null && kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
 		{
 			ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 			kriterijum.add(Restrictions.eq("aktivan", true));
@@ -320,6 +320,29 @@ public class GrupaRepository {
 		if(lista.size() > 0)
 			return true;
 		else return false;
+	}
+	
+	public int dajPravaGrupeNaFolder(Integer grupaId, Integer folderId)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		List<FolderXGrupaDbModel> listaPostojecih;
+		
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		kriterijum.add(Restrictions.eq("folderId", folderId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		listaPostojecih = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		if(listaPostojecih.size() != 0)
+		{
+			if(listaPostojecih.get(0).getPravoDodavanja())
+				return 1; // Ima i pravo pisanja i čitanja
+			else if(listaPostojecih.get(0).getPravoSkidanja())
+				return 2; // Ime samo pravo čitanja
+				
+		}
+		
+		return -1;
 	}
 	
 

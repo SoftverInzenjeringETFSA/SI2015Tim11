@@ -92,7 +92,7 @@ public class FolderRepository {
 		
 		KorisnikDbModel korisnik = kor.dajKorisnika(idKorisnika);
 		
-		if(korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		if(korisnik.getKorisnikTip() != null && korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
 		{
 			ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 			kriterijum.add(Restrictions.eq("aktivan", true));
@@ -202,6 +202,7 @@ public class FolderRepository {
 		System.out.println("prosao4: "+listaFoldera.size());
 		return listaFoldera;
 	}
+	
 	private Boolean listaSadrziFolder(List<FolderDbModel> listaFoldera, long folderId){
 		for (FolderDbModel folderDbModel : listaFoldera) {
 			if(folderDbModel.getFolderId() == folderId)

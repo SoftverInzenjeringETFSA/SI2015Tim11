@@ -68,6 +68,7 @@ public class IzmjenaGrupe
 	String userNameKorisnika;
 	
 	final static Logger logger = Logger.getLogger(IzmjenaGrupe.class.toString());
+	private JLabel lbl_trenutnaPrava;
 	
 	/**
 	 * Launch the application.
@@ -307,12 +308,12 @@ public class IzmjenaGrupe
 				}
 			}
 		});
-		btnBrisanjeGrupe.setBounds(48, 397, 157, 26);
+		btnBrisanjeGrupe.setBounds(49, 410, 157, 30);
 		frmIzmjenaGrupa.getContentPane().add(btnBrisanjeGrupe);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Izmjena korisnika u grupi", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(216, 118, 459, 308);
+		panel_1.setBounds(216, 118, 459, 322);
 		frmIzmjenaGrupa.getContentPane().add(panel_1);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -430,7 +431,7 @@ public class IzmjenaGrupe
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Izmjena/Uklanjanje prava pristupa nad folderima", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_2.setBounds(685, 11, 486, 412);
+		panel_2.setBounds(685, 11, 486, 429);
 		frmIzmjenaGrupa.getContentPane().add(panel_2);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
@@ -487,8 +488,21 @@ public class IzmjenaGrupe
 		JScrollPane scrollPane_4 = new JScrollPane();
 		
 		checkBox_Pisanje = new JCheckBox("Pravo pisanja");
+		checkBox_Pisanje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(checkBox_Pisanje.isSelected())
+					checkBox_Citanje.setSelected(true);
+					
+			}
+		});
 		
-		checkBox_Citanje = new JCheckBox("Pravi čitanja");
+		checkBox_Citanje = new JCheckBox("Pravo čitanja");
+		checkBox_Citanje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkBox_Pisanje.isSelected())
+					checkBox_Citanje.setSelected(true);
+			}
+		});
 		
 		JLabel lblDodaniFolderi = new JLabel("Dodani folderi:");
 		
@@ -515,6 +529,8 @@ public class IzmjenaGrupe
 
 			}
 		});
+		
+		lbl_trenutnaPrava = new JLabel("");
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -533,13 +549,14 @@ public class IzmjenaGrupe
 								.addComponent(lblSviFolderi))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+								.addComponent(scrollPane_4, GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
 								.addComponent(lblDodaniFolderi)))
-						.addComponent(btnUkloniPravoPristupa, Alignment.TRAILING))
+						.addComponent(btnUkloniPravoPristupa, Alignment.TRAILING)
+						.addComponent(lbl_trenutnaPrava))
 					.addContainerGap())
 		);
 		gl_panel_2.setVerticalGroup(
-			gl_panel_2.createParallelGroup(Alignment.TRAILING)
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -550,9 +567,7 @@ public class IzmjenaGrupe
 							.addGap(7)
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 305, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-							.addComponent(btnUkloniPravoPristupa))
+								.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 303, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGap(109)
 							.addComponent(checkBox_Pisanje)
@@ -560,10 +575,46 @@ public class IzmjenaGrupe
 							.addComponent(checkBox_Citanje)
 							.addGap(18)
 							.addComponent(btnDodajFolder)))
-					.addContainerGap())
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnUkloniPravoPristupa)
+					.addGap(18)
+					.addComponent(lbl_trenutnaPrava)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
 		list_dodaniFolderi = new JList(listaDodanihFolderaGrupe);
+		list_dodaniFolderi.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				String poruka = "";
+				if(list_dodaniFolderi.getSelectedIndex() != -1)
+				{
+					GrupaDbModel grupa = ((GrupaDbModel)list_grupeKorisnika.getSelectedValue());
+					FolderDbModel folder = ((FolderDbModel)list_dodaniFolderi.getSelectedValue());
+					int prava = grupaRep.dajPravaGrupeNaFolder((int)grupa.getGrupaId(), (int)folder.getFolderId());
+					
+					if(prava != -1 && prava == 1) // -1 vraca u slucaju greske odredivanja prava
+					{
+						poruka = "pravo pisanja i čitanja";
+					}
+					else if(prava != -1 && prava == 2)
+					{
+						poruka = "pravo čitanja";
+					}
+					else
+					{
+						poruka = "";
+					}
+					
+					String nazivGrupe = grupa.getGrupaNaziv();
+					String nazivFoldera = folder.getFolderNaziv();
+					
+					lbl_trenutnaPrava.setText("Grupa " + nazivGrupe + " nad folderom "+nazivFoldera+" ima "+poruka);
+					
+				}
+				else
+					lbl_trenutnaPrava.setText("");
+			}
+		});
 		scrollPane_4.setViewportView(list_dodaniFolderi);
 		
 		list_sviFolderi = new JList(listaSvihFoldera);
@@ -572,13 +623,7 @@ public class IzmjenaGrupe
 				
 				int prava = korisnikRep.dajPravaKorisnikaNaFolder(userNameKorisnika, (FolderDbModel)list_sviFolderi.getSelectedValue());
 				
-				if(prava == 1)
-				{
-					checkBox_Citanje.setSelected(false);
-					checkBox_Citanje.setEnabled(false);
-					checkBox_Pisanje.setEnabled(true);
-				}
-				else if(prava == 2)
+				if(prava == 2)
 				{
 					checkBox_Pisanje.setSelected(false);
 					checkBox_Pisanje.setEnabled(false);

@@ -271,8 +271,20 @@ public class KreiranjeGrupa
 		JScrollPane scrollPane_folderi = new JScrollPane();
 		
 		checkBox_Citanje = new JCheckBox("Pravo čitanja");
+		checkBox_Citanje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkBox_Pisanje.isSelected())
+					checkBox_Citanje.setSelected(true);
+			}
+		});
 		
 		checkBox_Pisanje = new JCheckBox("Pravo pisanja");
+		checkBox_Pisanje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(checkBox_Pisanje.isSelected())
+					checkBox_Citanje.setSelected(true);
+			}
+		});
 		
 		JLabel lblFolderi = new JLabel("Folderi:");
 		
@@ -381,13 +393,7 @@ public class KreiranjeGrupa
 				KorisnikRepository kr = new KorisnikRepository();
 				int prava = kr.dajPravaKorisnikaNaFolder(userNameKorisnika, (FolderDbModel)list_folderi.getSelectedValue());
 				
-				if(prava == 1)
-				{
-					checkBox_Citanje.setSelected(false);
-					checkBox_Citanje.setEnabled(false);
-					checkBox_Pisanje.setEnabled(true);
-				}
-				else if(prava == 2)
+				if(prava == 2)
 				{
 					checkBox_Pisanje.setSelected(false);
 					checkBox_Pisanje.setEnabled(false);
