@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.logging.Logger;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -21,7 +23,7 @@ public class ZahtjevZaOdobrenje
 	private JTextField textFieldZahtjevPretragaDokumenti;
 	private JTable tableZahtjevDokumenti;
 	private JTextField textFieldZahtjevPoruka;
-
+	final static Logger logger = Logger.getLogger(ZahtjevZaOdobrenje.class.toString());
 	/**
 	 * Launch the application.
 	 */
@@ -37,7 +39,8 @@ public class ZahtjevZaOdobrenje
 					window.frmZahtjevZaOdobrenje.setVisible(true);
 				} catch (Exception e)
 				{
-					e.printStackTrace();
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 		});

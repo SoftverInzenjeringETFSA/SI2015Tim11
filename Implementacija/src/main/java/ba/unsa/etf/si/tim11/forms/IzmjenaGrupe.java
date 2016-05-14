@@ -67,7 +67,7 @@ public class IzmjenaGrupe
 	private FolderRepository folderRep = new FolderRepository();
 	String userNameKorisnika;
 	
-	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
+	final static Logger logger = Logger.getLogger(IzmjenaGrupe.class.toString());
 	
 	/**
 	 * Launch the application.
@@ -85,7 +85,7 @@ public class IzmjenaGrupe
 				} catch (Exception e)
 				{
 					logger.info(e.getMessage());
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 			}
 		});

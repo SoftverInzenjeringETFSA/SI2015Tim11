@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.logging.Logger;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTree;
 import javax.swing.JTextField;
@@ -20,6 +22,7 @@ public class DodavanjeFolderaDokumenataKomentara
 	private JTextField textFieldDFDKNazivFoldera;
 	private JTextField textFieldDFDKIzabraniDokument;
 	private JTextField textFieldDFDKNazivDokumenta;
+	final static Logger logger = Logger.getLogger(DodavanjeFolderaDokumenataKomentara.class.toString());
 
 	/**
 	 * Launch the application.
@@ -36,7 +39,9 @@ public class DodavanjeFolderaDokumenataKomentara
 					window.frmDodavanjeFolderadokumenatakomentara.setVisible(true);
 				} catch (Exception e)
 				{
-					e.printStackTrace();
+					String poruka=e.getMessage();
+					logger.info(poruka);
+					throw new RuntimeException(e);
 				}
 			}
 		});

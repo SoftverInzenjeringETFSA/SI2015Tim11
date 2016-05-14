@@ -67,7 +67,7 @@ public class KreiranjeGrupa
 	private GrupaRepository grupaRep = new GrupaRepository();
 	private String userNameKorisnika = "";
 	
-	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
+	final static Logger logger = Logger.getLogger(KreiranjeGrupa.class.toString());
 	
 	/**
 	 * Launch the application.
@@ -85,7 +85,7 @@ public class KreiranjeGrupa
 				} catch (Exception e)
 				{
 					logger.info(e.getMessage());
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 			}
 		});

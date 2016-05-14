@@ -28,8 +28,7 @@ public class KorisnikRepository {
 		KorisnikDbModel korisnik = DbDMSContext.getInstance().getKorisnici().ucitaj((long)korisnikId);
 		
 		return korisnik;
-		// TODO - implement KorisnikRepository.dajKorisnika
-		//throw new UnsupportedOperationException();
+
 	}
 	
 	public static Boolean korisnikPostoji(String username, String password) {

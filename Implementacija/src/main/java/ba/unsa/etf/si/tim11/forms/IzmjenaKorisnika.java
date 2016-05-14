@@ -83,7 +83,6 @@ public class IzmjenaKorisnika
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
 					String poruka=e.getMessage();
 					logger.info(poruka);
 					throw new RuntimeException(e);

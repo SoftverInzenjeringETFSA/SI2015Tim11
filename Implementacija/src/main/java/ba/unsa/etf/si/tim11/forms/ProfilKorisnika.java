@@ -38,7 +38,7 @@ public class ProfilKorisnika extends JFrame {
 	private String userNameKorisnika = "";
 	private KorisnikDbModel prijavljeniKorisnik;
 	private KorisnikRepository korisnikRep = new KorisnikRepository();
-	final static Logger logger = Logger.getLogger(DodavanjeKorisnika.class.toString());
+	final static Logger logger = Logger.getLogger(ProfilKorisnika.class.toString());
 
 	/**
 	 * Launch the application.
@@ -51,7 +51,7 @@ public class ProfilKorisnika extends JFrame {
 					frame.setVisible(true);
 				} catch (Exception e) {
 					logger.info(e.getMessage());
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 			}
 		});

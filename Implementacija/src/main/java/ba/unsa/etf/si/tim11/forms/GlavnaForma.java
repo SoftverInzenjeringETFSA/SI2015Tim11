@@ -26,6 +26,7 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -78,7 +79,8 @@ public class GlavnaForma {
 	private JMenuItem mntmDodajVerzijuDokumenta;
 	private JMenuItem mntmDodajVerzijuDokumenta_1;
 	private JTextField textField_1;
-
+	
+	final static Logger logger = Logger.getLogger(GlavnaForma.class.toString());
 	
 	private UnitOfWork uow = new UnitOfWork();
 	/**
@@ -91,7 +93,9 @@ public class GlavnaForma {
 					GlavnaForma window = new GlavnaForma();
 					window.frmDobrodoaolaUDms.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					String poruka=e.getMessage();
+					logger.info(poruka);
+					throw new RuntimeException(e);
 				}
 			}
 		});

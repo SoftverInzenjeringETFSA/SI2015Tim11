@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
 import net.sourceforge.jdatepicker.util.JDatePickerUtil;
@@ -19,6 +20,7 @@ public class LoginForma {
 	private JFrame frmDmsLogin;
 	private JTextField txtUsername;
 	private JPasswordField passwordField;
+	final static Logger logger = Logger.getLogger(LoginForma.class.toString());
 	
 	/**
 	 * Launch the application.
@@ -30,7 +32,9 @@ public class LoginForma {
 					LoginForma window = new LoginForma();
 					window.frmDmsLogin.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					String poruka=e.getMessage();
+					logger.info(poruka);
+					throw new RuntimeException(e);
 				}
 			}
 		});
