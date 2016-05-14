@@ -54,7 +54,10 @@ public class DodavanjeFoldera {
 		}
 		folder.setFolderNaziv(txtNaziv.getText());
 		folder.setAktivan(true);
-		uow.getFolderRepository().dodajFolder(_roditeljFolderID, folder);
+		if(_roditeljFolderID != -1)
+			uow.getFolderRepository().dodajFolder(_roditeljFolderID, folder);
+		else
+			uow.getFolderRepository().dodajFolder(null, folder);
 	}
 	/**
 	 * Create the application.

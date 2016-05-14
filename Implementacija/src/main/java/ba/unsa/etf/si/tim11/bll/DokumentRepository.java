@@ -19,7 +19,7 @@ public class DokumentRepository {
 	 * 
 	 * @param dokument
 	 */
-	public Boolean dodajDokument(DokumentDbModel dokument, String sadrzaj) {
+	public Boolean dodajDokument(DokumentDbModel dokument, byte[] sadrzaj) {
 		try {
 			KorisnikRepository kor = new KorisnikRepository();
 			
@@ -32,7 +32,7 @@ public class DokumentRepository {
 			verzija.setDokumentId((Integer)(int)dokumentId);
 			verzija.setPostavioKorisnikId(kor.dajIdKorisnikaPoUsername(Sesija.getUsername()));
 			//fali status
-			//fali sadrzaj
+			verzija.setSadrzaj(sadrzaj);
 			
 			dodajverzijuDokumenta(verzija);
 			
@@ -57,14 +57,28 @@ public class DokumentRepository {
 		}
 		return false;
 	}
-
+	
+	public DokumentVerzijaDbModel dajVerzijuDokumenta(long dokumentVerzijaId) {
+		return DbDMSContext.getInstance().getDokumentiVerzije().ucitaj(dokumentVerzijaId);
+	}
+	
 	/**
 	 * 
 	 * @param dokumentId
 	 */
 	public Boolean obrisiDokument(Integer dokumentId) {
-		// TODO - implement DokumentRepository.obrisiDokument
-		throw new UnsupportedOperationException();
+		DokumentDbModel dokument = DbDMSContext.getInstance().getDokumenti().ucitaj((long)(int)dokumentId);
+		if(dokument != null){
+			dokument.setAktivan(false);
+			
+			try {
+				DbDMSContext.getInstance().getDokumenti().sacuvajIliAzuriraj(dokument);
+				return true;
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return false;
 	}
 
 	/**

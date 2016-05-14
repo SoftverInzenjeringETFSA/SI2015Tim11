@@ -50,9 +50,18 @@ public class FolderRepository {
 	 * 
 	 * @param folderId
 	 */
-	public void obrisiFolder(Integer folderId) {
-		// TODO - implement FolderRepository.obrisiFolder
-		throw new UnsupportedOperationException();
+	public Boolean obrisiFolder(Integer folderId) {
+		FolderDbModel folder = DbDMSContext.getInstance().getFolderi().ucitaj((long)(int)folderId);
+		if(folder != null){
+			folder.setAktivan(false);
+			try {
+				DbDMSContext.getInstance().getFolderi().sacuvajIliAzuriraj(folder);
+				return true;
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -164,6 +173,23 @@ public class FolderRepository {
 				System.out.println("Null folderid: "+folderXGrupaDbModel.getFolderId());
 			}
 		}
+		
+		//jos dodavanje vlastitih foldera
+		ArrayList<Criterion> kriterijumVlastititFolderi = new ArrayList<Criterion>();
+		kriterijumVlastititFolderi.add(Restrictions.eq("aktivan", true));
+		kriterijumVlastititFolderi.add(Restrictions.isNull("roditeljFolderId"));
+		kriterijumVlastititFolderi.add(Restrictions.eq("kreiraoKorisnikId", korisnikRepo.dajIdKorisnikaPoUsername(Sesija.getUsername())));
+		
+		List<FolderDbModel> listaVlastitiFolderi = DbDMSContext.getInstance()
+				.getFolderi()
+				.ucitajSveSaKriterujumom(kriterijumVlastititFolderi);
+		System.out.println("UKUPNO MOJI FOLDERI: "+listaVlastitiFolderi.size());
+		for (FolderDbModel folderDbModel : listaVlastitiFolderi) {
+			if(!this.listaSadrziFolder(listaFoldera, folderDbModel.getFolderId())){
+				listaFoldera.add(folderDbModel);
+			}
+		}
+		
 		System.out.println("prosao4: "+listaFoldera.size());
 		return listaFoldera;
 	}
