@@ -28,7 +28,7 @@ public class KorisnikRepositoryTest extends TestCase {
 	long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
 	korModel.setAdresa("neka adresa");
 	korModel.setAktivan(true);
-	korModel.setDatumRodjenja(new Date("02.02.2001"));
+	korModel.setDatumRodjenja(new Date());
 	korModel.setIme("neko ime");
 	korModel.setKorisnikPozicija(pozicija);
 	korModel.setKorisnikPozicijaId((int) idPozicije);
