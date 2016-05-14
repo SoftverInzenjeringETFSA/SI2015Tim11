@@ -90,8 +90,10 @@ public class ProfilKorisnika extends JFrame {
 		}
 		catch(Exception ex)
 		{
-			logger.info(ex.getMessage());
 			userNameKorisnika = "";
+			logger.info(ex.getMessage());
+			throw new RuntimeException(ex);
+			
 		}
 		
 	}

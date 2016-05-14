@@ -191,6 +191,7 @@ public class IzmjenaGrupe
 		catch(Exception ex){
 			logger.info(ex.getMessage());
 			userNameKorisnika = "";
+			throw new RuntimeException(ex);
 		}
 		
 	}

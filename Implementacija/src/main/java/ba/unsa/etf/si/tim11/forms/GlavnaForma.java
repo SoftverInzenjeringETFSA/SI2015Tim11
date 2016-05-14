@@ -219,6 +219,8 @@ public class GlavnaForma {
 					try {
 						pocetniFolderi = uow.getFolderRepository().dajFoldere();
 					} catch (Exception e) {
+						logger.info(e.getMessage());
+						throw new RuntimeException(e);
 					}
 					
 					if(pocetniFolderi != null){
