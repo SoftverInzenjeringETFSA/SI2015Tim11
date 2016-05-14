@@ -309,8 +309,6 @@ public class KreiranjeGrupa
 					listaDodanihFoldera.addElement((FolderDbModel)list_folderi.getSelectedValue());
 					FolderXGrupaDbModel novi = new FolderXGrupaDbModel();
 					FolderDbModel trenutni = (FolderDbModel)list_folderi.getSelectedValue();
-					
-					
 					novi.setFolderId((int)trenutni.getFolderId());
 					novi.setAktivan(true);
 					novi.setPravoDodavanja(checkBox_Pisanje.isSelected());

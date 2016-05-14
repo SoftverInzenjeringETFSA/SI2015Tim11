@@ -177,8 +177,9 @@ public class KorisnikRepository {
 			return 0; // Korisnik ima pravo i citanja i pisanja
 		else if(pravoPisanja)
 			return 1; // Korisnik ima pravo pisanja samo
-		else 
+		else if(pravoCitanja)
 			return 2; // Korisnik ima pravo citanja samo
+		else return -1;
 	}
 
 	public List<KorisnikDbModel> dajKorisnikeGrupe(int grupaId) {
