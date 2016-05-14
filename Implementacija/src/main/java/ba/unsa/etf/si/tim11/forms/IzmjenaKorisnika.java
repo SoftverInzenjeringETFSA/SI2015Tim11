@@ -85,6 +85,7 @@ public class IzmjenaKorisnika
 				{
 					logger.info(e.getMessage());
 					e.printStackTrace();
+					throw new RuntimeException(e);
 					
 				}
 			}
@@ -208,6 +209,7 @@ public class IzmjenaKorisnika
 					String poruka=e.getMessage();
 					logger.info(poruka);
 					JOptionPane.showMessageDialog(frmIzmjenaKorisnika,poruka);
+					throw new RuntimeException(e);
 				}
 				
 			}

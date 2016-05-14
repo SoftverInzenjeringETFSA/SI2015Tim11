@@ -73,6 +73,7 @@ public class DodavanjeKorisnika {
 				{
 					logger.info(e.getMessage());
 					e.printStackTrace();
+					throw new RuntimeException(e);
 					
 				}
 			}
@@ -488,6 +489,8 @@ public class DodavanjeKorisnika {
 					String poruka=e.getMessage();
 					logger.info(poruka);
 					JOptionPane.showMessageDialog(frmDodavanjeizmjenaKorisnika,poruka);
+					throw new RuntimeException(e);
+
 				}
 				
 			}
