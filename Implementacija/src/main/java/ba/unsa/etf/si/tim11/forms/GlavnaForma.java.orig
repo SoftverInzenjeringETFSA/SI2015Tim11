@@ -103,11 +103,16 @@ public class GlavnaForma {
 	private JMenuItem mntmObrisiDokument;
 	private JMenuItem mntmDodajVerzijuDokumenta;
 	private JMenuItem mntmDodajVerzijuDokumenta_1;
+<<<<<<< HEAD
 	public JTextField txtPretraga;
 	public final JTree treeFolderView = new JTree();;
 	private JEditorPane txtKomentar;
 	
+=======
+	private JTextField textField_1;
+	
 	final static Logger logger = Logger.getLogger(GlavnaForma.class.toString());
+>>>>>>> 9bfede3cfe938c1867f5a3d73796ccc5aeee356c
 	
 	private UnitOfWork uow = new UnitOfWork();
 
@@ -327,8 +332,6 @@ public class GlavnaForma {
 				try {
 					pocetniFolderi = uow.getFolderRepository().dajFoldere();
 				} catch (Exception e) {
-						logger.info(e.getMessage());
-						throw new RuntimeException(e);
 				}
 
 				if (pocetniFolderi != null) {
@@ -409,6 +412,7 @@ public class GlavnaForma {
 
 		treeFolderView.setShowsRootHandles(true);
 		treeFolderView.setRootVisible(false);
+<<<<<<< HEAD
 
 		treeFolderView.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION); // moguce
 																										// odabrati
@@ -418,6 +422,31 @@ public class GlavnaForma {
 		ucitajTreeViewModel();
 		
 		mnGrupe = new JMenu("Grupe");
+=======
+		treeFolderView.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("Root") {
+				{
+					DefaultMutableTreeNode node;
+					List<FolderDbModel> pocetniFolderi = null;
+					
+					try {
+						pocetniFolderi = uow.getFolderRepository().dajFoldere();
+					} catch (Exception e) {
+						logger.info(e.getMessage());
+						throw new RuntimeException(e);
+					}
+					
+					if(pocetniFolderi != null){
+						for (FolderDbModel folderDbModel : pocetniFolderi) {
+							node = new DefaultMutableTreeNode(folderDbModel);
+							add(PopuniDrvo(node, folderDbModel));
+						}
+					}
+				}
+			}
+		));
+		treeFolderView.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION); //moguce odabrati samo jednu stavku
+>>>>>>> 9bfede3cfe938c1867f5a3d73796ccc5aeee356c
 		
 		treeFolderView.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent arg0) {

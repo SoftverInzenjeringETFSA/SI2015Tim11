@@ -18,13 +18,16 @@ import ba.unsa.etf.si.tim11.bll.GrupaRepository;
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
 import ba.unsa.etf.si.tim11.bll.Sesija;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.FolderXGrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -33,6 +36,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Container;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -62,6 +66,9 @@ public class IzmjenaGrupe
 	private GrupaRepository grupaRep = new GrupaRepository();
 	private FolderRepository folderRep = new FolderRepository();
 	String userNameKorisnika;
+	
+	final static Logger logger = Logger.getLogger(IzmjenaGrupe.class.toString());
+	
 	/**
 	 * Launch the application.
 	 */
@@ -77,7 +84,8 @@ public class IzmjenaGrupe
 					window.frmIzmjenaGrupa.setVisible(true);
 				} catch (Exception e)
 				{
-					e.printStackTrace();
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 		});
@@ -95,6 +103,14 @@ public class IzmjenaGrupe
 		ucitajGrupeKorisnika(userNameKorisnika);
 	}
 	
+	private boolean daLiVecPostojiUListiDodanihFoldera(int idFoldera)
+	{
+		for(int i=0; i<listaDodanihFolderaGrupe.size(); i++)
+			if(((FolderDbModel)listaDodanihFolderaGrupe.get(i)).getFolderId() == idFoldera)
+				return true;
+			 
+		return false;
+	}
 	private void ocistiSve()
 	{
 		list_grupeKorisnika.removeAll();
@@ -112,10 +128,12 @@ public class IzmjenaGrupe
 	
 	private void ucitajListeForme(String userNameKorisnika)
 	{
+		listaSvihKorisnika.clear();
 		List<KorisnikDbModel> listaKorisnika = korisnikRep.dajSveKorisnike();
 		for(KorisnikDbModel kor : listaKorisnika)
 			listaSvihKorisnika.addElement(kor);
 		
+		listaSvihFoldera.clear();
 		List<FolderDbModel> listaFolderaa = folderRep.dajSveFoldereNaKojeImaPravo(userNameKorisnika);
 		 for(FolderDbModel f : listaFolderaa)
 			if(!listaSvihFoldera.contains(f))
@@ -130,7 +148,7 @@ public class IzmjenaGrupe
 			listaDodanihKorisnikaGrupe.clear();
 			
 			for(KorisnikDbModel korisnik : korisniciGrupe)
-				//if(!listaDodanihKorisnikaGrupe.contains(korisnik))
+				if(!listaDodanihKorisnikaGrupe.contains(korisnik))
 				listaDodanihKorisnikaGrupe.addElement(korisnik);
 		}
 		else
@@ -171,7 +189,9 @@ public class IzmjenaGrupe
 		    userNameKorisnika = Sesija.getUsername();
 		}
 		catch(Exception ex){
+			logger.info(ex.getMessage());
 			userNameKorisnika = "";
+			throw new RuntimeException(ex);
 		}
 		
 	}
@@ -313,6 +333,11 @@ public class IzmjenaGrupe
 					JOptionPane.showMessageDialog(null, "Nije odabran nijedan korisnika za dodavanje iz liste svih korisnika!", "Greška", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
+				if(((KorisnikDbModel)list_sviKorisnici.getSelectedValue()).getUsername().equals(userNameKorisnika))
+				{
+					  JOptionPane.showMessageDialog(null, "Ne možete dodati sebe u vasu grupu!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					  return;
+				}	
 				//KorisnikDbModel selektovaniKorisnik = (KorisnikDbModel)list_sviKorisnici.getSelectedValue();
 				if(grupaRep.daLiPostojiKorisnikUGrupi((int)((KorisnikDbModel)list_sviKorisnici.getSelectedValue()).getKorisnikID(), (int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId()))
 				{
@@ -329,6 +354,8 @@ public class IzmjenaGrupe
 				
 				grupaRep.dodajKorisnikaUGrupu(novi);
 				ucitajKorisnikeGrupe();
+				JOptionPane.showMessageDialog(null, "Korisnik uspjesno dodan u grupu!", "Info", JOptionPane.INFORMATION_MESSAGE);
+
 			}
 		});
 		
@@ -411,6 +438,51 @@ public class IzmjenaGrupe
 		JLabel lblSviFolderi = new JLabel("Svi folderi:");
 		
 		JButton btnDodajFolder = new JButton("Dodaj folder");
+		btnDodajFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(list_grupeKorisnika.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Niste selektovali nijednu grupu kojoj dajete prava na folder!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				if(list_sviFolderi.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Niste selektovali nijedan folder za definisanje prava pristupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				if(!checkBox_Pisanje.isSelected() && !checkBox_Citanje.isSelected())
+				{
+					JOptionPane.showMessageDialog(null, "Niste definisali prava pristupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				
+				if(!daLiVecPostojiUListiDodanihFoldera((int)((FolderDbModel)list_sviFolderi.getSelectedValue()).getFolderId()))
+				{		
+					FolderXGrupaDbModel novi = new FolderXGrupaDbModel();
+					FolderDbModel trenutni = (FolderDbModel)list_sviFolderi.getSelectedValue();
+					
+					novi.setFolderId((int)trenutni.getFolderId());
+					novi.setAktivan(true);
+					novi.setPravoDodavanja(checkBox_Pisanje.isSelected());
+					novi.setPravoSkidanja(checkBox_Citanje.isSelected());
+					
+					List<FolderXGrupaDbModel> listaDefinisanihPravaPristupa = new ArrayList<FolderXGrupaDbModel>();
+					listaDefinisanihPravaPristupa.add(novi);
+					
+					int idNoveGrupe = (int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId();
+					grupaRep.dodajFolderXGrupaDbModele(listaDefinisanihPravaPristupa, idNoveGrupe);
+					ucitajFoldereGrupe();
+					
+					checkBox_Citanje.setSelected(false);
+					checkBox_Pisanje.setSelected(false);
+					
+					JOptionPane.showMessageDialog(null, "Folder uspješno dodan!", "Info", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else
+					JOptionPane.showMessageDialog(null, "Folder već postoji među dodanim folderima!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+
+			}
+		});
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
 		
@@ -421,6 +493,28 @@ public class IzmjenaGrupe
 		JLabel lblDodaniFolderi = new JLabel("Dodani folderi:");
 		
 		JButton btnUkloniPravoPristupa = new JButton("Ukloni pravo pristupa");
+		btnUkloniPravoPristupa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(list_grupeKorisnika.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Niste selektovali nijednu grupu, te folderi na koje grupa ima pravo ne mogu biti prikazani!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				if(list_dodaniFolderi.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null, "Niste selektovali nijedan folder kako bi uklonili prava grupe na njega!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				int idFoldera = (int)((FolderDbModel)list_dodaniFolderi.getSelectedValue()).getFolderId();
+				int idGrupe = (int)((GrupaDbModel)list_grupeKorisnika.getSelectedValue()).getGrupaId();
+				grupaRep.oduzmiPravaPristupaGrupeNaFolder(idFoldera, idGrupe);
+				ucitajFoldereGrupe();
+				
+				JOptionPane.showMessageDialog(null, "Uspjesno ste uklonili sva prava pristupa grupe na izabrani folder!", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+
+			}
+		});
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)

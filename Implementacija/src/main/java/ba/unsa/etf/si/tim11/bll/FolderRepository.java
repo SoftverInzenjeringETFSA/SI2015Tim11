@@ -94,17 +94,23 @@ public class FolderRepository {
 		
 		if(korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
 		{
-			listaFoldera = DbDMSContext.getInstance().getFolderi().ucitajSve();
+			ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+			kriterijum.add(Restrictions.eq("aktivan", true));
+			
+			listaFoldera = DbDMSContext.getInstance().getFolderi().ucitajSveSaKriterujumom(kriterijum);
 			return listaFoldera;
 		}	
 		
 		List<GrupaDbModel> listaGrupa = gru.dajGrupeZaKorisnika(idKorisnika);
 		
-		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSve();
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		for(GrupaDbModel grupa : listaGrupa)
 			for(FolderXGrupaDbModel fg : folGru)
-				if(grupa.getGrupaId() == fg.getGrupa().getGrupaId())
+				if(grupa.getGrupaId() == fg.getGrupa().getGrupaId() && fg.getFolder().getAktivan())
 			     	listaFoldera.add(fg.getFolder());	
 		
 		return listaFoldera;
@@ -117,7 +123,10 @@ public class FolderRepository {
 		
 		List<GrupaDbModel> listaGrupa = gru.dajGrupeZaKorisnika(idKorisnika);
 		
-		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSve();
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<FolderXGrupaDbModel> folGru = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		List<FolderXGrupaDbModel> novaLista = new ArrayList<FolderXGrupaDbModel>();
 		
@@ -213,8 +222,10 @@ public class FolderRepository {
 	}
 
 	public List<FolderDbModel> dajFoldereGrupe(int grupaId) {
+		
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
 		List<FolderXGrupaDbModel> grupeFolderi = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		List<FolderDbModel> folderi = new ArrayList<FolderDbModel>();

@@ -20,7 +20,7 @@ public class DMSSessionFactory {
             ourSessionFactory = new Configuration().
                     configure().
                     buildSessionFactory();
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
