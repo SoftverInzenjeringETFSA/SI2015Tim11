@@ -454,6 +454,20 @@ public class GlavnaForma {
 		addPopup(treeFolderView, popupMenu);
 
 		mntmPostavkePravaPristupa = new JMenuItem("Postavke prava pristupa");
+		mntmPostavkePravaPristupa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeFolderView.getLastSelectedPathComponent();
+				FolderDbModel folder = null;
+				if (node != null && node.getUserObject() instanceof FolderDbModel) {
+					folder = (FolderDbModel) node.getUserObject();
+				}
+				
+				if(folder == null) return;
+				System.out.println(folder.getFolderId());
+				FolderPravaPristupa forma = new FolderPravaPristupa(folder.getFolderId());
+				forma.setVisible(true);
+			}
+		});
 		popupMenu.add(mntmPostavkePravaPristupa);		
 
 		mntmDodajFolder = new JMenuItem("Dodaj folder");

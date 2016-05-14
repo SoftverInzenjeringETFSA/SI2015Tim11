@@ -45,6 +45,27 @@ public class FolderRepository {
 		}
 		return false;
 	}
+	
+	public FolderDbModel dajFolderPoId(Integer idFoldera)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<FolderDbModel> lista = DbDMSContext.getInstance().getFolderi().ucitajSveSaKriterujumom(kriterijum);
+		
+		FolderDbModel folder = null;
+		
+		if(lista.size() != 0)
+		{
+			for(FolderDbModel fol : lista)
+			  if((int)fol.getFolderId() == idFoldera)
+			  {
+				  return fol;
+			  }
+		}
+		
+		return folder;
+	}
 
 	/**
 	 * 
