@@ -46,7 +46,8 @@ public class GrupaRepository {
 	 * @param grupaId
 	 */
 	public Boolean obrisiGrupu(GrupaDbModel grupa) {
-		DbDMSContext.getInstance().getGrupe().obrisi(grupa);
+		grupa.setAktivan(false);
+		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupa);
 		return true;
 	}
 	
@@ -54,21 +55,50 @@ public class GrupaRepository {
 	{
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
 		List<GrupaXKorisnikDbModel> grupeKorisnici = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
 		
 		for(GrupaXKorisnikDbModel gk : grupeKorisnici)
-			DbDMSContext.getInstance().getGrupeKorisnici().obrisi(gk);
+		{
+			gk.setAktivan(false);
+			DbDMSContext.getInstance().getGrupeKorisnici().sacuvajIliAzuriraj(gk);
+		}
 	}
 	
 	public void ukloniSvaPravaPristupaGrupe(Integer grupaId)
 	{
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
 		List<FolderXGrupaDbModel> folderiGrupe = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		for(FolderXGrupaDbModel fg : folderiGrupe)
-			DbDMSContext.getInstance().getFolderiGrupe().obrisi(fg);
+		{
+			fg.setAktivan(false);
+			DbDMSContext.getInstance().getFolderiGrupe().sacuvajIliAzuriraj(fg);
+		}
 		
+	}
+	
+	public void oduzmiPravaPristupaGrupeNaFolder(int idFoldera, int idGrupe)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaId", idGrupe));
+		kriterijum.add(Restrictions.eq("folderId", idFoldera));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<FolderXGrupaDbModel> folderiGrupe = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		if(folderiGrupe.size() != 0)
+		{
+			folderiGrupe.get(0).setPravoDodavanja(false);
+			folderiGrupe.get(0).setPravoSkidanja(false);
+			folderiGrupe.get(0).setAktivan(false);
+			
+			DbDMSContext.getInstance().getFolderiGrupe().sacuvajIliAzuriraj(folderiGrupe.get(0));
+		}
 	}
 
 	/**
@@ -76,7 +106,25 @@ public class GrupaRepository {
 	 * @param grupa
 	 */
 	public Boolean dodajGrupu(GrupaDbModel grupa) {
-		DbDMSContext.getInstance().getGrupe().sacuvaj(grupa);
+		
+		// Provjeri da li ima grupa sa istim nazivom koja je neaktivna
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaNaziv", grupa.getGrupaNaziv()));
+		kriterijum.add(Restrictions.eq("aktivan", false));
+		
+		List<GrupaDbModel> listaNeaktivnihGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		if(listaNeaktivnihGrupa.size() != 0)
+		{
+			GrupaDbModel postojecaGrupa = listaNeaktivnihGrupa.get(0);
+			postojecaGrupa.setAktivan(true);
+			postojecaGrupa.setDatumKreiranja(grupa.getDatumKreiranja());
+			postojecaGrupa.setOdgovorniKorisnikId(grupa.getOdgovorniKorisnikId());
+			DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(postojecaGrupa);
+		}
+		else // Ako ne postoji sačuvaj kreiranu
+			DbDMSContext.getInstance().getGrupe().sacuvaj(grupa);
+		
 		return true;
 	}
 
@@ -85,8 +133,22 @@ public class GrupaRepository {
 	 * @param grupaXKorisnikDbModel
 	 */
 	public Boolean dodajKorisnikaUGrupu(GrupaXKorisnikDbModel grupaXKorisnikDbModel) {
-		// TODO - implement GrupaRepository.dodajKorisnikaUGrupu
-		throw new UnsupportedOperationException();
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add( Restrictions.eq("korisnikId", grupaXKorisnikDbModel.getKorisnikId()));
+		kriterijum.add( Restrictions.eq("grupaId", grupaXKorisnikDbModel.getGrupaId()));
+		kriterijum.add( Restrictions.eq("aktivan", false));
+		
+		List<GrupaXKorisnikDbModel> listaPostojecih = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+		
+		if(listaPostojecih.size() != 0)
+		{
+			 listaPostojecih.get(0).setAktivan(true);
+			 DbDMSContext.getInstance().getGrupeKorisnici().sacuvajIliAzuriraj(listaPostojecih.get(0));
+		}
+		else
+			DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(grupaXKorisnikDbModel);
+		
+		return true;
 	}
 
 	/**
@@ -95,16 +157,45 @@ public class GrupaRepository {
 	 * @param grupaId
 	 */
 	public void odbrisiKorisnikaIzGrupe(Integer korisnikId, Integer grupaId) {
-		// TODO - implement GrupaRepository.odbrisiKorisnikaIzGrupe
-		throw new UnsupportedOperationException();
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add( Restrictions.eq("korisnikId", korisnikId));
+		kriterijum.add( Restrictions.eq("grupaId", grupaId));
+		kriterijum.add( Restrictions.eq("aktivan", true));
+		
+		List<GrupaXKorisnikDbModel> grupeKorisnici = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+		
+		GrupaXKorisnikDbModel gk = null;
+		
+		if(!grupeKorisnici.isEmpty())
+		  gk = grupeKorisnici.get(0);
+		
+		if(gk != null)
+		{
+			gk.setAktivan(false);
+			DbDMSContext.getInstance().getGrupeKorisnici().sacuvajIliAzuriraj(gk);
+		}
 	}
 	
 	public List<GrupaDbModel> dajGrupeVlasnika(Integer idKorisnika)
 	{
+		KorisnikRepository korRep = new KorisnikRepository();
+		KorisnikDbModel kor = korRep.dajKorisnika(idKorisnika);
+		List<GrupaDbModel> listaGrupa;
+		
+		if(kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		{
+			ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+			kriterijum.add(Restrictions.eq("aktivan", true));
+			
+			listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
+			return listaGrupa;
+		}
+					
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("odgovorniKorisnikId", idKorisnika));
+		kriterijum.add(Restrictions.eq("aktivan", true));
 		
-		List<GrupaDbModel> listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
+		listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		return listaGrupa;
 	}
@@ -113,6 +204,7 @@ public class GrupaRepository {
 	{
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("korisnikId", idKorisnika));
+		kriterijum.add(Restrictions.eq("aktivan", true));
 		
 		List<GrupaDbModel> listaGrupa = new ArrayList<GrupaDbModel>();
 		List<GrupaXKorisnikDbModel> lista = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
@@ -127,6 +219,8 @@ public class GrupaRepository {
 		
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("grupaNaziv", text));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
 		List<GrupaDbModel> listaGrupa = DbDMSContext.getInstance().getGrupe().ucitajSveSaKriterujumom(kriterijum);
 		
 		if(listaGrupa.isEmpty())
@@ -138,17 +232,43 @@ public class GrupaRepository {
 
 	public void dodajFolderXGrupaDbModele(List<FolderXGrupaDbModel> listaDefinisanihPravaPristupa, Integer idNoveGrupe) {
 		
+		// Provjeri da li postoji zapis da grupa ima prava na folder koji je neaktivan pa ga aktiviraj
+		// U suprotnom sacuvaj kreirani
+		
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		List<FolderXGrupaDbModel> listaPostojecih;
+		
 		for(FolderXGrupaDbModel fg : listaDefinisanihPravaPristupa)
-			{ 
-			 	fg.setGrupaId(idNoveGrupe);
-			 	DbDMSContext.getInstance().getFolderiGrupe().sacuvaj(fg);
-			}
+		{ 
+				fg.setGrupaId(idNoveGrupe);
+				kriterijum.clear();
+				kriterijum.add(Restrictions.eq("grupaId", fg.getGrupaId()));
+				kriterijum.add(Restrictions.eq("folderId", fg.getFolderId()));
+				kriterijum.add(Restrictions.eq("aktivan", false));
+				
+				listaPostojecih = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
+				
+				if(listaPostojecih.size() != 0)
+				{
+					listaPostojecih.get(0).setAktivan(true);
+					listaPostojecih.get(0).setPravoDodavanja(fg.getPravoDodavanja());
+					listaPostojecih.get(0).setPravoSkidanja(fg.getPravoSkidanja());
+					DbDMSContext.getInstance().getFolderiGrupe().sacuvajIliAzuriraj(listaPostojecih.get(0));
+				}
+				else
+				{
+				 	fg.setGrupaId(idNoveGrupe);
+				 	DbDMSContext.getInstance().getFolderiGrupe().sacuvaj(fg);
+				}
+		}
 		
 	}
 
-	public void dodajGrupaXKorisnikDbModele(List<KorisnikDbModel> listaDodanihKorisnika, Integer idNoveGrupe) {
-		
+	public void dodajGrupaXKorisnikDbModele(List<KorisnikDbModel> listaDodanihKorisnika, Integer idNoveGrupe) 
+	{
 		GrupaXKorisnikDbModel novi = null;
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		List<GrupaXKorisnikDbModel> listaPostojecih;
 		
 		for(KorisnikDbModel kor : listaDodanihKorisnika)
 		{
@@ -159,9 +279,47 @@ public class GrupaRepository {
 			novi.setGrupaId(idNoveGrupe);
 			novi.setKorisnikId((int)kor.getKorisnikID());
 			
-			DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(novi);
+			// Provjeri da li postoji zapis da je korisnik u grupi koji je neaktivan pa ga aktiviraj
+			// U suprotnom sacuvaj kreirani
+			kriterijum.clear();
+			kriterijum.add(Restrictions.eq("grupaId", novi.getGrupaId()));
+			kriterijum.add(Restrictions.eq("korisnikId", novi.getKorisnikId()));
+			kriterijum.add(Restrictions.eq("aktivan", false));
+			
+			listaPostojecih = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+			
+			if(listaPostojecih.size() != 0)
+			{
+				listaPostojecih.get(0).setAktivan(true);
+				listaPostojecih.get(0).setDatumPristupa(novi.getDatumPristupa());
+				listaPostojecih.get(0).setDatumZadnjeIzmjene(novi.getDatumZadnjeIzmjene());
+				DbDMSContext.getInstance().getGrupeKorisnici().sacuvajIliAzuriraj(listaPostojecih.get(0));
+			}
+			else
+			{
+				DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(novi);
+			}
 		}
 		
+	}
+
+	public void azurirajGrupu(GrupaDbModel grupaZaIzmjenu) {
+		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);
+		
+	}
+	
+	public boolean daLiPostojiKorisnikUGrupi(Integer idKorisnika, Integer idGrupe)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("korisnikId", idKorisnika));
+		kriterijum.add(Restrictions.eq("grupaId", idGrupe));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<GrupaXKorisnikDbModel> lista = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+
+		if(lista.size() > 0)
+			return true;
+		else return false;
 	}
 	
 

@@ -17,7 +17,7 @@
         <property name="dokumentVerzijaStatusId" type="java.lang.Integer">
             <column name="DOKUMENTVERZIJASTATUSID" />
         </property>
-        <property name="sadrzaj" type="java.sql.Blob">
+        <property name="sadrzaj" type="binary">
             <column name="SADRZAJ" />
         </property>
         <property name="aktivan" type="java.lang.Boolean">

@@ -17,7 +17,7 @@ public class DokumentVerzijaDbModel implements java.io.Serializable {
 	private Integer dokumentId;
 	private Integer postavioKorisnikId;
 	private Integer dokumentVerzijaStatusId;
-	private Blob sadrzaj;
+	private byte[] sadrzaj;
 	private Boolean aktivan;
 
 	@ManyToOne
@@ -89,11 +89,11 @@ public class DokumentVerzijaDbModel implements java.io.Serializable {
 		this.dokumentVerzijaStatusId = dokumentVerzijaStatusId;
 	}
 
-	public Blob getSadrzaj() {
+	public byte[] getSadrzaj() {
 		return sadrzaj;
 	}
 
-	public void setSadrzaj(Blob sadrzaj) {
+	public void setSadrzaj(byte[] sadrzaj) {
 		this.sadrzaj = sadrzaj;
 	}
 

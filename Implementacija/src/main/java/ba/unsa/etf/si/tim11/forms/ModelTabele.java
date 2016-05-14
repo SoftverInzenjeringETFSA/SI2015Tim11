@@ -23,6 +23,12 @@ public class ModelTabele extends AbstractTableModel
         lista.add(e);
         fireTableRowsInserted(lista.size()-1, lista.size()-1);
     }
+    
+    public void ocistiListu()
+    {
+    	lista.clear();
+    	fireTableRowsDeleted(lista.size()-1, lista.size()-1);
+    }
 
 
     public int getColumnCount() {
@@ -104,7 +110,6 @@ public class ModelTabele extends AbstractTableModel
         
         
     }
-
 
 
 }

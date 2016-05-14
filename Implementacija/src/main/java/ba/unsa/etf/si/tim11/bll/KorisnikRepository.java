@@ -2,6 +2,7 @@ package ba.unsa.etf.si.tim11.bll;
 
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.FolderXGrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
@@ -27,8 +28,7 @@ public class KorisnikRepository {
 		KorisnikDbModel korisnik = DbDMSContext.getInstance().getKorisnici().ucitaj((long)korisnikId);
 		
 		return korisnik;
-		// TODO - implement KorisnikRepository.dajKorisnika
-		//throw new UnsupportedOperationException();
+
 	}
 	
 	public static Boolean korisnikPostoji(String username, String password) {
@@ -61,7 +61,10 @@ public class KorisnikRepository {
 	
 	public List<KorisnikDbModel> dajSveKorisnike()
 	{
-		List<KorisnikDbModel> lista = DbDMSContext.getInstance().getKorisnici().ucitajSve();
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		List<KorisnikDbModel> lista = DbDMSContext.getInstance().getKorisnici().ucitajSveSaKriterujumom(kriterijum);
 		return lista;
 	}
 
@@ -81,7 +84,6 @@ public class KorisnikRepository {
 	 * @param korisnik
 	 */
 	public Boolean izmijeniKorisnika(KorisnikDbModel korisnik) {
-		// TODO - implement KorisnikRepository.izmijeniKorisnika
 		KorisnikDbModel k=new KorisnikDbModel();
 		k=korisnik;
 		DbDMSContext.getInstance().getKorisnici().sacuvajIliAzuriraj(k);
@@ -93,9 +95,11 @@ public class KorisnikRepository {
 	 * 
 	 * @param korinikId
 	 */
-	public Boolean obrisiKorisnika(Integer korinikId) {
-		// TODO - implement KorisnikRepository.obrisiKorisnika
-		throw new UnsupportedOperationException();
+	public Boolean obrisiKorisnika(Integer korisnikId) {
+		
+		KorisnikDbModel  k=DbDMSContext.getInstance().getKorisnici().ucitaj((long)korisnikId);
+		DbDMSContext.getInstance().getKorisnici().obrisi(k);
+		return true;
 	}
 
 	/**
@@ -118,7 +122,7 @@ public class KorisnikRepository {
 	public Integer dajIdKorisnikaPoUsername(String username){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("username", username));
-		
+		kriterijum.add(Restrictions.eq("aktivan", true));
 		
 		java.util.List<KorisnikDbModel> lista = DbDMSContext.getInstance()
 						.getKorisnici()
@@ -141,11 +145,18 @@ public class KorisnikRepository {
 		Integer idKorisnika = this.dajIdKorisnikaPoUsername(userName);
 		FolderRepository f = new FolderRepository();
 		
+		KorisnikDbModel korisnik = this.dajKorisnika(idKorisnika);
+		
+		if(korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+			return 0;
+		
 		List<FolderXGrupaDbModel> gf = f.dajSveGrupeFoldereKorisnika(idKorisnika);
 		List<FolderXGrupaDbModel> novaLista = new ArrayList<FolderXGrupaDbModel>();
+		
 		for(FolderXGrupaDbModel fg : gf)
 			if(fg.getFolder().getFolderId() == selectedValue.getFolderId())
 				novaLista.add(fg);
+		
 		
 		boolean pravoCitanja = false;
 		boolean pravoPisanja = false;
@@ -168,6 +179,21 @@ public class KorisnikRepository {
 			return 1; // Korisnik ima pravo pisanja samo
 		else 
 			return 2; // Korisnik ima pravo citanja samo
+	}
+
+	public List<KorisnikDbModel> dajKorisnikeGrupe(int grupaId) {
+		
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		List<GrupaXKorisnikDbModel> grupeKorisnici = DbDMSContext.getInstance().getGrupeKorisnici().ucitajSveSaKriterujumom(kriterijum);
+		
+		List<KorisnikDbModel> korisnici = new ArrayList<KorisnikDbModel>();
+		
+		for(GrupaXKorisnikDbModel gk : grupeKorisnici)
+			korisnici.add(gk.getKorisnik());
+		
+		return korisnici;
 	}
 
 }

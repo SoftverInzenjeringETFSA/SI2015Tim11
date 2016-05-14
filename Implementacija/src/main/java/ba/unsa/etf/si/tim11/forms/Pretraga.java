@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.logging.Logger;
+
 import com.toedter.calendar.JCalendar;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -20,6 +22,8 @@ public class Pretraga
 	private JFrame frmPretragaizvjetaji;
 	private JTextField textFieldPretragaKorisnik;
 	private JTable tablePretragaDokumenti;
+	
+	final static Logger logger = Logger.getLogger(Pretraga.class.toString());
 
 	/**
 	 * Launch the application.
@@ -36,7 +40,8 @@ public class Pretraga
 					window.frmPretragaizvjetaji.setVisible(true);
 				} catch (Exception e)
 				{
-					e.printStackTrace();
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 		});

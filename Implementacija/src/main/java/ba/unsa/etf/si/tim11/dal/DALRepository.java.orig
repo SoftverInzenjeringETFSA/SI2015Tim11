@@ -93,7 +93,11 @@ public class DALRepository<T>{
      * @param object Objekat koji se spasava
      * @param session Hibernate sesija
      */
+<<<<<<< HEAD
     public long sacuvaj(T object) {
+=======
+     public long sacuvaj(T object) {
+>>>>>>> 9bfede3cfe938c1867f5a3d73796ccc5aeee356c
     	this.session = DMSSessionFactory.getSession();
         Transaction t = this.session.beginTransaction();
         long id = (Long) this.session.save(object);

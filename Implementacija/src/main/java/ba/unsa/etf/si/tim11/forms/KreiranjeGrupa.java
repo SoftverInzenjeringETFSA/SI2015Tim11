@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -65,11 +66,13 @@ public class KreiranjeGrupa
 	private FolderRepository folderRep = new FolderRepository();
 	private GrupaRepository grupaRep = new GrupaRepository();
 	private String userNameKorisnika = "";
-
+	
+	final static Logger logger = Logger.getLogger(KreiranjeGrupa.class.toString());
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args)
+	public void PokreniFormu()
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
@@ -81,7 +84,8 @@ public class KreiranjeGrupa
 					window.frmKreiranjeGrupa.setVisible(true);
 				} catch (Exception e)
 				{
-					e.printStackTrace();
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 		});
@@ -105,7 +109,9 @@ public class KreiranjeGrupa
 		}
 		catch(Exception ex)
 		{
+			logger.info(ex.getMessage());
 			userNameKorisnika = "";
+			throw new RuntimeException(ex);
 		}
 		
 	}
@@ -176,6 +182,16 @@ public class KreiranjeGrupa
 		btnDodajKorisnika.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				if(list_sviKorisnici.getSelectedIndex() == -1)
+				{
+				  JOptionPane.showMessageDialog(null, "Nije izabran nijedan korisnik iz liste svih korisnika!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+				  return;
+				}
+				if(((KorisnikDbModel)list_sviKorisnici.getSelectedValue()).getUsername().equals(userNameKorisnika))
+				{
+					  JOptionPane.showMessageDialog(null, "Ne možete dodati samog sebe u grupu koju pravite!", "Greška", JOptionPane.INFORMATION_MESSAGE);
+					  return;
+				}	
 				if(!listaDodanihKorisnika.contains(list_sviKorisnici.getSelectedValue()))
 					listaDodanihKorisnika.addElement(list_sviKorisnici.getSelectedValue());
 				else
@@ -282,11 +298,12 @@ public class KreiranjeGrupa
 					FolderXGrupaDbModel novi = new FolderXGrupaDbModel();
 					FolderDbModel trenutni = (FolderDbModel)list_folderi.getSelectedValue();
 					
-					novi.setFolder(trenutni);
+					
 					novi.setFolderId((int)trenutni.getFolderId());
 					novi.setAktivan(true);
 					novi.setPravoDodavanja(checkBox_Pisanje.isSelected());
 					novi.setPravoSkidanja(checkBox_Citanje.isSelected());
+					
 					listaDefinisanihPravaPristupa.add(novi);		
 				}
 				else
@@ -360,6 +377,7 @@ public class KreiranjeGrupa
 		list_folderi = new JList(listaFoldera);
 		list_folderi.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
+				
 				KorisnikRepository kr = new KorisnikRepository();
 				int prava = kr.dajPravaKorisnikaNaFolder(userNameKorisnika, (FolderDbModel)list_folderi.getSelectedValue());
 				
@@ -414,6 +432,7 @@ public class KreiranjeGrupa
 					JOptionPane.showMessageDialog(null, "Niste dodali nijedan folder kojem grupa ima pravo pristupa!", "Greška", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
+				
 				KorisnikRepository kor = new KorisnikRepository();
 				GrupaDbModel nova = new GrupaDbModel();
 				nova.setAktivan(true);
@@ -422,17 +441,31 @@ public class KreiranjeGrupa
 				nova.setOdgovorniKorisnikId(kor.dajIdKorisnikaPoUsername(userNameKorisnika));
 				String naziv = nova.getGrupaNaziv();
 				gRep.dodajGrupu(nova);
+				
 				Integer idNoveGrupe = (int)gRep.dajGrupuPoNazivu(naziv).getGrupaId();
 				//System.out.println(listaDefinisanihPravaPristupa.get(0).getFolder().getFolderNaziv());
 				
 				gRep.dodajFolderXGrupaDbModele(listaDefinisanihPravaPristupa, idNoveGrupe);
 				
 				List <KorisnikDbModel> listaKorisnika = new ArrayList<KorisnikDbModel>();
+				
 				for(int i=0; i< listaDodanihKorisnika.size(); i++)
 					listaKorisnika.add((KorisnikDbModel)listaDodanihKorisnika.get(i));
+				
 				gRep.dodajGrupaXKorisnikDbModele(listaKorisnika, idNoveGrupe);
 				
+				txt_nazivGrupe.setText("");
+				list_dodaniKorisnici.setSelectedIndex(-1);
+				list_dodaniFolderi.setSelectedIndex(-1);
+				listaDodanihKorisnika.clear();
+				listaDodanihFoldera.clear();
+				checkBox_Pisanje.setSelected(false);
+				checkBox_Citanje.setSelected(false);
 				
+				JOptionPane.showMessageDialog(null, "Grupa uspješno kreirana!", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+				
+								
 					
 			}
 		});

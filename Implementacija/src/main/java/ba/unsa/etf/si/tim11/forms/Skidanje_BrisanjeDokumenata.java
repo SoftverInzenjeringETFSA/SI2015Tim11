@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTree;
 import java.awt.Font;
+import java.util.logging.Logger;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ public class Skidanje_BrisanjeDokumenata
 
 	private JFrame frmSkidanjebrisanjeDokumenata;
 	private JTable tableBrisanjeDokumenti;
+	final static Logger logger = Logger.getLogger(Skidanje_BrisanjeDokumenata.class.toString());
 
 	/**
 	 * Launch the application.
@@ -35,7 +38,8 @@ public class Skidanje_BrisanjeDokumenata
 					window.frmSkidanjebrisanjeDokumenata.setVisible(true);
 				} catch (Exception e)
 				{
-					e.printStackTrace();
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 		});

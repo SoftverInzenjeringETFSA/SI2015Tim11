@@ -18,8 +18,12 @@ public class KomentarRepository {
 	 * @param komentar
 	 */
 	public Boolean dodajKomentar(KomentarDbModel komentar) {
-		// TODO - implement KomentarRepository.dodajKomentar
-		throw new UnsupportedOperationException();
+		try {
+			DbDMSContext.getInstance().getKomentari().sacuvaj(komentar);
+			return true;
+		} catch (Exception e) {
+		}
+		return false;
 	}
 
 	/**
