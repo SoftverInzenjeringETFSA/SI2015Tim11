@@ -841,6 +841,12 @@ public class GlavnaForma {
 		mnKorisnici.add(mntmDodavanjeKorisnika);
 
 		mntmBrisanjeKorisnika = new JMenuItem("Izmjena korisnika");
+		mntmBrisanjeKorisnika.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IzmjenaKorisnika izmjenaKorisnikaForma= new IzmjenaKorisnika();
+				izmjenaKorisnikaForma.pokreniFormu();
+			}
+		});
 		mnKorisnici.add(mntmBrisanjeKorisnika);
 
 		mnZahtjevi = new JMenu("Zahtjevi");
