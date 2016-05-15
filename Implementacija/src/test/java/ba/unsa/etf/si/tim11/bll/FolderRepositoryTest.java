@@ -203,7 +203,7 @@ public class FolderRepositoryTest {
 		GKkor.setGrupaId((int) idGrupe);
 		long idGKkor = DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(GKkor);
 		
-		assertEquals(brojFoldPrije+1,foldRep.dajSveFoldereNaKojeImaPravo(korModel.getUsername()));
+		assertEquals(brojFoldPrije+1,foldRep.dajSveFoldereNaKojeImaPravo(korModel.getUsername()).size());
 		
 		
 		DbDMSContext.getInstance().getFolderi().obrisi(foldModel);
@@ -232,6 +232,9 @@ public class FolderRepositoryTest {
 
 	@Test
 	public void testDajFoldereGrupe() {
+		
+		
+		
 		//fail("Not yet implemented");
 	}
 
