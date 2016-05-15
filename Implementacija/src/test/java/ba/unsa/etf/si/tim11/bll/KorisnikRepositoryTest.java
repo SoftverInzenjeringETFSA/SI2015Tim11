@@ -378,7 +378,7 @@ KorisnikRepository korRep = new KorisnikRepository();
 	KorisnikTipDbModel korTip = new KorisnikTipDbModel();
 	korTip.setAktivan(true);
 	korTip.setKorisnikTipNaziv("Administrator");
-	long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+//	long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
 	pozicija.setKorisnikPozicijaNaziv("neki direktor");
 	pozicija.setAktivan(true);
 	long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
@@ -398,9 +398,9 @@ KorisnikRepository korRep = new KorisnikRepository();
 	fm.setKreiraoKorisnikId((int)korModel.getKorisnikID());
 	fm.setAktivan(true);
 	DbDMSContext.getInstance().getFolderi().sacuvaj(fm);
-	int  pravo=0;
+	/*int  pravo=0;
 	int pravo1=1;
-	int pravo2=2;
+	int pravo2=2;*/
 	Assert.assertEquals(0, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
 	DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
     DbDMSContext.getInstance().getKorisnikPozicije().obrisi(pozicija);
@@ -413,14 +413,14 @@ KorisnikRepository korRep = new KorisnikRepository();
 	public void testDajKorisnikeGrupe() {
 		
 		KorisnikRepository korRep = new KorisnikRepository();
-		GrupaRepository grupaRep = new GrupaRepository();
+//	GrupaRepository grupaRep = new GrupaRepository();
 		
 		KorisnikDbModel korModel = new KorisnikDbModel();
 		KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
 		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
 		korTip.setAktivan(true);
 		korTip.setKorisnikTipNaziv("Administrator");
-		long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+		//long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
 		pozicija.setKorisnikPozicijaNaziv("neki direktor");
 		pozicija.setAktivan(true);
 		long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
