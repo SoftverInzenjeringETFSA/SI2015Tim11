@@ -41,6 +41,7 @@ public class DokumentRepository {
 			dodajverzijuDokumenta(verzija);
 			
 			return true;
+			
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 		}
