@@ -406,11 +406,13 @@ public class KorisnikRepositoryTest extends TestCase {
 		long idFoldera = DbDMSContext.getInstance().getFolderi().sacuvaj(fm);
 		FolderDbModel sacuvani = DbDMSContext.getInstance().getFolderi().ucitaj(idFoldera);
 		
+		
 		Assert.assertEquals(0, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), sacuvani));
 	    DbDMSContext.getInstance().getKorisnikPozicije().obrisi(pozicija);
 	    DbDMSContext.getInstance().getKorisnikTipovi().obrisi(korTip);
 	    DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
 	    DbDMSContext.getInstance().getFolderi().obrisi(sacuvani);
+	    
 		
 	}
 
