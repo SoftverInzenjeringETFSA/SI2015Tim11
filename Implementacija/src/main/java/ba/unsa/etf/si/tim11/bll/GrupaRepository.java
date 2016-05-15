@@ -7,6 +7,7 @@ import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.GrupaViewModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.swing.DefaultListModel;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-public class GrupaRepository {
+public class GrupaRepository implements Serializable{
 	final static Logger logger = Logger.getLogger(GrupaRepository.class.toString());
 
 	/**

@@ -1,5 +1,6 @@
 package ba.unsa.etf.si.tim11.bll;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -12,7 +13,7 @@ import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KomentarDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.KomentarViewModel;
 
-public class KomentarRepository {
+public class KomentarRepository implements Serializable{
 	final static Logger logger = Logger.getLogger(KomentarRepository.class.toString());
 	/**
 	 * 
