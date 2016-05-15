@@ -5,9 +5,27 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
+import ba.unsa.etf.si.tim11.bll.DokumentRepository;
+import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.izvjestajmodels.Dokument;
 import com.toedter.calendar.JCalendar;
+import org.jxls.common.Context;
+import org.jxls.util.JxlsHelper;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -22,6 +40,8 @@ public class Pretraga
 	private JFrame frmPretragaizvjetaji;
 	private JTextField textFieldPretragaKorisnik;
 	private JTable tablePretragaDokumenti;
+
+	private String[] izvjestaji = new String[] {"Tip Izvještaja", "Korisnik", "Dokument", "Zahtjev", "Odobrenje"};
 	
 	final static Logger logger = Logger.getLogger(Pretraga.class.toString());
 
@@ -73,7 +93,7 @@ public class Pretraga
 		label.setBounds(10, 11, 71, 21);
 		frmPretragaizvjetaji.getContentPane().add(label);
 		
-		JCalendar calendarPretragaPocetni = new JCalendar();
+		final JCalendar calendarPretragaPocetni = new JCalendar();
 		calendarPretragaPocetni.setBounds(91, 11, 198, 157);
 		frmPretragaizvjetaji.getContentPane().add(calendarPretragaPocetni);
 		
@@ -83,11 +103,11 @@ public class Pretraga
 		label_1.setBounds(299, 11, 65, 21);
 		frmPretragaizvjetaji.getContentPane().add(label_1);
 		
-		JCalendar calendarPretragaKrajnji = new JCalendar();
+		final JCalendar calendarPretragaKrajnji = new JCalendar();
 		calendarPretragaKrajnji.setBounds(374, 11, 198, 157);
 		frmPretragaizvjetaji.getContentPane().add(calendarPretragaKrajnji);
 		
-		JLabel label_2 = new JLabel("Korisnik:");
+		final JLabel label_2 = new JLabel("Korisnik:");
 		label_2.setHorizontalAlignment(SwingConstants.RIGHT);
 		label_2.setFont(new Font("Dialog", Font.PLAIN, 11));
 		label_2.setBounds(40, 187, 41, 21);
@@ -102,6 +122,29 @@ public class Pretraga
 		JButton buttonPretragaTrazi = new JButton("Traži");
 		buttonPretragaTrazi.setFont(new Font("Dialog", Font.PLAIN, 11));
 		buttonPretragaTrazi.setBounds(458, 185, 114, 24);
+		buttonPretragaTrazi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(calendarPretragaPocetni.getDate().after(calendarPretragaKrajnji.getDate())) {
+					Integer id = new KorisnikRepository().dajIdKorisnikaPoUsername(label_2.getText());
+					List<DokumentDbModel> dokumentsi = new DokumentRepository().getDokumentByKorisnikAjDi(id);
+					List<DokumentVerzijaDbModel> verzijeDokumenta = new ArrayList<DokumentVerzijaDbModel>();
+					for (DokumentDbModel aDokumentsi : dokumentsi) {
+						verzijeDokumenta.addAll(new DokumentRepository().dajVerzijeDokumenta((int) aDokumentsi.getDokumentId()));
+					}
+					Object[][] array = new Object[verzijeDokumenta.size()][5];
+					for(int i = 0; i < verzijeDokumenta.size(); i++) {
+						array[i][0] = verzijeDokumenta.get(i).getDokumentId();
+						array[i][1] = verzijeDokumenta.get(i).getDokument().getDokumentNaziv();
+						array[i][2] = verzijeDokumenta.get(i).getDokumentVerzijaId();
+						array[i][3] = verzijeDokumenta.get(i).getPostavioKorisnikId();
+						array[i][4] = "Not yet implemeted.";
+					}
+					tablePretragaDokumenti.setModel(new DefaultTableModel(array, new String[] {
+							"ID Dokumenta", "Naziv Dokumenta", "Verzija", "Korisnik Postavio", "Datum Postavljanja"
+					} ));
+				}
+			}
+		});
 		frmPretragaizvjetaji.getContentPane().add(buttonPretragaTrazi);
 		
 		JLabel label_3 = new JLabel("Dokumenti:");
@@ -126,8 +169,8 @@ public class Pretraga
 		tablePretragaDokumenti.setBounds(91, 217, 481, 121);
 		frmPretragaizvjetaji.getContentPane().add(tablePretragaDokumenti);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Tip Izvještaja", "Korisnik", "Dokument", "Zahtjev", "Odobrenje"}));
+		final JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(izvjestaji));
 		comboBox.setFont(new Font("Dialog", Font.PLAIN, 11));
 		comboBox.setBounds(458, 349, 114, 27);
 		frmPretragaizvjetaji.getContentPane().add(comboBox);
@@ -135,6 +178,34 @@ public class Pretraga
 		JButton button_1 = new JButton("Kreiraj Izvještaj");
 		button_1.setFont(new Font("Dialog", Font.PLAIN, 11));
 		button_1.setBounds(458, 387, 114, 29);
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(comboBox.getSelectedIndex() != 0) {
+					List<Dokument> dokumenti = new ArrayList<Dokument>();
+					for(int i = 0; i < tablePretragaDokumenti.getRowCount(); i++) {
+						Dokument novi = new Dokument();
+						novi.setDatum(new Date());
+						novi.setNaziv((String)tablePretragaDokumenti.getValueAt(i, 2));
+						novi.setBrojZahtjeva(new Random().nextInt());
+						novi.setZadnjiStatus("Odobreno");
+						dokumenti.add(novi);
+					}
+					try {
+						InputStream is = new FileInputStream("templates/template_za_dokument_izvjestaj.xls");
+						try {
+							OutputStream os = new FileOutputStream("target/rezultat.xls");
+							Context context = new Context();
+							context.putVar("dokumenti", dokumenti);
+							JxlsHelper.getInstance().processTemplate(is, os, context);
+						} catch (Exception ex) {
+							logger.warning(ex.getMessage());
+						}
+					} catch (Exception ex) {
+						logger.warning(ex.getMessage());
+					}
+				}
+			}
+		});
 		frmPretragaizvjetaji.getContentPane().add(button_1);
 	}
 }
