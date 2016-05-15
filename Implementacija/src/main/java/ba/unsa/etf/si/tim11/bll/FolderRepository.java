@@ -2,6 +2,7 @@ package ba.unsa.etf.si.tim11.bll;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -16,15 +17,16 @@ import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 public class FolderRepository {
-
+	final static Logger logger = Logger.getLogger(FolderRepository.class.toString());
 	/**
 	 * 
 	 * @param grupaId
 	 * @param folder
 	 */
 	public void dodajRootFolder(Integer grupaId, FolderDbModel folder) {
-		// TODO - implement FolderRepository.dodajRootFolder
-		throw new UnsupportedOperationException();
+		
+			throw new UnsupportedOperationException();
+		
 	}
 
 	/**
@@ -41,7 +43,7 @@ public class FolderRepository {
 			DbDMSContext.getInstance().getFolderi().sacuvaj(folder);
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.info(e.getMessage());
 		}
 		return false;
 	}
@@ -79,7 +81,7 @@ public class FolderRepository {
 				DbDMSContext.getInstance().getFolderi().sacuvajIliAzuriraj(folder);
 				return true;
 			} catch (Exception e) {
-				// TODO: handle exception
+				logger.info(e.getMessage());
 			}
 		}
 		return false;
@@ -89,19 +91,21 @@ public class FolderRepository {
 	 * 
 	 * @param folderXGrupa
 	 */
-	public Boolean dodajPravaPristupaGrupiFolderu(FolderXGrupaDbModel folderXGrupa) {
-		// TODO - implement FolderRepository.dodajPravaPristupaGrupiFolderu
-		throw new UnsupportedOperationException();
-	}
+	/*public Boolean dodajPravaPristupaGrupiFolderu(FolderXGrupaDbModel folderXGrupa) {
+		
+			throw new UnsupportedOperationException();
+		
+	}*/
 
 	/**
 	 * 
 	 * @param folderXGrupa
 	 */
-	public Boolean izmijeniPravaPristupaGrupiFolderu(FolderXGrupaDbModel folderXGrupa) {
-		// TODO - implement FolderRepository.izmijeniPravaPristupaGrupiFolderu
-		throw new UnsupportedOperationException();
-	}
+	/*public Boolean izmijeniPravaPristupaGrupiFolderu(FolderXGrupaDbModel folderXGrupa) {
+		
+			throw new UnsupportedOperationException();
+		
+	}*/
 
 	public List<FolderDbModel> dajSveFoldereNaKojeImaPravo(String userNameKorisnika) {
 		

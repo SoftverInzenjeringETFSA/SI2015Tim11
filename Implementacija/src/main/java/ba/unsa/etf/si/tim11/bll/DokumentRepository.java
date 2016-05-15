@@ -2,6 +2,7 @@ package ba.unsa.etf.si.tim11.bll;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -13,8 +14,11 @@ import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+import ba.unsa.etf.si.tim11.forms.ZahtjevZaOdobrenje;
 
 public class DokumentRepository {
+	
+	final static Logger logger = Logger.getLogger(DokumentRepository.class.toString());
 	/**
 	 * 
 	 * @param dokument
@@ -38,7 +42,7 @@ public class DokumentRepository {
 			
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.info(e.getMessage());
 		}
 		return false;
 	}
@@ -53,7 +57,7 @@ public class DokumentRepository {
 			DbDMSContext.getInstance().getDokumentiVerzije().sacuvaj(dokumentVerzija);
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.info(e.getMessage());
 		}
 		return false;
 	}
@@ -75,7 +79,7 @@ public class DokumentRepository {
 				DbDMSContext.getInstance().getDokumenti().sacuvajIliAzuriraj(dokument);
 				return true;
 			} catch (Exception e) {
-				// TODO: handle exception
+				logger.info(e.getMessage());
 			}
 		}
 		return false;
@@ -85,10 +89,13 @@ public class DokumentRepository {
 	 * 
 	 * @param dokumentVerzijaId
 	 */
-	public Boolean obrisiVerzijuDokumenta(Integer dokumentVerzijaId) {
-		// TODO - implement DokumentRepository.obrisiVerzijuDokumenta
-		throw new UnsupportedOperationException();
-	}
+	/*public Boolean obrisiVerzijuDokumenta(Integer dokumentVerzijaId) {
+		
+		
+			throw new UnsupportedOperationException();
+		
+		
+	}*/
 	
 	public List<DokumentDbModel> dajDokumente(Integer folderId){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();

@@ -10,6 +10,7 @@ import ba.unsa.etf.si.tim11.viewmodels.GrupaViewModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 
@@ -17,29 +18,31 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 public class GrupaRepository {
+	final static Logger logger = Logger.getLogger(GrupaRepository.class.toString());
 
 	/**
 	 * 
 	 * @param grupaId
 	 */
-	public GrupaViewModel dajGrupu(Integer grupaId) {
+	/*public GrupaViewModel dajGrupu(Integer grupaId) {
 		// TODO - implement GrupaRepository.dajGrupu
 		throw new UnsupportedOperationException();
-	}
+	}*/
 
-	public List<GrupaViewModel> dajGrupe() {
+	/*public List<GrupaViewModel> dajGrupe() {
 		// TODO - implement GrupaRepository.dajGrupe
 		throw new UnsupportedOperationException();
-	}
+	}*/
 
 	/**
 	 * 
 	 * @param grupa
 	 */
-	public Boolean izmijeniGrupu(GrupaDbModel grupa) {
-		// TODO - implement GrupaRepository.izmijeniGrupu
-		throw new UnsupportedOperationException();
-	}
+	/*public Boolean izmijeniGrupu(GrupaDbModel grupa) {
+		
+			throw new UnsupportedOperationException();
+	
+	}*/
 
 	/**
 	 * 
