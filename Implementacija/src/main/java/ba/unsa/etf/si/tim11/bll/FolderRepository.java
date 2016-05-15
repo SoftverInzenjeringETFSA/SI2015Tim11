@@ -165,6 +165,9 @@ public class FolderRepository {
 	public List<FolderDbModel> dajFoldere() throws Exception {
 		KorisnikRepository korisnikRepo = new KorisnikRepository();
 		
+		KorisnikDbModel logovaniKorisnik = DbDMSContext.getInstance().getKorisnici()
+				.ucitaj((long)(int)korisnikRepo.dajIdKorisnikaPoUsername(Sesija.getUsername()));
+		
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("aktivan", true));
 		kriterijum.add(Restrictions.eq("korisnikId", korisnikRepo.dajIdKorisnikaPoUsername(Sesija.getUsername())));
@@ -179,7 +182,7 @@ public class FolderRepository {
 			if(grupaXKorisnikDbModel.getGrupa() != null)
 				listaGrupaID.add((Integer)(int)grupaXKorisnikDbModel.getGrupa().getGrupaId());
 		}
-		System.out.println("prosao2: "+listaGrupaID.size());
+		System.out.println("Broj grupa korisnika: "+listaGrupaID.size());
 		
 		ArrayList<Criterion> kriterijumFolderi = new ArrayList<Criterion>();
 		kriterijumFolderi.add(Restrictions.eq("aktivan", true));
@@ -191,16 +194,52 @@ public class FolderRepository {
 		List<FolderXGrupaDbModel> listaFolderXGrupa = DbDMSContext.getInstance()
 				.getFolderiGrupe()
 				.ucitajSveSaKriterujumom(kriterijumFolderi);
-		System.out.println("prosao3: "+listaFolderXGrupa.size());
+		System.out.println("Broj foldera u grupi: "+listaFolderXGrupa.size());
 		
 		List<FolderDbModel> listaFoldera = new ArrayList<FolderDbModel>();
-		for (FolderXGrupaDbModel folderXGrupaDbModel : listaFolderXGrupa) {
-			if(folderXGrupaDbModel.getFolder() != null){
-				if(!this.listaSadrziFolder(listaFoldera, folderXGrupaDbModel.getFolderId())){
-					listaFoldera.add(folderXGrupaDbModel.getFolder());
+		
+		if(logovaniKorisnik.getKorisnikTip() != null){
+			if(logovaniKorisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator")){
+				//uzmi sve root foldere
+				
+				ArrayList<Criterion> kriterijumAdministratorFolderi = new ArrayList<Criterion>();
+				kriterijumAdministratorFolderi.add(Restrictions.eq("aktivan", true));
+				kriterijumAdministratorFolderi.add(Restrictions.isNull("roditeljFolderId"));
+				
+				List<FolderDbModel> sviRootFolderi = DbDMSContext.getInstance().getFolderi()
+						.ucitajSveSaKriterujumom(kriterijumAdministratorFolderi);
+				
+				for (FolderDbModel folder : sviRootFolderi) {
+					if(!this.listaSadrziFolder(listaFoldera, folder.getFolderId())){
+						listaFoldera.add(folder);
+					}
 				}
-			}else{
-				System.out.println("Null folderid: "+folderXGrupaDbModel.getFolderId());
+			}
+			else{
+				for (FolderXGrupaDbModel folderXGrupaDbModel : listaFolderXGrupa) {
+					if(folderXGrupaDbModel.getFolder() != null){
+						System.out.println("Dodajem folder zbog prava grupe: " +folderXGrupaDbModel.getFolder().getFolderNaziv());
+						
+						if(!this.listaSadrziFolder(listaFoldera, folderXGrupaDbModel.getFolderId())){
+							listaFoldera.add(folderXGrupaDbModel.getFolder());
+						}
+					}else{
+						System.out.println("Null folderid: "+folderXGrupaDbModel.getFolderId());
+					}
+				}
+			}
+		}
+		else{
+			for (FolderXGrupaDbModel folderXGrupaDbModel : listaFolderXGrupa) {
+				if(folderXGrupaDbModel.getFolder() != null){
+					System.out.println("Dodajem folder zbog prava grupe: " +folderXGrupaDbModel.getFolder().getFolderNaziv());
+					
+					if(!this.listaSadrziFolder(listaFoldera, folderXGrupaDbModel.getFolderId())){
+						listaFoldera.add(folderXGrupaDbModel.getFolder());
+					}
+				}else{
+					System.out.println("Null folderid: "+folderXGrupaDbModel.getFolderId());
+				}
 			}
 		}
 		
@@ -256,5 +295,74 @@ public class FolderRepository {
 			folderi.add(gf.getFolder());
 		
 		return folderi;
+	}
+	/*
+	 * Metoda vraca da li korisnik ima pravo dodavanja u izabrani folder.
+	 */
+	public Boolean logovaniKorisnikImaPravoDodavanja(Integer folderId) throws Exception{
+		KorisnikRepository korisnikRepo = new KorisnikRepository();
+		
+		KorisnikDbModel logovaniKorisnik = DbDMSContext.getInstance().getKorisnici()
+				.ucitaj((long)(int)korisnikRepo.dajIdKorisnikaPoUsername(Sesija.getUsername()));
+		//administrator MORE SVE
+		if(logovaniKorisnik.getKorisnikTip() != null){
+			if(logovaniKorisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+				return true;
+		}
+		
+		//ako je korisnik kreirao fajl
+		FolderDbModel folder = DbDMSContext.getInstance().getFolderi().ucitaj((long)(int)folderId);
+		if(folder.getKreiraoKorisnikId() == korisnikRepo.dajIdKorisnikaPoUsername(Sesija.getUsername()))
+			return true;
+		
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		kriterijum.add(Restrictions.eq("korisnikId", korisnikRepo.dajIdKorisnikaPoUsername(Sesija.getUsername())));
+		
+		List<GrupaXKorisnikDbModel> listaGrupaXKorisnik = DbDMSContext.getInstance()
+				.getGrupeKorisnici()
+				.ucitajSveSaKriterujumom(kriterijum);
+		System.out.println("prosao1: "+listaGrupaXKorisnik.size());
+		
+		List<Integer> listaGrupaID = new ArrayList<Integer>();
+		for (GrupaXKorisnikDbModel grupaXKorisnikDbModel : listaGrupaXKorisnik) {
+			if(grupaXKorisnikDbModel.getGrupa() != null)
+				listaGrupaID.add((Integer)(int)grupaXKorisnikDbModel.getGrupa().getGrupaId());
+		}
+		System.out.println("prosao2: "+listaGrupaID.size());
+		
+		ArrayList<Criterion> kriterijumFolderi = new ArrayList<Criterion>();
+		kriterijumFolderi.add(Restrictions.eq("aktivan", true));
+		kriterijumFolderi.add(Restrictions.eq("pravoDodavanja", true));
+		
+		if(listaGrupaID.size() > 0)
+			kriterijumFolderi.add(Restrictions.in("grupaId", listaGrupaID));
+		
+		List<FolderXGrupaDbModel> listaFolderXGrupa = DbDMSContext.getInstance()
+				.getFolderiGrupe()
+				.ucitajSveSaKriterujumom(kriterijumFolderi);
+		
+		List<FolderDbModel> listaFoldera = new ArrayList<FolderDbModel>();
+		for (FolderXGrupaDbModel folderXGrupaDbModel : listaFolderXGrupa) {
+			if(folderXGrupaDbModel.getFolder() != null){
+				if(!this.listaSadrziFolder(listaFoldera, folderXGrupaDbModel.getFolderId())){
+					listaFoldera.add(folderXGrupaDbModel.getFolder());
+				}
+			}else{
+				System.out.println("Null folderid: "+folderXGrupaDbModel.getFolderId());
+			}
+		}
+		
+		for (FolderDbModel folderDbModel : listaFoldera) {
+			FolderDbModel trazeniFolder = DbDMSContext.getInstance().getFolderi().ucitaj((long)(int)folderId);
+			if(folderDbModel.getFolderId() == (Integer)(int)folderId)
+				return true;
+			while(trazeniFolder.getRoditeljFolder() != null){
+				if(trazeniFolder.getRoditeljFolder().getFolderId() == (Integer)(int)folderId)
+					return true;
+				trazeniFolder = trazeniFolder.getRoditeljFolder();
+			}
+		}
+		return false;
 	}
 }
