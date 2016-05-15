@@ -3,8 +3,10 @@ package ba.unsa.etf.si.tim11.dbmodels;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table (name = "KorisnikTipDbModel")
 public class KorisnikTipDbModel implements java.io.Serializable {
 
 	@Id
