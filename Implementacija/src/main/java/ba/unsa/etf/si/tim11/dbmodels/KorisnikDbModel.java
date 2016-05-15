@@ -16,7 +16,6 @@ import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
 import java.util.Date;
 
 @Entity
-@Table (name = "KorisnikDbModel")
 public class KorisnikDbModel implements java.io.Serializable {
 	
 	@Id

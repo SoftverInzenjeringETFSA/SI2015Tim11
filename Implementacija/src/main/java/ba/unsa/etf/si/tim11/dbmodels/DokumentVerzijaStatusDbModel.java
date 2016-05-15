@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "DokumentVerzijaStatusDbModel")
 public class DokumentVerzijaStatusDbModel implements java.io.Serializable {
 
 	@Id

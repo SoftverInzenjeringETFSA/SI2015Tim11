@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table (name = "GrupaDbModel")
 public class GrupaDbModel implements java.io.Serializable {
 
 	@Id

@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "ZahtjevTipDbModel")
 public class ZahtjevTipDbModel implements java.io.Serializable {
 
 	@Id

@@ -8,7 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "FolderDbModel")
 public class FolderDbModel implements java.io.Serializable {
 
 	@Id

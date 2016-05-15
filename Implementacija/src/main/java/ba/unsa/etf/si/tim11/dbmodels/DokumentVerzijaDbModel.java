@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import java.sql.Blob;
 
 @Entity
-@Table (name = "DokumentVerzijaDbModel")
 public class DokumentVerzijaDbModel implements java.io.Serializable {
 
 	@Id

@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table (name = "ZahtjevDbModel")
 public class ZahtjevDbModel implements java.io.Serializable {
 
 	@Id
