@@ -21,7 +21,7 @@
         </property>
         
         <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
+        <property name="hbm2ddl.auto">update</property> 
         
         <!-- OVAKO DODAVATI OVE MAPINGE I DOPINGE  -->
         <mapping resource="BaseDbModel.hbm.xml"></mapping>
