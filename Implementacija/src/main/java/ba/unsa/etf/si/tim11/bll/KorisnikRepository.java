@@ -10,6 +10,7 @@ import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.KorisnikViewModel;
 import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import javax.swing.DefaultListModel;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-public class KorisnikRepository {
+public class KorisnikRepository implements Serializable{
 
 	/**
 	 * 
