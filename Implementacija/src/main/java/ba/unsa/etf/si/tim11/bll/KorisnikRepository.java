@@ -54,10 +54,10 @@ public class KorisnikRepository {
 		return false;
 	}
 	
-	public List<KorisnikViewModel> dajKorisnike() {
+	/*public List<KorisnikViewModel> dajKorisnike() {
 		// TODO - implement KorisnikRepository.dajKorisnike
 		throw new UnsupportedOperationException();
-	}
+	}*/
 	
 	public List<KorisnikDbModel> dajSveKorisnike()
 	{

@@ -184,11 +184,13 @@ public class GlavnaForma {
 					return;
 				}
 			} catch (HeadlessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				
+				logger.info(e1.getMessage());
+				throw new RuntimeException(e1);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				logger.info(e1.getMessage());
+				throw new RuntimeException(e1);
 			}
 
 			DodavanjeFoldera.pokreni(this, (Integer) (int) folder.getFolderId());
@@ -261,11 +263,12 @@ public class GlavnaForma {
 			komentar.setKorisnikId(uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 			uow.getKomentarRepository().dodajKomentar(komentar);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+						
 			JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 					JOptionPane.INFORMATION_MESSAGE);
+			logger.info(e.getMessage());
 			return;
+			
 		}
 		txtKomentar.setText("");
 		ucitajKomentareNaVerziju(dokumentVerzijaId);
@@ -301,20 +304,23 @@ public class GlavnaForma {
 					
 					Runtime.getRuntime().exec("explorer.exe /select," + punaPutanja);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 							JOptionPane.INFORMATION_MESSAGE);
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 							JOptionPane.INFORMATION_MESSAGE);
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 						JOptionPane.INFORMATION_MESSAGE);
+				
 			}
 		}
 	}
@@ -578,11 +584,11 @@ public class GlavnaForma {
 								return;
 							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						}
 						
 						JFileChooser choser = new JFileChooser();
@@ -595,17 +601,18 @@ public class GlavnaForma {
 								verzija.setPostavioKorisnikId(
 										uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.info(e.getMessage());
+								throw new RuntimeException(e);
 							}
 							Path putanja = Paths.get(file.getPath());
 							try {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								
 								JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument se nije dodao.",
 										"Greška", JOptionPane.INFORMATION_MESSAGE);
+								logger.info(e.getMessage());
+								
 								return;
 							}
 							// sadrzaj
@@ -628,11 +635,11 @@ public class GlavnaForma {
 								return;
 							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						}
 						
 						JFileChooser choser = new JFileChooser();
@@ -652,10 +659,11 @@ public class GlavnaForma {
 								byte[] sadrzaj = Files.readAllBytes(putanja);
 								uow.getDokumentRepository().dodajDokument(dokument, sadrzaj);
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								
 								JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument se nije dodao.",
 										"Greška", JOptionPane.INFORMATION_MESSAGE);
+								logger.info(e.getMessage());
+								
 								return;
 							}
 
@@ -686,11 +694,11 @@ public class GlavnaForma {
 								return;
 							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						}
 						
 						int dialogResult = JOptionPane.showConfirmDialog (null, "Jeste li sigurni da želite obrisati?","Upozorenje",JOptionPane.INFORMATION_MESSAGE);
@@ -726,11 +734,11 @@ public class GlavnaForma {
 								return;
 							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						}
 						
 						JFileChooser choser = new JFileChooser();
@@ -743,16 +751,15 @@ public class GlavnaForma {
 								verzija.setPostavioKorisnikId(
 										uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.info(e.getMessage());
+								throw new RuntimeException(e);
 							}
 							Path putanja = Paths.get(file.getPath());
 							try {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								
+								logger.info(e.getMessage());
+																
 								return;
 							}
 							// sadrzaj
@@ -789,11 +796,12 @@ public class GlavnaForma {
 				podaci+= ", "+korisnik.getKorisnikPozicija().getKorisnikPozicijaNaziv();
 			lblMojiPodaci = new JLabel(podaci);
 		} catch (Exception e2) {
-			// TODO Auto-generated catch block
+
 			JOptionPane.showMessageDialog(null, "Niste logovani.",
 					"Greška", JOptionPane.INFORMATION_MESSAGE);
 			frmDobrodoaolaUDms.dispose();
-			e2.printStackTrace();
+			logger.info(e2.getMessage());
+			throw new RuntimeException(e2);
 		}
 		
 		if(lblMojiPodaci == null)
@@ -820,6 +828,8 @@ public class GlavnaForma {
 						table.getColumnModel().getColumn(0).setPreferredWidth(115);
 						table.getColumnModel().getColumn(1).setPreferredWidth(112);
 						table.getColumnModel().getColumn(2).setPreferredWidth(233);
+						logger.info(e.getMessage());
+						throw new RuntimeException(e);
 				 }
 			}
 		});
@@ -846,8 +856,8 @@ public class GlavnaForma {
 					 ucitajKomentareNaVerziju((long)(int)verzijaId); 
 					 } 
 				 catch (Exception e) {
-				 //JOptionPane.showMessageDialog(null, "Nista", "Naziv",
-					//	 			JOptionPane.INFORMATION_MESSAGE); 
+					 logger.info(e.getMessage());
+					 throw new RuntimeException(e);
 				 }
 			}
 		});
@@ -881,11 +891,11 @@ public class GlavnaForma {
 								return;
 							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						}
 						
 						JFileChooser choser = new JFileChooser();
@@ -898,15 +908,15 @@ public class GlavnaForma {
 								verzija.setPostavioKorisnikId(
 										uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								logger.info(e1.getMessage());
+								throw new RuntimeException(e1);
 							}
 							Path putanja = Paths.get(file.getPath());
 							try {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								logger.info(e1.getMessage());
+								
 								
 								return;
 							}
@@ -938,6 +948,8 @@ public class GlavnaForma {
 				 catch (Exception e) {
 				 JOptionPane.showMessageDialog(null, "Nista", "Naziv",
 						 			JOptionPane.INFORMATION_MESSAGE); 
+				 logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				 }
 				 
 			}

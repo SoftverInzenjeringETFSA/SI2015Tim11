@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 
 public class DodavanjeFoldera {
@@ -24,7 +25,7 @@ public class DodavanjeFoldera {
 	public JFrame getFrmDodavanjeFoldera() {
 		return frmDodavanjeFoldera;
 	}
-
+	final static Logger logger = Logger.getLogger(DodavanjeFoldera.class.toString());
 	private JTextField txtNaziv;
 
 	private UnitOfWork uow = new UnitOfWork();
@@ -39,7 +40,9 @@ public class DodavanjeFoldera {
 					DodavanjeFoldera window = new DodavanjeFoldera(glavnaForma,roditeljFolderId);
 					window.frmDodavanjeFoldera.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					String poruka=e.getMessage();
+					logger.info(poruka);
+					throw new RuntimeException(e);
 				}
 			}
 		});
