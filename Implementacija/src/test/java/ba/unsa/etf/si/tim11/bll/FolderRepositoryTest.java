@@ -188,6 +188,7 @@ public class FolderRepositoryTest {
 		foldModel.setRoditeljFolderId((int) idRoditelj);
 		long idFold = DbDMSContext.getInstance().getFolderi().sacuvaj(foldModel);
 		//foldRep.logovaniKorisnikImaPravoDodavanja((int) idFold);
+		FGkor.setAktivan(true);
 		FGkor.setFolder(foldModel);
 		FGkor.setFolderId((int) idFold);
 		FGkor.setPravoDodavanja(true);
