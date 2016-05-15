@@ -198,10 +198,12 @@ public class Pretraga
 							context.putVar("dokumenti", dokumenti);
 							JxlsHelper.getInstance().processTemplate(is, os, context);
 						} catch (Exception ex) {
-							logger.warning(ex.getMessage());
+							logger.info(ex.getMessage());
+							throw new RuntimeException(ex);
 						}
 					} catch (Exception ex) {
-						logger.warning(ex.getMessage());
+						logger.info(ex.getMessage());
+						throw new RuntimeException(ex);
 					}
 				}
 			}

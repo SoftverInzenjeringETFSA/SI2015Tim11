@@ -973,7 +973,8 @@ public class GlavnaForma {
 		mntmIzlaz = new JMenuItem("Izlaz");
 		mntmIzlaz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Runtime.getRuntime().halt(0);
+				frmDobrodoaolaUDms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frmDobrodoaolaUDms.dispatchEvent(new WindowEvent(frmDobrodoaolaUDms, WindowEvent.WINDOW_CLOSING));
 			}
 		});
 		mnGlavna.add(mntmIzlaz);
