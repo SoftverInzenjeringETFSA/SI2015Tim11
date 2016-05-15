@@ -44,6 +44,7 @@ public class FolderRepository {
 			return true;
 		} catch (Exception e) {
 			logger.info(e.getMessage());
+			
 		}
 		return false;
 	}
@@ -82,6 +83,7 @@ public class FolderRepository {
 				return true;
 			} catch (Exception e) {
 				logger.info(e.getMessage());
+				throw new RuntimeException(e);
 			}
 		}
 		return false;
