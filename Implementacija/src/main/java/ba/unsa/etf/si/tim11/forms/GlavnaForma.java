@@ -161,11 +161,13 @@ public class GlavnaForma {
 				mnKorisnici.setVisible(false);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 			JOptionPane.showMessageDialog(null, "Niste ulogovani.",
 					"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
 			frmDobrodoaolaUDms.dispose();
+			String poruka=e.getMessage();
+			logger.info(poruka);
+			throw new RuntimeException(e);
 		}
 	}
 	private void otvoriProzorZaDodavanjeFoldera() {
@@ -189,7 +191,6 @@ public class GlavnaForma {
 				logger.info(e1.getMessage());
 				throw new RuntimeException(e1);
 			} catch (Exception e1) {
-				e1.printStackTrace();
 				logger.info(e1.getMessage());
 				throw new RuntimeException(e1);
 			}
@@ -545,11 +546,11 @@ public class GlavnaForma {
 								return;
 							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
 						}
 						
 						int dialogResult = JOptionPane.showConfirmDialog (null, "Jeste li sigurni da želite obrisati?","Upozorenje",JOptionPane.INFORMATION_MESSAGE);
