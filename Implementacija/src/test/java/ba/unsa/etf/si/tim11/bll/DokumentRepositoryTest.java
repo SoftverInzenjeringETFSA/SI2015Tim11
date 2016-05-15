@@ -2,6 +2,7 @@ package ba.unsa.etf.si.tim11.bll;
 import ba.unsa.etf.si.tim11.bll.DokumentRepository;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
@@ -95,10 +96,10 @@ public class DokumentRepositoryTest {
 		dokModel.setAktivan(true);
 		dokModel.setDokumentNaziv("naziv dokumenta");
 		dokModel.setEkstenzija("eks");
-		//long idDok=DbDMSContext.getInstance().getDokumenti().sacuvaj(dokModel);
+		long idDok=DbDMSContext.getInstance().getDokumenti().sacuvaj(dokModel);
 		dokVer.setAktivan(true);
 		dokVer.setDokument(dokModel);
-		//dokVer.setDokumentId((int) idDok);
+		dokVer.setDokumentId((int) idDok);
 		String sadrzaj = "neki text nesto..";
 		Sesija.setUsername("user");
 		Sesija.setCertifikatAktivan(true);
@@ -106,7 +107,7 @@ public class DokumentRepositoryTest {
 		dokVer.setSadrzaj(sadrzaj.getBytes());
 		Assert.assertTrue(dokRep.dodajverzijuDokumenta(dokVer));
 		//dokVer.setSadrzaj(000011110001);
-		
+		//Assert.assertTrue(dokRep.dodajDokument(dokModel, nizbajta));
 		//fail("Not yet implemented");
 	}
 
@@ -193,7 +194,16 @@ public class DokumentRepositoryTest {
 		korModel.setPassword("pass");
 		korModel.setPrezime("neko prezime");
 		korModel.setUsername("user");
+		FolderDbModel foldModel=new FolderDbModel();
+		FolderDbModel roditeljModel=new FolderDbModel();
+		foldModel.setAktivan(true);
+		foldModel.setFolderNaziv("naziv foldera");
+		foldModel.setRoditeljFolder(roditeljModel);
+		foldModel.setKreiraoKorisnik(korModel);
+		roditeljModel.setAktivan(true);
+		roditeljModel.setFolderNaziv("naziv");
 		long idKor = DbDMSContext.getInstance().getKorisnici().sacuvaj(korModel);
+		long idFold = DbDMSContext.getInstance().getFolderi().sacuvaj(foldModel);
 		
 		DokumentRepository dokRep=new DokumentRepository();
 		DokumentDbModel dokModel =new DokumentDbModel();
@@ -201,10 +211,10 @@ public class DokumentRepositoryTest {
 		dokModel.setAktivan(true);
 		dokModel.setDokumentNaziv("naziv dokumenta");
 		dokModel.setEkstenzija("eks");
-		//long idDok=DbDMSContext.getInstance().getDokumenti().sacuvaj(dokModel);
+		long idDok=DbDMSContext.getInstance().getDokumenti().sacuvaj(dokModel);
 		dokVer.setAktivan(true);
 		dokVer.setDokument(dokModel);
-		//dokVer.setDokumentId((int) idDok);
+		dokVer.setDokumentId((int) idDok);
 		String sadrzaj = "neki text nesto..";
 		Sesija.setUsername("user");
 		Sesija.setCertifikatAktivan(true);
@@ -212,7 +222,7 @@ public class DokumentRepositoryTest {
 		dokVer.setSadrzaj(sadrzaj.getBytes());
 		//int broj= dokRep.dajDokumente(i)
 		dokRep.dodajDokument(dokModel, nizbajta);
-		
+		Assert.assertEquals(dokModel, dokRep.dajDokumente((int) idFold));
 		//dokVer.setSadrzaj(000011110001);
 		
 		//fail("Not yet implemented");
