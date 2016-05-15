@@ -115,10 +115,12 @@ public class KorisnikRepository {
 	{
 		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
 	}
+	
 	public List<KorisnikPozicijaDbModel> dajSvePozicijeKorisnika()
 	{
 		return DbDMSContext.getInstance().getKorisnikPozicije().ucitajSve();
 	}
+	
 	public Integer dajIdKorisnikaPoUsername(String username){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("username", username));
@@ -136,6 +138,7 @@ public class KorisnikRepository {
 		}
 		return null;
 	}
+	
 	public List<KorisnikTipDbModel> dajSveKorisnikTipove() {
 		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
 	}

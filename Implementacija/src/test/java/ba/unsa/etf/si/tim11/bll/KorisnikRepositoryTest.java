@@ -1,12 +1,15 @@
 package ba.unsa.etf.si.tim11.bll;
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikPozicijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -85,7 +88,6 @@ public class KorisnikRepositoryTest extends TestCase {
 		
 	KorisnikRepository korRep = new KorisnikRepository();
 	KorisnikDbModel korModel = new KorisnikDbModel();
-	//KorisnikDbModel kor_noviModel= new KorisnikDbModel();
 	KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
 	KorisnikTipDbModel korTip = new KorisnikTipDbModel();
 	korTip.setAktivan(true);
@@ -105,7 +107,6 @@ public class KorisnikRepositoryTest extends TestCase {
 	korModel.setPassword("pass");
 	korModel.setPrezime("neko prezime");
 	korModel.setUsername("user");
-	//long idKor = DbDMSContext.getInstance().getKorisnici().sacuvaj(korModel);
 	korRep.dodajKorisnika(korModel);
 	Assert.assertTrue(KorisnikRepository.korisnikAutenticiran(korModel.getUsername(), korModel.getPassword()));;
     DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
@@ -116,7 +117,33 @@ public class KorisnikRepositoryTest extends TestCase {
 	}
 @Test
 	public void testDajKorisnike() {
-		//fail("Not yet implemented");
+	KorisnikRepository korRep = new KorisnikRepository();
+	KorisnikDbModel korModel = new KorisnikDbModel();
+	KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
+	KorisnikTipDbModel korTip = new KorisnikTipDbModel();
+	korTip.setAktivan(true);
+	korTip.setKorisnikTipNaziv("naziv tipa");
+	long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+	pozicija.setKorisnikPozicijaNaziv("neki direktor");
+	pozicija.setAktivan(true);
+	long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
+	korModel.setAdresa("neka adresa");
+	korModel.setAktivan(true);
+	korModel.setDatumRodjenja(new Date());
+	korModel.setIme("neko ime");
+	korModel.setKorisnikPozicija(pozicija);
+	korModel.setKorisnikPozicijaId((int) idPozicije);
+	korModel.setKorisnikTip(korTip);
+	korModel.setKorisnikTipId((int) idTipa);
+	korModel.setPassword("pass");
+	korModel.setPrezime("neko prezime");
+	korModel.setUsername("korisnickoIme");
+	korRep.dodajKorisnika(korModel);
+	
+	List<KorisnikDbModel> korisnici = korRep.dajSveKorisnike();
+	
+	assertTrue(korisnici.size() > 0);
+	
 	}
 @Test
 	public void testDajSveKorisnike() {
@@ -266,11 +293,29 @@ public class KorisnikRepositoryTest extends TestCase {
 	}
 @Test
 	public void testDajSveTipoveKorisnika() {
-		//fail("Not yet implemented");
+		KorisnikRepository korRep = new KorisnikRepository();
+		
+		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
+		korTip.setAktivan(true);
+		korTip.setKorisnikTipNaziv("naziv tipa");
+		DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+		List<KorisnikTipDbModel> lista = korRep.dajSveTipoveKorisnika();
+		
+		assertTrue(lista.size() > 0);
 	}
 @Test
 	public void testDajSvePozicijeKorisnika() {
-		//fail("Not yet implemented");
+	
+		KorisnikRepository korRep = new KorisnikRepository();
+		
+		KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
+		pozicija.setKorisnikPozicijaNaziv("neki direktor");
+		pozicija.setAktivan(true);
+		DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
+		
+		List<KorisnikPozicijaDbModel> lista = korRep.dajSvePozicijeKorisnika();
+		
+		assertTrue(lista.size() > 0);
 	}
 @Test
 	public void testDajIdKorisnikaPoUsername() {
@@ -306,9 +351,18 @@ public class KorisnikRepositoryTest extends TestCase {
 	
 	//fail("Not yet implemented");
 	}
-@Test
+	@Test
 	public void testDajSveKorisnikTipove() {
 		
+KorisnikRepository korRep = new KorisnikRepository();
+		
+		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
+		korTip.setAktivan(true);
+		korTip.setKorisnikTipNaziv("naziv tipa");
+		DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+		List<KorisnikTipDbModel> lista = korRep.dajSveKorisnikTipove();
+		
+		assertTrue(lista.size() > 0);
 	
 	
 	//fail("Not yet implemented");
@@ -334,31 +388,75 @@ public class KorisnikRepositoryTest extends TestCase {
 	korModel.setIme("neko ime");
 	korModel.setKorisnikPozicija(pozicija);
 	korModel.setKorisnikPozicijaId((int) idPozicije);
-	korModel.setKorisnikTip(korTip);
-	korModel.setKorisnikTipId((int) idTipa);
+	korModel.setKorisnikTipId((int)korTip.getKorisnikTipId());
 	korModel.setPassword("pass");
 	korModel.setPrezime("neko prezime");
 	korModel.setUsername("user");
-	//long idKor = DbDMSContext.getInstance().getKorisnici().sacuvaj(korModel);
-	//KorisnikDbModel kor_noviModel= korRep.dajKorisnika((int) idKor);
-	//int brojKor =korRep.dajSveKorisnike().size();
 	korRep.dodajKorisnika(korModel);
 	FolderDbModel fm =new FolderDbModel();
+	fm.setFolderNaziv("neki folder");
+	fm.setKreiraoKorisnikId((int)korModel.getKorisnikID());
+	fm.setAktivan(true);
+	DbDMSContext.getInstance().getFolderi().sacuvaj(fm);
 	int  pravo=0;
 	int pravo1=1;
 	int pravo2=2;
-	Assert.assertEquals(idTipa, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
-	//Assert.assertEquals(pravo1, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
-	//Assert.assertEquals(pravo2, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
+	Assert.assertEquals(0, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
 	DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
     DbDMSContext.getInstance().getKorisnikPozicije().obrisi(pozicija);
     DbDMSContext.getInstance().getKorisnikTipovi().obrisi(korTip);
     DbDMSContext.getInstance().getFolderi().obrisi(fm);
 	//fail("Not yet implemented");
 	}
-@Test
+
+	@Test
 	public void testDajKorisnikeGrupe() {
-		//fail("Not yet implemented");
+		
+		KorisnikRepository korRep = new KorisnikRepository();
+		GrupaRepository grupaRep = new GrupaRepository();
+		
+		KorisnikDbModel korModel = new KorisnikDbModel();
+		KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
+		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
+		korTip.setAktivan(true);
+		korTip.setKorisnikTipNaziv("Administrator");
+		long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+		pozicija.setKorisnikPozicijaNaziv("neki direktor");
+		pozicija.setAktivan(true);
+		long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
+		korModel.setAdresa("neka adresa");
+		korModel.setAktivan(true);
+		korModel.setDatumRodjenja(new Date());
+		korModel.setIme("neko ime");
+		korModel.setKorisnikPozicija(pozicija);
+		korModel.setKorisnikPozicijaId((int) idPozicije);
+		korModel.setKorisnikTipId((int)korTip.getKorisnikTipId());
+		korModel.setPassword("pass");
+		korModel.setPrezime("neko prezime");
+		korModel.setUsername("user");
+		korRep.dodajKorisnika(korModel);
+		
+		GrupaDbModel grupa = new GrupaDbModel();
+		
+		grupa.setAktivan(true);
+		grupa.setDatumKreiranja(new Date());
+		grupa.setGrupaNaziv("naziv grupe");
+		long idGrupe = DbDMSContext.getInstance().getGrupe().sacuvaj(grupa);
+		//grupa.setOdgovorniKorisnikId(korRep.dajIdKorisnikaPoUsername(korModel.getUsername()));
+		
+		GrupaXKorisnikDbModel kg = new GrupaXKorisnikDbModel();
+		kg.setAktivan(true);
+		kg.setDatumZadnjeIzmjene(new Date());
+		kg.setDatumPristupa(new Date());
+		kg.setGrupaId((int)idGrupe);
+		kg.setKorisnikId((int)korModel.getKorisnikID());
+		
+		DbDMSContext.getInstance().getGrupeKorisnici().sacuvaj(kg);
+		
+		List<KorisnikDbModel> lista = korRep.dajKorisnikeGrupe((int)idGrupe);
+		
+		assertTrue(lista.size() > 0);
+		
 	}
 
 }
