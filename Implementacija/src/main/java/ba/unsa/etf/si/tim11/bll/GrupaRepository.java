@@ -7,6 +7,7 @@ import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.GrupaViewModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.swing.DefaultListModel;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-public class GrupaRepository {
+public class GrupaRepository implements Serializable{
 	final static Logger logger = Logger.getLogger(GrupaRepository.class.toString());
 
 	/**
@@ -49,6 +50,7 @@ public class GrupaRepository {
 	 * @param grupaId
 	 */
 	public Boolean obrisiGrupu(GrupaDbModel grupa) {
+		
 		grupa.setAktivan(false);
 		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupa);
 		return true;
@@ -307,8 +309,8 @@ public class GrupaRepository {
 	}
 
 	public void azurirajGrupu(GrupaDbModel grupaZaIzmjenu) {
-		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);
 		
+		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);	
 	}
 	
 	public boolean daLiPostojiKorisnikUGrupi(Integer idKorisnika, Integer idGrupe)

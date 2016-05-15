@@ -1,5 +1,6 @@
 package ba.unsa.etf.si.tim11.bll;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,7 +17,7 @@ import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
-public class FolderRepository {
+public class FolderRepository implements Serializable{
 	final static Logger logger = Logger.getLogger(FolderRepository.class.toString());
 	/**
 	 * 

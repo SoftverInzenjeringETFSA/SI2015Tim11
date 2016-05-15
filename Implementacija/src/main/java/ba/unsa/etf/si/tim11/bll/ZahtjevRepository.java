@@ -4,9 +4,10 @@ package ba.unsa.etf.si.tim11.bll;
 import ba.unsa.etf.si.tim11.dbmodels.ZahtjevDbModel;
 import ba.unsa.etf.si.tim11.viewmodels.ZahtjevViewModel;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ZahtjevRepository {
+public class ZahtjevRepository implements Serializable{
 
 	/**
 	 * 
