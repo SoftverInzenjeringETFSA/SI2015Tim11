@@ -178,7 +178,7 @@ public class DokumentRepositoryTest {
 		KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
 		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
 		korTip.setAktivan(true);
-		korTip.setKorisnikTipNaziv("naziv tipa");
+		korTip.setKorisnikTipNaziv("Administrator");
 		long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
 		pozicija.setKorisnikPozicijaNaziv("neki direktor");
 		pozicija.setAktivan(true);
@@ -196,12 +196,17 @@ public class DokumentRepositoryTest {
 		korModel.setUsername("user");
 		FolderDbModel foldModel=new FolderDbModel();
 		FolderDbModel roditeljModel=new FolderDbModel();
+		roditeljModel.setAktivan(true);
+		roditeljModel.setFolderNaziv("naziv");
 		foldModel.setAktivan(true);
 		foldModel.setFolderNaziv("naziv foldera");
 		foldModel.setRoditeljFolder(roditeljModel);
 		foldModel.setKreiraoKorisnik(korModel);
-		roditeljModel.setAktivan(true);
-		roditeljModel.setFolderNaziv("naziv");
+		foldModel.setFolderId(1);
+		foldModel.setKreiraoKorisnikId((int)korModel.getKorisnikID());
+		foldModel.setRoditeljFolderId((int)roditeljModel.getFolderId());
+		
+		
 		long idKor = DbDMSContext.getInstance().getKorisnici().sacuvaj(korModel);
 		long idFold = DbDMSContext.getInstance().getFolderi().sacuvaj(foldModel);
 		

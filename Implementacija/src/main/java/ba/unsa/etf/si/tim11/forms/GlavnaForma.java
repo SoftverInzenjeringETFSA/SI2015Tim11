@@ -269,7 +269,7 @@ public class GlavnaForma {
 			JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 					JOptionPane.INFORMATION_MESSAGE);
 			logger.info(e.getMessage());
-			return;
+			throw new RuntimeException(e);
 			
 		}
 		txtKomentar.setText("");
@@ -614,8 +614,7 @@ public class GlavnaForma {
 								JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument se nije dodao.",
 										"Greška", JOptionPane.INFORMATION_MESSAGE);
 								logger.info(e.getMessage());
-								
-								return;
+								throw new RuntimeException(e);
 							}
 							// sadrzaj
 							uow.getDokumentRepository().dodajverzijuDokumenta(verzija);
@@ -665,8 +664,7 @@ public class GlavnaForma {
 								JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument se nije dodao.",
 										"Greška", JOptionPane.INFORMATION_MESSAGE);
 								logger.info(e.getMessage());
-								
-								return;
+								throw new RuntimeException(e);
 							}
 
 							ucitajTreeViewModel();
@@ -761,8 +759,7 @@ public class GlavnaForma {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e) {
 								logger.info(e.getMessage());
-																
-								return;
+								throw new RuntimeException(e);
 							}
 							// sadrzaj
 							uow.getDokumentRepository().dodajverzijuDokumenta(verzija);
@@ -918,9 +915,7 @@ public class GlavnaForma {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e1) {
 								logger.info(e1.getMessage());
-								
-								
-								return;
+								throw new RuntimeException(e1);
 							}
 							// sadrzaj
 							uow.getDokumentRepository().dodajverzijuDokumenta(verzija);

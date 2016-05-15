@@ -25,8 +25,9 @@ public class KomentarRepository implements Serializable{
 			return true;
 		} catch (Exception e) {
 			logger.info(e.getMessage());
+			throw new RuntimeException(e);
 		}
-		return false;
+
 	}
 
 	/**

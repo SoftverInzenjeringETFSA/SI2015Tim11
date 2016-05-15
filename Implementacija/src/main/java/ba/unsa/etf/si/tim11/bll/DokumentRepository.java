@@ -25,6 +25,7 @@ public class DokumentRepository implements Serializable {
 	 * @param dokument
 	 */
 	public Boolean dodajDokument(DokumentDbModel dokument, byte[] sadrzaj) {
+
 		try {
 			KorisnikRepository kor = new KorisnikRepository();
 			
@@ -45,8 +46,9 @@ public class DokumentRepository implements Serializable {
 			
 		} catch (Exception e) {
 			logger.info(e.getMessage());
+			throw new RuntimeException(e);
 		}
-		return false;
+
 	}
 
 	/**
@@ -60,8 +62,10 @@ public class DokumentRepository implements Serializable {
 			return true;
 		} catch (Exception e) {
 			logger.info(e.getMessage());
+			throw new RuntimeException(e);
+			
 		}
-		return false;
+
 	}
 	
 	public DokumentVerzijaDbModel dajVerzijuDokumenta(long dokumentVerzijaId) {
@@ -82,6 +86,7 @@ public class DokumentRepository implements Serializable {
 				return true;
 			} catch (Exception e) {
 				logger.info(e.getMessage());
+				throw new RuntimeException(e);
 			}
 		}
 		return false;

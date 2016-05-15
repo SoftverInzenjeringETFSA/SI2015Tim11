@@ -45,9 +45,10 @@ public class FolderRepository implements Serializable{
 			return true;
 		} catch (Exception e) {
 			logger.info(e.getMessage());
+			throw new RuntimeException(e);
 			
 		}
-		return false;
+
 	}
 	
 	public FolderDbModel dajFolderPoId(Integer idFoldera)
