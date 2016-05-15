@@ -49,6 +49,7 @@ public class GrupaRepository {
 	 * @param grupaId
 	 */
 	public Boolean obrisiGrupu(GrupaDbModel grupa) {
+		
 		grupa.setAktivan(false);
 		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupa);
 		return true;
@@ -307,8 +308,8 @@ public class GrupaRepository {
 	}
 
 	public void azurirajGrupu(GrupaDbModel grupaZaIzmjenu) {
-		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);
 		
+		DbDMSContext.getInstance().getGrupe().sacuvajIliAzuriraj(grupaZaIzmjenu);	
 	}
 	
 	public boolean daLiPostojiKorisnikUGrupi(Integer idKorisnika, Integer idGrupe)
