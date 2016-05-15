@@ -66,7 +66,6 @@ public class FolderPravaPristupa extends JFrame {
 					//FolderPravaPristupa frame = new FolderPravaPristupa(0);
 					//frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
 					logger.info(e.getMessage());
 					throw new RuntimeException(e);
 					
@@ -143,7 +142,6 @@ public class FolderPravaPristupa extends JFrame {
 			
 		} catch (Exception e) {
 			userNameKorisnika = "";
-			e.printStackTrace();
 			logger.info(e.getMessage());
 			throw new RuntimeException(e);
 			
