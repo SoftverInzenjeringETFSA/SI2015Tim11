@@ -44,7 +44,7 @@ public class AppTest
     	KorisnikRepository korisnikRepo = new KorisnikRepository();
     	
     	//uzmes koliko ima trenutno korinika
-    	int brojKorisnika = korisnikRepo.dajKorisnike().size();
+    	int brojKorisnika = korisnikRepo.dajSveKorisnike().size();
     	
     	KorisnikDbModel korisnik = new KorisnikDbModel();
     	korisnik.setAktivan(true);//ovo je u bazi not null pa mora biti
@@ -53,7 +53,7 @@ public class AppTest
     	korisnikRepo.dodajKorisnika(korisnik);
     	
     	//provjeravas da li sada ima u listi jedan vise
-    	assertEquals(brojKorisnika + 1, korisnikRepo.dajKorisnike().size());
+    	assertEquals(brojKorisnika + 1, korisnikRepo.dajSveKorisnike().size());
     }
     
     public void dajKorisnikaBllTest()

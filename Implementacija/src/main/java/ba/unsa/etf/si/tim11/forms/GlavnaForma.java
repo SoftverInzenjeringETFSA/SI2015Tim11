@@ -16,6 +16,7 @@ import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KomentarDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -66,12 +67,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.event.MenuKeyListener;
 import javax.swing.event.MenuKeyEvent;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ListSelectionModel;
 
 public class GlavnaForma {
 
 	private JFrame frmDobrodoaolaUDms;
 	private JTable table;
-	private JLabel lblDokumenti;
+	private JLabel lblMojiPodaci;
 	private JLabel lblKomentari;
 	private JButton btnDodajKomentar;
 	private JButton btnDodajRootFolder;
@@ -83,8 +87,6 @@ public class GlavnaForma {
 	private JMenu mnGlavna;
 	private JMenuItem mntmMojProfil;
 	private JMenuItem mntmIzlaz;
-	private JMenu mnDokumenti;
-	private JMenuItem mntmPregledDokumenta;
 	private JMenu mnGrupe;
 	private JMenuItem mntmDodavanjeGrupe;
 	private JMenuItem mntmIzmjenaGrupe;
@@ -110,6 +112,10 @@ public class GlavnaForma {
 	final static Logger logger = Logger.getLogger(GlavnaForma.class.toString());
 	
 	private UnitOfWork uow = new UnitOfWork();
+	private JScrollPane scrollPaneDokumenti;
+	private JScrollPane scrollPaneVerzije;
+	private JScrollPane scrollPaneKomentari;
+	private JScrollPane scrollPaneDodajKomentar;
 
 	/**
 	 * Launch the application.
@@ -135,7 +141,33 @@ public class GlavnaForma {
 	public GlavnaForma() {
 		initialize();
 	}
-
+	private void prikazTopMenija(){
+		try {
+			KorisnikDbModel korisnik =uow.getKorisnikRepository().dajKorisnika( 
+					uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
+			
+			if(korisnik.getKorisnikTip() != null){
+				if(korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator")){
+					mnGrupe.setVisible(true);
+					mnKorisnici.setVisible(true);
+				}
+				else{
+					mnGrupe.setVisible(true);
+					mnKorisnici.setVisible(false);
+				}
+			}
+			else{
+				mnGrupe.setVisible(false);
+				mnKorisnici.setVisible(false);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Niste ulogovani.",
+					"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+			frmDobrodoaolaUDms.dispose();
+		}
+	}
 	private void otvoriProzorZaDodavanjeFoldera() {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeFolderView.getLastSelectedPathComponent();
 
@@ -145,9 +177,22 @@ public class GlavnaForma {
 
 		if (node.getUserObject() instanceof FolderDbModel) {
 			FolderDbModel folder = (FolderDbModel) node.getUserObject();
-			// DodavanjeFoldera dodavanjeFoldera = new DodavanjeFoldera(forma,
-			// (Integer)(int)folder.getFolderId());
-			// dodavanjeFoldera.getFrmDodavanjeFoldera().setVisible(true);
+
+			try {
+				if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja((Integer)(int)folder.getFolderId())){
+					JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+							"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			} catch (HeadlessException e1) {
+				
+				logger.info(e1.getMessage());
+				throw new RuntimeException(e1);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				logger.info(e1.getMessage());
+				throw new RuntimeException(e1);
+			}
 
 			DodavanjeFoldera.pokreni(this, (Integer) (int) folder.getFolderId());
 		}
@@ -191,7 +236,7 @@ public class GlavnaForma {
 	 */
 	private void ucitajKomentareNaVerziju(long dokumentVerzijaId) {
 
-		table.setModel(new DefaultTableModel(new Object[][] { { "Korisnik postavio", "Vrijeme", "Komentar" } },
+		table.setModel(new DefaultTableModel(new Object[][] { },
 				new String[] { "Korisnik postavio", "Vrijeme", "Komentar" }));
 		table.getColumnModel().getColumn(0).setPreferredWidth(115);
 		table.getColumnModel().getColumn(1).setPreferredWidth(112);
@@ -219,11 +264,12 @@ public class GlavnaForma {
 			komentar.setKorisnikId(uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 			uow.getKomentarRepository().dodajKomentar(komentar);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+						
 			JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 					JOptionPane.INFORMATION_MESSAGE);
+			logger.info(e.getMessage());
 			return;
+			
 		}
 		txtKomentar.setText("");
 		ucitajKomentareNaVerziju(dokumentVerzijaId);
@@ -259,20 +305,23 @@ public class GlavnaForma {
 					
 					Runtime.getRuntime().exec("explorer.exe /select," + punaPutanja);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 							JOptionPane.INFORMATION_MESSAGE);
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 							JOptionPane.INFORMATION_MESSAGE);
+					logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				}
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument nije spašen.", "Upozorenje",
 						JOptionPane.INFORMATION_MESSAGE);
+				
 			}
 		}
 	}
@@ -283,8 +332,8 @@ public class GlavnaForma {
 	private void ucitajVerzijeDokumenta(long dokumentId) {
 		
 		table_1.setModel(new DefaultTableModel(
-				new Object[][] { { "ID", "Postavio korisnik", "Verzija", "Vrijeme postavljanja" } },
-				new String[] { "New column", "New column", "New column", "New column" }));
+				new Object[][] {  },
+				new String[] { "ID", "Postavio korisnik", "Verzija", "Vrijeme postavljanja" }));
 		table_1.getColumnModel().getColumn(0).setPreferredWidth(30);
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(174);
 		table_1.getColumnModel().getColumn(2).setPreferredWidth(112);
@@ -386,6 +435,7 @@ public class GlavnaForma {
 	 */
 	public void initialize() {
 		frmDobrodoaolaUDms = new JFrame();
+		frmDobrodoaolaUDms.setResizable(false);
 		frmDobrodoaolaUDms.addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent arg0) {
 				ucitajTreeViewModel();
@@ -446,14 +496,28 @@ public class GlavnaForma {
 				}
 			}
 		});
-		treeFolderView.setBounds(10, 53, 343, 407);
+		treeFolderView.setBounds(373, 440, 93, 32);
 
-		frmDobrodoaolaUDms.getContentPane().add(treeFolderView);
+		//frmDobrodoaolaUDms.getContentPane().add(treeFolderView);
 
 		popupMenu = new JPopupMenu();	
 		addPopup(treeFolderView, popupMenu);
 
 		mntmPostavkePravaPristupa = new JMenuItem("Postavke prava pristupa");
+		mntmPostavkePravaPristupa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) treeFolderView.getLastSelectedPathComponent();
+				FolderDbModel folder = null;
+				if (node != null && node.getUserObject() instanceof FolderDbModel) {
+					folder = (FolderDbModel) node.getUserObject();
+				}
+				
+				if(folder == null) return;
+				System.out.println(folder.getFolderId());
+				FolderPravaPristupa forma = new FolderPravaPristupa(folder.getFolderId());
+				forma.setVisible(true);
+			}
+		});
 		popupMenu.add(mntmPostavkePravaPristupa);		
 
 		mntmDodajFolder = new JMenuItem("Dodaj folder");
@@ -473,6 +537,20 @@ public class GlavnaForma {
 					if (node.getUserObject() instanceof FolderDbModel) { 
 
 						FolderDbModel folder = (FolderDbModel) node.getUserObject();
+						
+						try {
+							if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja((Integer)(int)folder.getFolderId())){
+								JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+										"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						
 						int dialogResult = JOptionPane.showConfirmDialog (null, "Jeste li sigurni da želite obrisati?","Upozorenje",JOptionPane.INFORMATION_MESSAGE);
 						if(dialogResult == JOptionPane.YES_OPTION){
@@ -499,7 +577,21 @@ public class GlavnaForma {
 					if (node.getUserObject() instanceof DokumentDbModel) { // dodavanje
 																			// verzije
 						DokumentDbModel dokument = (DokumentDbModel) node.getUserObject();
-
+						
+						try {
+							if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja(dokument.getFolderId())){
+								JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+										"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						} catch (Exception e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						}
+						
 						JFileChooser choser = new JFileChooser();
 						if (choser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 							File file = choser.getSelectedFile();
@@ -510,17 +602,18 @@ public class GlavnaForma {
 								verzija.setPostavioKorisnikId(
 										uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.info(e.getMessage());
+								throw new RuntimeException(e);
 							}
 							Path putanja = Paths.get(file.getPath());
 							try {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								
 								JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument se nije dodao.",
 										"Greška", JOptionPane.INFORMATION_MESSAGE);
+								logger.info(e.getMessage());
+								
 								return;
 							}
 							// sadrzaj
@@ -535,7 +628,21 @@ public class GlavnaForma {
 																			// novog
 																			// dokumenta
 						FolderDbModel folder = (FolderDbModel) node.getUserObject();
-
+						
+						try {
+							if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja((Integer)(int)folder.getFolderId())){
+								JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+										"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						} catch (Exception e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						}
+						
 						JFileChooser choser = new JFileChooser();
 						if (choser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 							File file = choser.getSelectedFile();
@@ -553,10 +660,11 @@ public class GlavnaForma {
 								byte[] sadrzaj = Files.readAllBytes(putanja);
 								uow.getDokumentRepository().dodajDokument(dokument, sadrzaj);
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								
 								JOptionPane.showMessageDialog(null, "Došlo je do greške, dokument se nije dodao.",
 										"Greška", JOptionPane.INFORMATION_MESSAGE);
+								logger.info(e.getMessage());
+								
 								return;
 							}
 
@@ -579,6 +687,20 @@ public class GlavnaForma {
 					if (node.getUserObject() instanceof DokumentDbModel) { // dodavanje
 																			// verzije
 						DokumentDbModel dokument = (DokumentDbModel) node.getUserObject();
+						
+						try {
+							if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja(dokument.getFolderId())){
+								JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+										"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						} catch (Exception e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						}
 						
 						int dialogResult = JOptionPane.showConfirmDialog (null, "Jeste li sigurni da želite obrisati?","Upozorenje",JOptionPane.INFORMATION_MESSAGE);
 						if(dialogResult == JOptionPane.YES_OPTION){
@@ -605,7 +727,21 @@ public class GlavnaForma {
 					if (node.getUserObject() instanceof DokumentDbModel) { // dodavanje
 																			// verzije
 						DokumentDbModel dokument = (DokumentDbModel) node.getUserObject();
-
+						
+						try {
+							if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja(dokument.getFolderId())){
+								JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+										"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						} catch (Exception e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						}
+						
 						JFileChooser choser = new JFileChooser();
 						if (choser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 							File file = choser.getSelectedFile();
@@ -616,16 +752,15 @@ public class GlavnaForma {
 								verzija.setPostavioKorisnikId(
 										uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.info(e.getMessage());
+								throw new RuntimeException(e);
 							}
 							Path putanja = Paths.get(file.getPath());
 							try {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								
+								logger.info(e.getMessage());
+																
 								return;
 							}
 							// sadrzaj
@@ -641,18 +776,40 @@ public class GlavnaForma {
 		sakrijSveOpcijeMenijaZaDrvo();
 
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(
-				new DefaultTableModel(new Object[][] { { "Korisnik postavio", "Vrijeme", "Komentar" } }
+				new DefaultTableModel(new Object[][] { }
 				, new String[] { "Korisnik postavio", "Vrijeme", "Komentar" }));
 		table.getColumnModel().getColumn(0).setPreferredWidth(115);
 		table.getColumnModel().getColumn(1).setPreferredWidth(112);
 		table.getColumnModel().getColumn(2).setPreferredWidth(233);
-		table.setBounds(363, 258, 469, 109);
-		frmDobrodoaolaUDms.getContentPane().add(table);
+		table.setBounds(363, 326, 469, 41);
+		//frmDobrodoaolaUDms.getContentPane().add(table);
+		
+		try {
+			KorisnikDbModel korisnik =uow.getKorisnikRepository().dajKorisnika( 
+					uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
+			String podaci = "Moji dokumenti: ";
+			if(korisnik != null)
+				podaci += korisnik.getIme()+" "+korisnik.getPrezime();
+			
+			if(korisnik.getKorisnikPozicija() != null)
+				podaci+= ", "+korisnik.getKorisnikPozicija().getKorisnikPozicijaNaziv();
+			lblMojiPodaci = new JLabel(podaci);
+		} catch (Exception e2) {
 
-		lblDokumenti = new JLabel("Moji dokumenti: Muhamed Smajevic, Development Team");
-		lblDokumenti.setBounds(363, 28, 318, 14);
-		frmDobrodoaolaUDms.getContentPane().add(lblDokumenti);
+			JOptionPane.showMessageDialog(null, "Niste logovani.",
+					"Greška", JOptionPane.INFORMATION_MESSAGE);
+			frmDobrodoaolaUDms.dispose();
+			logger.info(e2.getMessage());
+			throw new RuntimeException(e2);
+		}
+		
+		if(lblMojiPodaci == null)
+			lblMojiPodaci = new JLabel("");
+		
+		lblMojiPodaci.setBounds(363, 28, 318, 14);
+		frmDobrodoaolaUDms.getContentPane().add(lblMojiPodaci);
 
 		lblKomentari = new JLabel("Komentari za izabranu verziju");
 		lblKomentari.setBounds(363, 233, 177, 14);
@@ -667,15 +824,17 @@ public class GlavnaForma {
 					 dodajKomentarNaVerziju((long)(int)verzijaId); 
 				 } 
 				 catch (Exception e) {
-					 table.setModel(new DefaultTableModel(new Object[][] { { "Korisnik postavio", "Vrijeme", "Komentar" } },
+					 table.setModel(new DefaultTableModel(new Object[][] { },
 								new String[] { "Korisnik postavio", "Vrijeme", "Komentar" }));
 						table.getColumnModel().getColumn(0).setPreferredWidth(115);
 						table.getColumnModel().getColumn(1).setPreferredWidth(112);
 						table.getColumnModel().getColumn(2).setPreferredWidth(233);
+						logger.info(e.getMessage());
+						throw new RuntimeException(e);
 				 }
 			}
 		});
-		btnDodajKomentar.setBounds(675, 437, 157, 23);
+		btnDodajKomentar.setBounds(685, 447, 157, 23);
 		frmDobrodoaolaUDms.getContentPane().add(btnDodajKomentar);
 
 		btnDodajRootFolder = new JButton("Dodaj root folder");
@@ -684,10 +843,11 @@ public class GlavnaForma {
 				otvoriProzorZaDodavanjeRootFoldera();
 			}
 		});
-		btnDodajRootFolder.setBounds(696, 24, 136, 23);
+		btnDodajRootFolder.setBounds(709, 24, 136, 23);
 		frmDobrodoaolaUDms.getContentPane().add(btnDodajRootFolder);
 
 		table_1 = new JTable();
+		table_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -697,23 +857,23 @@ public class GlavnaForma {
 					 ucitajKomentareNaVerziju((long)(int)verzijaId); 
 					 } 
 				 catch (Exception e) {
-				 //JOptionPane.showMessageDialog(null, "Nista", "Naziv",
-					//	 			JOptionPane.INFORMATION_MESSAGE); 
+					 logger.info(e.getMessage());
+					 throw new RuntimeException(e);
 				 }
 			}
 		});
 		table_1.setModel(new DefaultTableModel(
-				new Object[][] { { "ID", "Postavio korisnik", "Verzija", "Vrijeme postavljanja" } },
-				new String[] { "New column", "New column", "New column", "New column" }));
+				new Object[][] { },
+				new String[] { "ID", "Postavio korisnik", "Verzija", "Vrijeme postavljanja" } ));
 		table_1.getColumnModel().getColumn(0).setPreferredWidth(30);
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(174);
 		table_1.getColumnModel().getColumn(2).setPreferredWidth(112);
 		table_1.getColumnModel().getColumn(3).setPreferredWidth(322);
-		table_1.setBounds(363, 78, 469, 136);
-		frmDobrodoaolaUDms.getContentPane().add(table_1);
+		table_1.setBounds(363, 132, 469, 82);
+		//frmDobrodoaolaUDms.getContentPane().add(table_1);
 
-		lblVerzijeIzabranogDokumenta = new JLabel("Verzije dokumenta:");
-		lblVerzijeIzabranogDokumenta.setBounds(363, 53, 111, 14);
+		lblVerzijeIzabranogDokumenta = new JLabel("Verzije dokumenta: ");
+		lblVerzijeIzabranogDokumenta.setBounds(363, 53, 123, 14);
 		frmDobrodoaolaUDms.getContentPane().add(lblVerzijeIzabranogDokumenta);
 
 		btnDodajVerziju = new JButton("Dodaj verziju");
@@ -724,7 +884,21 @@ public class GlavnaForma {
 					if (node.getUserObject() instanceof DokumentDbModel) { // dodavanje
 																			// verzije
 						DokumentDbModel dokument = (DokumentDbModel) node.getUserObject();
-
+						
+						try {
+							if(!uow.getFolderRepository().logovaniKorisnikImaPravoDodavanja(dokument.getFolderId())){
+								JOptionPane.showMessageDialog(null, "Nemate pravo dodavanja ili brisanja novih stavki u odabranom folderu.",
+										"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+								return;
+							}
+						} catch (HeadlessException e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						} catch (Exception e1) {
+							logger.info(e1.getMessage());
+							throw new RuntimeException(e1);
+						}
+						
 						JFileChooser choser = new JFileChooser();
 						if (choser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 							File file = choser.getSelectedFile();
@@ -735,15 +909,15 @@ public class GlavnaForma {
 								verzija.setPostavioKorisnikId(
 										uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
 							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								logger.info(e1.getMessage());
+								throw new RuntimeException(e1);
 							}
 							Path putanja = Paths.get(file.getPath());
 							try {
 								verzija.setSadrzaj(Files.readAllBytes(putanja));
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								logger.info(e1.getMessage());
+								
 								
 								return;
 							}
@@ -760,7 +934,7 @@ public class GlavnaForma {
 				}
 			}
 		});
-		btnDodajVerziju.setBounds(576, 224, 123, 23);
+		btnDodajVerziju.setBounds(586, 224, 123, 23);
 		frmDobrodoaolaUDms.getContentPane().add(btnDodajVerziju);
 
 		btnPreuzmiVerziju = new JButton("Preuzmi");
@@ -775,15 +949,17 @@ public class GlavnaForma {
 				 catch (Exception e) {
 				 JOptionPane.showMessageDialog(null, "Nista", "Naziv",
 						 			JOptionPane.INFORMATION_MESSAGE); 
+				 logger.info(e.getMessage());
+					throw new RuntimeException(e);
 				 }
 				 
 			}
 		});
-		btnPreuzmiVerziju.setBounds(709, 224, 123, 23);
+		btnPreuzmiVerziju.setBounds(719, 224, 123, 23);
 		frmDobrodoaolaUDms.getContentPane().add(btnPreuzmiVerziju);
 
 		menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 842, 21);
+		menuBar.setBounds(0, 0, 852, 21);
 		frmDobrodoaolaUDms.getContentPane().add(menuBar);
 
 		mnGlavna = new JMenu("Glavna");
@@ -799,15 +975,13 @@ public class GlavnaForma {
 		mnGlavna.add(mntmMojProfil);
 
 		mntmIzlaz = new JMenuItem("Izlaz");
+		mntmIzlaz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		mnGlavna.add(mntmIzlaz);
 
-		mnDokumenti = new JMenu("Dokumenti");
-		menuBar.add(mnDokumenti);
-
-		mntmPregledDokumenta = new JMenuItem("Pregled dokumenta");
-		mnDokumenti.add(mntmPregledDokumenta);
-
-		
 		menuBar.add(mnGrupe);
 
 		mntmDodavanjeGrupe = new JMenuItem("Dodavanje grupe");
@@ -857,14 +1031,24 @@ public class GlavnaForma {
 
 		mntmDodavanjeZahtjeva = new JMenuItem("Dodavanje zahtjeva");
 		mnZahtjevi.add(mntmDodavanjeZahtjeva);
-
+		
+		JMenu mnNewMenu = new JMenu("Izvještaji");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Pregled izvještaja");
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		//prikaz menija zavisno od tipa korisnika
+		prikazTopMenija();
+		
 		lblIzabraniDokumentNaziv = new JLabel("");
-		lblIzabraniDokumentNaziv.setBounds(471, 53, 198, 14);
+		lblIzabraniDokumentNaziv.setBounds(492, 53, 177, 14);
 		frmDobrodoaolaUDms.getContentPane().add(lblIzabraniDokumentNaziv);
 
 		txtKomentar = new JEditorPane();
-		txtKomentar.setBounds(363, 377, 469, 49);
-		frmDobrodoaolaUDms.getContentPane().add(txtKomentar);
+		txtKomentar.setToolTipText("Unesite tekst komentara..");
+		txtKomentar.setBounds(363, 437, 265, 23);
+		//frmDobrodoaolaUDms.getContentPane().add(txtKomentar);
 
 		txtPretraga = new JTextField();
 		txtPretraga.addKeyListener(new KeyAdapter() {
@@ -887,6 +1071,31 @@ public class GlavnaForma {
 		JLabel lblPretraga = new JLabel("Pretraga");
 		lblPretraga.setBounds(10, 28, 65, 14);
 		frmDobrodoaolaUDms.getContentPane().add(lblPretraga);
+		
+		scrollPaneDokumenti = new JScrollPane();
+		scrollPaneDokumenti.setBounds(10, 53, 343, 417);
+		//scrollPaneDokumenti.add(treeFolderView);
+		scrollPaneDokumenti.setViewportView(treeFolderView);
+		
+		frmDobrodoaolaUDms.getContentPane().add(scrollPaneDokumenti);
+		
+		scrollPaneVerzije = new JScrollPane();
+		scrollPaneVerzije.setBounds(363, 75, 482, 138);
+		scrollPaneVerzije.setViewportView(table_1);
+		frmDobrodoaolaUDms.getContentPane().add(scrollPaneVerzije);
+		
+		scrollPaneKomentari = new JScrollPane();
+		scrollPaneKomentari.setBounds(363, 258, 482, 118);
+		scrollPaneKomentari.setViewportView(table);
+		frmDobrodoaolaUDms.getContentPane().add(scrollPaneKomentari);
+		
+		scrollPaneDodajKomentar = new JScrollPane();
+		scrollPaneDodajKomentar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPaneDodajKomentar.setBounds(363, 387, 482, 49);
+		scrollPaneDodajKomentar.setViewportView(txtKomentar);
+		frmDobrodoaolaUDms.getContentPane().add(scrollPaneDodajKomentar);
+		
+		
 	}
 
 	private void sakrijSveOpcijeMenijaZaDrvo() {

@@ -54,10 +54,10 @@ public class KorisnikRepository {
 		return false;
 	}
 	
-	public List<KorisnikViewModel> dajKorisnike() {
+	/*public List<KorisnikViewModel> dajKorisnike() {
 		// TODO - implement KorisnikRepository.dajKorisnike
 		throw new UnsupportedOperationException();
-	}
+	}*/
 	
 	public List<KorisnikDbModel> dajSveKorisnike()
 	{
@@ -115,10 +115,12 @@ public class KorisnikRepository {
 	{
 		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
 	}
+	
 	public List<KorisnikPozicijaDbModel> dajSvePozicijeKorisnika()
 	{
 		return DbDMSContext.getInstance().getKorisnikPozicije().ucitajSve();
 	}
+	
 	public Integer dajIdKorisnikaPoUsername(String username){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 		kriterijum.add(Restrictions.eq("username", username));
@@ -136,6 +138,7 @@ public class KorisnikRepository {
 		}
 		return null;
 	}
+	
 	public List<KorisnikTipDbModel> dajSveKorisnikTipove() {
 		return DbDMSContext.getInstance().getKorisnikTipovi().ucitajSve();
 	}
@@ -177,8 +180,9 @@ public class KorisnikRepository {
 			return 0; // Korisnik ima pravo i citanja i pisanja
 		else if(pravoPisanja)
 			return 1; // Korisnik ima pravo pisanja samo
-		else 
+		else if(pravoCitanja)
 			return 2; // Korisnik ima pravo citanja samo
+		else return -1;
 	}
 
 	public List<KorisnikDbModel> dajKorisnikeGrupe(int grupaId) {

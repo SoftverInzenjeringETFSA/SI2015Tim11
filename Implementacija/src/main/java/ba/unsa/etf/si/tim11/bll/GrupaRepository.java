@@ -10,6 +10,7 @@ import ba.unsa.etf.si.tim11.viewmodels.GrupaViewModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 
@@ -17,29 +18,31 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 public class GrupaRepository {
+	final static Logger logger = Logger.getLogger(GrupaRepository.class.toString());
 
 	/**
 	 * 
 	 * @param grupaId
 	 */
-	public GrupaViewModel dajGrupu(Integer grupaId) {
+	/*public GrupaViewModel dajGrupu(Integer grupaId) {
 		// TODO - implement GrupaRepository.dajGrupu
 		throw new UnsupportedOperationException();
-	}
+	}*/
 
-	public List<GrupaViewModel> dajGrupe() {
+	/*public List<GrupaViewModel> dajGrupe() {
 		// TODO - implement GrupaRepository.dajGrupe
 		throw new UnsupportedOperationException();
-	}
+	}*/
 
 	/**
 	 * 
 	 * @param grupa
 	 */
-	public Boolean izmijeniGrupu(GrupaDbModel grupa) {
-		// TODO - implement GrupaRepository.izmijeniGrupu
-		throw new UnsupportedOperationException();
-	}
+	/*public Boolean izmijeniGrupu(GrupaDbModel grupa) {
+		
+			throw new UnsupportedOperationException();
+	
+	}*/
 
 	/**
 	 * 
@@ -182,7 +185,7 @@ public class GrupaRepository {
 		KorisnikDbModel kor = korRep.dajKorisnika(idKorisnika);
 		List<GrupaDbModel> listaGrupa;
 		
-		if(kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
+		if(kor.getKorisnikTip() != null && kor.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator"))
 		{
 			ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
 			kriterijum.add(Restrictions.eq("aktivan", true));
@@ -320,6 +323,29 @@ public class GrupaRepository {
 		if(lista.size() > 0)
 			return true;
 		else return false;
+	}
+	
+	public int dajPravaGrupeNaFolder(Integer grupaId, Integer folderId)
+	{
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		List<FolderXGrupaDbModel> listaPostojecih;
+		
+		kriterijum.add(Restrictions.eq("grupaId", grupaId));
+		kriterijum.add(Restrictions.eq("folderId", folderId));
+		kriterijum.add(Restrictions.eq("aktivan", true));
+		
+		listaPostojecih = DbDMSContext.getInstance().getFolderiGrupe().ucitajSveSaKriterujumom(kriterijum);
+		
+		if(listaPostojecih.size() != 0)
+		{
+			if(listaPostojecih.get(0).getPravoDodavanja())
+				return 1; // Ima i pravo pisanja i čitanja
+			else if(listaPostojecih.get(0).getPravoSkidanja())
+				return 2; // Ime samo pravo čitanja
+				
+		}
+		
+		return -1;
 	}
 	
 

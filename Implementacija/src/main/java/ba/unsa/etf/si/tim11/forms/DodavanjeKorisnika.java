@@ -363,11 +363,16 @@ public class DodavanjeKorisnika {
 			@Override
 			public void focusLost(FocusEvent e) {
 				String s=textFieldDodavanjeKorisnikaUsername.getText();
-				if(!Validator.daLiJeStringPrazan(s)&&Validator.daLiJeStringSlovaIBrojevi(s))
+				if(!Validator.daLiJeStringPrazan(s)&&Validator.daLiJeStringSlovaIBrojevi(s)&&kr.dajIdKorisnikaPoUsername(s)==null)
 				{
 					labelOkUsername.setText("OK");
 					labelOkUsername.setForeground(new Color(0, 128, 0));
 					uredu[3]=true;
+				}
+				else if(kr.dajIdKorisnikaPoUsername(s)!=null)
+				{
+					JOptionPane.showMessageDialog(frmDodavanjeizmjenaKorisnika, "Korisnik sa tim korisničkim imenom već postoji!");
+					textFieldDodavanjeKorisnikaUsername.setText("");
 				}
 				else
 				{
