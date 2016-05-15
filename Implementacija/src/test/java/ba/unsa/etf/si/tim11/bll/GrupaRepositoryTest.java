@@ -28,6 +28,7 @@ public class GrupaRepositoryTest {
 		folder.setFolderNaziv("naziv foldera");
 		return folder;		
 	}
+	
 	private GrupaDbModel kreirajMiGrupu(Integer idOdgovornog)
 	{
 		GrupaDbModel grupa = new GrupaDbModel();

@@ -354,7 +354,7 @@ public class KorisnikRepositoryTest extends TestCase {
 	@Test
 	public void testDajSveKorisnikTipove() {
 		
-KorisnikRepository korRep = new KorisnikRepository();
+		KorisnikRepository korRep = new KorisnikRepository();
 		
 		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
 		korTip.setAktivan(true);
@@ -367,46 +367,51 @@ KorisnikRepository korRep = new KorisnikRepository();
 	
 	//fail("Not yet implemented");
 	}
-@Test
-	public void testDajPravaKorisnikaNaFolder() {
+	@Test
+	public void testDajPravaKorisnikaNaFolder() 
+	{
 		
-
-	KorisnikRepository korRep = new KorisnikRepository();
-	//KorisnikRepository korRep_novi = new KorisnikRepository();
-	KorisnikDbModel korModel = new KorisnikDbModel();
-	KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
-	KorisnikTipDbModel korTip = new KorisnikTipDbModel();
-	korTip.setAktivan(true);
-	korTip.setKorisnikTipNaziv("Administrator");
-//	long idTipa =DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
-	pozicija.setKorisnikPozicijaNaziv("neki direktor");
-	pozicija.setAktivan(true);
-	long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
-	korModel.setAdresa("neka adresa");
-	korModel.setAktivan(true);
-	korModel.setDatumRodjenja(new Date());
-	korModel.setIme("neko ime");
-	korModel.setKorisnikPozicija(pozicija);
-	korModel.setKorisnikPozicijaId((int) idPozicije);
-	korModel.setKorisnikTipId((int)korTip.getKorisnikTipId());
-	korModel.setPassword("pass");
-	korModel.setPrezime("neko prezime");
-	korModel.setUsername("user");
-	korRep.dodajKorisnika(korModel);
-	FolderDbModel fm =new FolderDbModel();
-	fm.setFolderNaziv("neki folder");
-	fm.setKreiraoKorisnikId((int)korModel.getKorisnikID());
-	fm.setAktivan(true);
-	DbDMSContext.getInstance().getFolderi().sacuvaj(fm);
-	/*int  pravo=0;
-	int pravo1=1;
-	int pravo2=2;*/
-	Assert.assertEquals(0, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), fm));
-	DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
-    DbDMSContext.getInstance().getKorisnikPozicije().obrisi(pozicija);
-    DbDMSContext.getInstance().getKorisnikTipovi().obrisi(korTip);
-    DbDMSContext.getInstance().getFolderi().obrisi(fm);
-	//fail("Not yet implemented");
+		KorisnikRepository korRep = new KorisnikRepository();
+		KorisnikDbModel korModel = new KorisnikDbModel();
+		KorisnikPozicijaDbModel pozicija = new KorisnikPozicijaDbModel();
+		KorisnikTipDbModel korTip = new KorisnikTipDbModel();
+		
+		korTip.setAktivan(true);
+		korTip.setKorisnikTipNaziv("Administrator");
+		
+		long idTipa = DbDMSContext.getInstance().getKorisnikTipovi().sacuvaj(korTip);
+		
+		pozicija.setKorisnikPozicijaNaziv("neki direktor");
+		pozicija.setAktivan(true);
+		
+		long idPozicije = DbDMSContext.getInstance().getKorisnikPozicije().sacuvaj(pozicija);
+		
+		korModel.setAdresa("neka adresa");
+		korModel.setAktivan(true);
+		korModel.setDatumRodjenja(new Date());
+		korModel.setIme("neko ime");
+		
+		korModel.setKorisnikPozicijaId((int) idPozicije);
+		korModel.setKorisnikTipId((int)idTipa);
+		
+		korModel.setPassword("pass");
+		korModel.setPrezime("neko prezime");
+		korModel.setUsername("user");
+		korRep.dodajKorisnika(korModel);
+		
+		FolderDbModel fm =new FolderDbModel();
+		fm.setFolderNaziv("neki folder");
+		fm.setKreiraoKorisnikId((int)korRep.dajIdKorisnikaPoUsername(korModel.getUsername()));
+		fm.setAktivan(true);
+		long idFoldera = DbDMSContext.getInstance().getFolderi().sacuvaj(fm);
+		FolderDbModel sacuvani = DbDMSContext.getInstance().getFolderi().ucitaj(idFoldera);
+		
+		Assert.assertEquals(0, korRep.dajPravaKorisnikaNaFolder(korModel.getUsername(), sacuvani));
+	    DbDMSContext.getInstance().getKorisnikPozicije().obrisi(pozicija);
+	    DbDMSContext.getInstance().getKorisnikTipovi().obrisi(korTip);
+	    DbDMSContext.getInstance().getKorisnici().obrisi(korModel);
+	    DbDMSContext.getInstance().getFolderi().obrisi(sacuvani);
+		
 	}
 
 	@Test
