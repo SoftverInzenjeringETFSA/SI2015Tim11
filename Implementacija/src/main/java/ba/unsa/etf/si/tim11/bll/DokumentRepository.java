@@ -53,7 +53,6 @@ public class DokumentRepository implements Serializable {
 
 	/**
 	 * 
-	 * @param dokumentId
 	 * @param dokumentVerzija
 	 */
 	public Boolean dodajverzijuDokumenta(DokumentVerzijaDbModel dokumentVerzija) {
@@ -92,17 +91,12 @@ public class DokumentRepository implements Serializable {
 		return false;
 	}
 
-	/**
-	 * 
-	 * @param dokumentVerzijaId
-	 */
-	/*public Boolean obrisiVerzijuDokumenta(Integer dokumentVerzijaId) {
-		
-		
-			throw new UnsupportedOperationException();
-		
-		
-	}*/
+	public List<DokumentDbModel> getDokumentByKorisnikAjDi(Integer korisnikAjDi) {
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("korisnikId", korisnikAjDi));
+
+		return DbDMSContext.getInstance().getDokumenti().ucitajSveSaKriterujumom(kriterijum);
+	}
 	
 	public List<DokumentDbModel> dajDokumente(Integer folderId){
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
