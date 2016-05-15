@@ -145,13 +145,14 @@ public class GlavnaForma {
 		try {
 			KorisnikDbModel korisnik =uow.getKorisnikRepository().dajKorisnika( 
 					uow.getKorisnikRepository().dajIdKorisnikaPoUsername(Sesija.getUsername()));
+			
 			if(korisnik.getKorisnikTip() != null){
 				if(korisnik.getKorisnikTip().getKorisnikTipNaziv().equals("Administrator")){
 					mnGrupe.setVisible(true);
 					mnKorisnici.setVisible(true);
 				}
 				else{
-					mnGrupe.setVisible(false);
+					mnGrupe.setVisible(true);
 					mnKorisnici.setVisible(false);
 				}
 			}
@@ -962,6 +963,11 @@ public class GlavnaForma {
 		mnGlavna.add(mntmMojProfil);
 
 		mntmIzlaz = new JMenuItem("Izlaz");
+		mntmIzlaz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		mnGlavna.add(mntmIzlaz);
 
 		menuBar.add(mnGrupe);

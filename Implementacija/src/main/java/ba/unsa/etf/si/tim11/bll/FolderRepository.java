@@ -292,6 +292,7 @@ public class FolderRepository {
 		List<FolderDbModel> folderi = new ArrayList<FolderDbModel>();
 		
 		for(FolderXGrupaDbModel gf : grupeFolderi)
+			if(gf.getFolder().getAktivan())
 			folderi.add(gf.getFolder());
 		
 		return folderi;

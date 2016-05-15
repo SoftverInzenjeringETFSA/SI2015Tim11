@@ -112,7 +112,7 @@ public class IzmjenaKorisnika
 		frmIzmjenaKorisnika = new JFrame();
 		frmIzmjenaKorisnika.setTitle("Izmjena Korisnika");
 		frmIzmjenaKorisnika.setBounds(100, 100, 748, 516);
-		frmIzmjenaKorisnika.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmIzmjenaKorisnika.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmIzmjenaKorisnika.getContentPane().setLayout(null);
 		
 		JLabel label = new JLabel("Pretraga Korisnika:");
