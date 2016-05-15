@@ -1,6 +1,8 @@
 package ba.unsa.etf.si.tim11.bll;
 
-public class UnitOfWork {
+import java.io.Serializable;
+
+public class UnitOfWork implements Serializable{
 	private KorisnikRepository korisnikRepository;
 	private FolderRepository folderRepository;
 	private DokumentRepository dokumentRepository;
