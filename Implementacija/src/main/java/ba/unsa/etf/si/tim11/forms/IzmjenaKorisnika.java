@@ -141,7 +141,7 @@ public class IzmjenaKorisnika
 		tableIzmjenaPretraga.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		tableIzmjenaPretraga.setFont(new Font("Dialog", Font.PLAIN, 11));
 		tableIzmjenaPretraga.setCellSelectionEnabled(true);
-		tableIzmjenaPretraga.setBounds(155, 98, 566, 173);
+		tableIzmjenaPretraga.setBounds(155, 114, 566, 157);
 		frmIzmjenaKorisnika.getContentPane().add(tableIzmjenaPretraga);
 		
 		JLabel label_1 = new JLabel("Nova Šifra:");
@@ -208,6 +208,34 @@ public class IzmjenaKorisnika
 		labelOKPS.setFont(new Font("Dialog", Font.PLAIN, 11));
 		labelOKPS.setBounds(675, 370, 46, 14);
 		frmIzmjenaKorisnika.getContentPane().add(labelOKPS);
+		
+		JLabel lblIme = new JLabel("Ime");
+		lblIme.setBounds(155, 90, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblIme);
+		
+		JLabel lblPrezime = new JLabel("Prezime");
+		lblPrezime.setBounds(239, 89, 62, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblPrezime);
+		
+		JLabel lblDatumRoenja = new JLabel("Datum Rođenja");
+		lblDatumRoenja.setBounds(311, 89, 95, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblDatumRoenja);
+		
+		JLabel lblAdresa = new JLabel("Adresa");
+		lblAdresa.setBounds(425, 90, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblAdresa);
+		
+		JLabel lblTipKorisnika = new JLabel("Tip Korisnika");
+		lblTipKorisnika.setBounds(481, 90, 79, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblTipKorisnika);
+		
+		JLabel lblPozicijaKorisnika = new JLabel("Pozicija");
+		lblPozicijaKorisnika.setBounds(586, 90, 51, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblPozicijaKorisnika);
+		
+		JLabel lblAktivan = new JLabel("Aktivan");
+		lblAktivan.setBounds(675, 89, 46, 14);
+		frmIzmjenaKorisnika.getContentPane().add(lblAktivan);
 		
 		//Events
 		

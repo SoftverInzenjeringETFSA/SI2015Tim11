@@ -88,13 +88,13 @@ public class ModelTabele extends AbstractTableModel
         	case 4: 
         		if(!Validator.daLiJeStringPrazan((String)value)&&Validator.samoJedanBroj((String)value))
         		{
-        			lista.get(row).setKorisnikTipId((Integer)value);
+        			lista.get(row).setKorisnikTipId(Integer.parseInt((String) value));
         		}
         		break;
         	case 5: 
         		if(!Validator.daLiJeStringPrazan((String)value)&&Validator.samoJedanBroj((String)value))
         		{
-        		lista.get(row).setKorisnikPozicijaId((Integer)value);
+        		lista.get(row).setKorisnikPozicijaId(Integer.parseInt((String) value));
         		}
         		break;
         	case 6:
