@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
@@ -53,7 +54,7 @@ public class LoginForma {
 	private void initialize() {
 		frmDmsLogin = new JFrame();
 		frmDmsLogin.setTitle("DMS Login");
-		frmDmsLogin.setBounds(100, 100, 300, 180);
+		frmDmsLogin.setBounds(100, 100, 300, 202);
 		frmDmsLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmDmsLogin.getContentPane().setLayout(null);
 		
@@ -93,5 +94,15 @@ public class LoginForma {
 		});
 		btnPrijaviSe.setBounds(107, 87, 98, 23);
 		frmDmsLogin.getContentPane().add(btnPrijaviSe);
+		
+		JButton btnIzlaz = new JButton("Izlaz");
+		btnIzlaz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frmDmsLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frmDmsLogin.dispatchEvent(new WindowEvent(frmDmsLogin, WindowEvent.WINDOW_CLOSING));
+			}
+		});
+		btnIzlaz.setBounds(107, 121, 98, 20);
+		frmDmsLogin.getContentPane().add(btnIzlaz);
 	}
 }
