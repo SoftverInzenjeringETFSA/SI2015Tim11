@@ -284,9 +284,9 @@ CREATE TABLE IF NOT EXISTS `zahtjevstatus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
-INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev poslan', b'1');
-INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odobren', b'1');
-INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odbijen', b'1');
+INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za prikazivanje', b'1');
+INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za odobravanje', b'1'); 
+
 --
 -- Table structure for table `zahtjevtip`
 --
@@ -298,15 +298,14 @@ CREATE TABLE IF NOT EXISTS `zahtjevtip` (
   PRIMARY KEY (`ZahtjevTipID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za prikazivanje', b'1');
-INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za odobravanje', b'1'); 
---
--- Constraints for dumped tables
---
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev poslan', b'1');
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odobren', b'1');
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odbijen', b'1');
 
---
--- Constraints for table `dokument`
---
+CREATE USER 'EtfSI2015'@'localhost' IDENTIFIED BY '2015SIEtf';GRANT USAGE ON *.* TO 'EtfSI2015'@'localhost' IDENTIFIED BY '2015SIEtf' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `tim11`.* TO 'EtfSI2015'@'localhost';
+
+INSERT INTO `tim11`.`korisnik` (`Ime`, `Prezime`, `Adresa`, `DatumRodjenja`, `Username`, `Password`, `KorisnikTipID`, `KorisnikPozicijaID`, `Aktivan`) VALUES ('System', 'Admin', 'Root ', '2016-05-11 00:00:00', 'root', 'root123', '2', '2', b'1');
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
