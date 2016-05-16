@@ -6,7 +6,11 @@
 -- Generation Time: May 11, 2016 at 10:48 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
+/*---------------------PRISTUPNI PODACI------------------------------*/
 
+/*USERNAME: EtfSI2015
+  PASSWORD: 2015SIEtf
+*/
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -16,9 +20,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `dms_old`
---
 CREATE DATABASE IF NOT EXISTS `tim11` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `tim11`;
 
@@ -224,7 +225,12 @@ CREATE TABLE IF NOT EXISTS `korisnikpozicija` (
 -- Dumping data for table `korisnikpozicija`
 --
 -- --------------------------------------------------------
-
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Menadžer', b'1');
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Direktor', b'1');
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Junior developer', b'1');
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Senior developer', b'1');
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Sekretarica', b'1');
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Help deskt', b'1');
 --
 -- Table structure for table `korisniktip`
 --
@@ -240,6 +246,8 @@ CREATE TABLE IF NOT EXISTS `korisniktip` (
 -- Dumping data for table `korisniktip`
 --
 -- --------------------------------------------------------
+INSERT INTO `korisniktip` (`KorisnikTipNaziv`, `Aktivan`) VALUES ('Administrator', b'1');
+INSERT INTO `korisniktip` (`KorisnikTipNaziv`, `Aktivan`) VALUES ('Korisnik', b'1');
 
 --
 -- Table structure for table `zahtjev`
@@ -276,7 +284,9 @@ CREATE TABLE IF NOT EXISTS `zahtjevstatus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
-
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev poslan', b'1');
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odobren', b'1');
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odbijen', b'1');
 --
 -- Table structure for table `zahtjevtip`
 --
@@ -288,6 +298,8 @@ CREATE TABLE IF NOT EXISTS `zahtjevtip` (
   PRIMARY KEY (`ZahtjevTipID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za prikazivanje', b'1');
+INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za odobravanje', b'1'); 
 --
 -- Constraints for dumped tables
 --
