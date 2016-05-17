@@ -20,11 +20,14 @@ import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 
-public class ProfilKorisnika extends JFrame {
+public class ProfilKorisnika extends JDialog {
 
 	private JPanel contentPane;
 	private JLabel label_imeKorisnika;
@@ -64,6 +67,7 @@ public class ProfilKorisnika extends JFrame {
 	{
 		setResizable(false);
 		setTitle("Moj Profil");
+		setModal(true);
 		initialize();
 		postaviUserNameKorisnika();
 		postaviKorisnika();

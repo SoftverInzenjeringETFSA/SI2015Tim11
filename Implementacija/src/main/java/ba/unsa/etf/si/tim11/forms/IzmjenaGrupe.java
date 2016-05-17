@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -48,7 +49,7 @@ import javax.swing.event.ListSelectionEvent;
 public class IzmjenaGrupe
 {
 
-	private JFrame frmIzmjenaGrupa;
+	private JDialog frmIzmjenaGrupa;
 	private JTextField text_noviNazivGrupe;
 	private JList list_grupeKorisnika;
 	private JList list_sviKorisnici;
@@ -202,7 +203,8 @@ public class IzmjenaGrupe
 	 */
 	private void initialize()
 	{
-		frmIzmjenaGrupa = new JFrame();
+		frmIzmjenaGrupa = new JDialog();
+		frmIzmjenaGrupa.setModal(true);
 		frmIzmjenaGrupa.setTitle("Izmjena Grupa");
 		frmIzmjenaGrupa.setResizable(false);
 		frmIzmjenaGrupa.setBounds(100, 100, 1194, 480);

@@ -18,6 +18,7 @@ import ba.unsa.etf.si.tim11.bll.UnitOfWork;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikTipDbModel;
 
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPasswordField;
@@ -41,7 +42,7 @@ import java.awt.event.FocusEvent;
 @SuppressWarnings("unused")
 public class DodavanjeKorisnika {
 
-	private JFrame frmDodavanjeizmjenaKorisnika;
+	private JDialog frmDodavanjeizmjenaKorisnika;
 	private JTextField txtDodavanjeIme;
 	private JTextField txtDodavanjePrezime;
 	private JTextField txtDodavanjeAdresa;
@@ -112,7 +113,8 @@ public class DodavanjeKorisnika {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initialize() {
-		frmDodavanjeizmjenaKorisnika = new JFrame();
+		frmDodavanjeizmjenaKorisnika = new JDialog();
+		frmDodavanjeizmjenaKorisnika.setModal(true);
 		frmDodavanjeizmjenaKorisnika.setResizable(false);
 		frmDodavanjeizmjenaKorisnika.setTitle("Dodavanje Korisnika");
 		frmDodavanjeizmjenaKorisnika.setBounds(100, 100, 485, 529);

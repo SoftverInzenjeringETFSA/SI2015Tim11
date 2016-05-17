@@ -12,6 +12,8 @@ import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,13 +45,15 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Dialog.ModalityType;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
 public class KreiranjeGrupa
 {
 
-	private JFrame frmKreiranjeGrupa;
+	private JDialog frmKreiranjeGrupa;
 	private JTextField txt_nazivGrupe;
 	private JCheckBox checkBox_Citanje;
 	private JList list_sviKorisnici;
@@ -135,7 +139,8 @@ public class KreiranjeGrupa
 	 */
 	private void initialize()
 	{
-		frmKreiranjeGrupa = new JFrame();
+		frmKreiranjeGrupa = new JDialog();
+		frmKreiranjeGrupa.setModal(true);
 		frmKreiranjeGrupa.setResizable(false);
 		frmKreiranjeGrupa.setTitle("Kreiranje Grupa");
 		frmKreiranjeGrupa.setBounds(100, 100, 1209, 630);

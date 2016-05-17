@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -36,7 +37,7 @@ import java.util.logging.Logger;
 public class IzmjenaKorisnika
 {
 
-	private JFrame frmIzmjenaKorisnika;
+	private JDialog frmIzmjenaKorisnika;
 	private JTextField textFieldIzmjenaPretragaKorisnika;
 	private JTable tableIzmjenaPretraga;
 	private JPasswordField passwordFieldIzmjenaNovaSifra;
@@ -109,7 +110,8 @@ public class IzmjenaKorisnika
 	 */
 	private void initialize()
 	{
-		frmIzmjenaKorisnika = new JFrame();
+		frmIzmjenaKorisnika = new JDialog();
+		frmIzmjenaKorisnika.setModal(true);
 		frmIzmjenaKorisnika.setTitle("Izmjena Korisnika");
 		frmIzmjenaKorisnika.setBounds(100, 100, 748, 516);
 		frmIzmjenaKorisnika.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
