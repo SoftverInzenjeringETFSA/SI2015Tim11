@@ -83,7 +83,7 @@ public class LoginForma {
 					JOptionPane.showMessageDialog(null, "Uspjesno", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
 					GlavnaForma glavnaForma = new GlavnaForma();
 					glavnaForma.PokreniFormu();
-					
+					frmDmsLogin.setVisible(false);
 					
 				}else{
 					JOptionPane.showMessageDialog(null, "GRESKA", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
