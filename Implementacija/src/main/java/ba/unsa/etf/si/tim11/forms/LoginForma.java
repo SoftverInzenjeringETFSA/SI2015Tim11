@@ -40,6 +40,7 @@ public class LoginForma {
 			}
 		});
 	}
+	
 
 	/**
 	 * Create the application.
@@ -83,7 +84,8 @@ public class LoginForma {
 					JOptionPane.showMessageDialog(null, "Uspjesno", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);
 					GlavnaForma glavnaForma = new GlavnaForma();
 					glavnaForma.PokreniFormu();
-					frmDmsLogin.setVisible(false);
+					//frmDmsLogin.setVisible(false);
+					frmDmsLogin.dispose();
 					
 				}else{
 					JOptionPane.showMessageDialog(null, "GRESKA", "Obavjestenje", JOptionPane.INFORMATION_MESSAGE);

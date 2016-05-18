@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -96,6 +97,7 @@ public class Pretraga
 		final JCalendar calendarPretragaPocetni = new JCalendar();
 		calendarPretragaPocetni.setBounds(91, 11, 198, 157);
 		frmPretragaizvjetaji.getContentPane().add(calendarPretragaPocetni);
+		calendarPretragaPocetni.setMaxSelectableDate(new Date());
 		
 		JLabel label_1 = new JLabel("Krajnji Datum:");
 		label_1.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -106,6 +108,7 @@ public class Pretraga
 		final JCalendar calendarPretragaKrajnji = new JCalendar();
 		calendarPretragaKrajnji.setBounds(374, 11, 198, 157);
 		frmPretragaizvjetaji.getContentPane().add(calendarPretragaKrajnji);
+		calendarPretragaKrajnji.setMaxSelectableDate(new Date());
 		
 		final JLabel label_2 = new JLabel("Korisnik:");
 		label_2.setHorizontalAlignment(SwingConstants.RIGHT);

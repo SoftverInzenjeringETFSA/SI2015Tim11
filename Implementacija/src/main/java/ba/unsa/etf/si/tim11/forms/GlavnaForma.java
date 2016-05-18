@@ -975,6 +975,7 @@ public class GlavnaForma {
 			public void actionPerformed(ActionEvent arg0) {
 				frmDobrodoaolaUDms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frmDobrodoaolaUDms.dispatchEvent(new WindowEvent(frmDobrodoaolaUDms, WindowEvent.WINDOW_CLOSING));
+				
 			}
 		});
 		mnGlavna.add(mntmIzlaz);

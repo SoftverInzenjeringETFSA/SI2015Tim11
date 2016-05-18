@@ -24,6 +24,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -211,7 +212,13 @@ public class DodavanjeKorisnika {
 		
 		final JCalendar calendarDodavanjeDatumRodjenja = new JCalendar();
 		calendarDodavanjeDatumRodjenja.setBounds(133, 116, 198, 157);
-		frmDodavanjeizmjenaKorisnika.getContentPane().add(calendarDodavanjeDatumRodjenja);
+		frmDodavanjeizmjenaKorisnika.getContentPane().add(calendarDodavanjeDatumRodjenja);	
+		Calendar datum=Calendar.getInstance();
+		Date danasnji=datum.getTime();
+		Date petnest=danasnji;
+		petnest.setYear(danasnji.getYear()-15);
+		petnest.setMonth(1);
+		calendarDodavanjeDatumRodjenja.setMaxSelectableDate(petnest);
 		
 		JLabel label_4 = new JLabel("Pozicija u Organizaciji:");
 		label_4.setHorizontalAlignment(SwingConstants.RIGHT);
