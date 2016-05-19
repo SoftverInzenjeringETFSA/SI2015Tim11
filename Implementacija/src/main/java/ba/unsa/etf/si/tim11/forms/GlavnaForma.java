@@ -70,6 +70,7 @@ import javax.swing.event.MenuKeyEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ListSelectionModel;
+import java.awt.event.WindowAdapter;
 
 public class GlavnaForma {
 
@@ -430,12 +431,24 @@ public class GlavnaForma {
 		});
 		ucitajTreeViewModel();
 	}
-
+	private void zatvaranjeForme(){
+		//logout korisnika
+		Sesija.setCertifikatAktivan(false);
+		
+		//ponovo pokretanje login forme
+		LoginForma.main(null);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
 		frmDobrodoaolaUDms = new JFrame();
+		frmDobrodoaolaUDms.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				zatvaranjeForme();
+			}
+		});
 		frmDobrodoaolaUDms.setResizable(false);
 		frmDobrodoaolaUDms.addWindowFocusListener(new WindowFocusListener() {
 			public void windowGainedFocus(WindowEvent arg0) {
@@ -973,9 +986,8 @@ public class GlavnaForma {
 		mntmIzlaz = new JMenuItem("Izlaz");
 		mntmIzlaz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frmDobrodoaolaUDms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frmDobrodoaolaUDms.dispatchEvent(new WindowEvent(frmDobrodoaolaUDms, WindowEvent.WINDOW_CLOSING));
-				
+				zatvaranjeForme();
+				frmDobrodoaolaUDms.dispose();
 			}
 		});
 		mnGlavna.add(mntmIzlaz);

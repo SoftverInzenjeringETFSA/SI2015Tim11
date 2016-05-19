@@ -17,6 +17,8 @@ public class Sesija {
 		Sesija.username = username;
 	}
 	public static void setCertifikatAktivan(Boolean certifikatAktivan) {
+		if(!certifikatAktivan)
+			Sesija.username = null;
 		Sesija.certifikatAktivan = certifikatAktivan;
 	}
 }

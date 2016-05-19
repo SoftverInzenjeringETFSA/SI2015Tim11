@@ -55,6 +55,17 @@ public class KorisnikRepository implements Serializable{
 		return false;
 	}
 	
+	
+	public static void korisnikLogout(){
+		
+		try {
+			Sesija.setCertifikatAktivan(false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/*public List<KorisnikViewModel> dajKorisnike() {
 		// TODO - implement KorisnikRepository.dajKorisnike
 		throw new UnsupportedOperationException();
