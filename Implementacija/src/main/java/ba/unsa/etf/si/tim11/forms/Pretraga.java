@@ -1,18 +1,12 @@
 package ba.unsa.etf.si.tim11.forms;
 
-import java.awt.EventQueue;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.awt.Font;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -20,19 +14,15 @@ import java.util.logging.Logger;
 
 import ba.unsa.etf.si.tim11.bll.DokumentRepository;
 import ba.unsa.etf.si.tim11.bll.KorisnikRepository;
+import ba.unsa.etf.si.tim11.dal.DbDMSContext;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.DokumentVerzijaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.izvjestajmodels.Dokument;
 import com.toedter.calendar.JCalendar;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
+import sun.util.calendar.LocalGregorianCalendar;
 
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 public class Pretraga
@@ -46,10 +36,7 @@ public class Pretraga
 	
 	final static Logger logger = Logger.getLogger(Pretraga.class.toString());
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args)
+	public static void pokreniFormu()
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
@@ -57,7 +44,9 @@ public class Pretraga
 			{
 				try
 				{
-					Pretraga window = new Pretraga();
+					if(window == null) {
+						window = new Pretraga();
+					}
 					window.frmPretragaizvjetaji.setVisible(true);
 				} catch (Exception e)
 				{
@@ -68,10 +57,12 @@ public class Pretraga
 		});
 	}
 
+	private static Pretraga window;
+
 	/**
 	 * Create the application.
 	 */
-	public Pretraga()
+	private Pretraga()
 	{
 		initialize();
 	}
@@ -85,7 +76,7 @@ public class Pretraga
 		frmPretragaizvjetaji.setTitle("Pretraga/Izvještaji");
 		frmPretragaizvjetaji.setResizable(false);
 		frmPretragaizvjetaji.setBounds(100, 100, 596, 458);
-		frmPretragaizvjetaji.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPretragaizvjetaji.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmPretragaizvjetaji.getContentPane().setLayout(null);
 		
 		JLabel label = new JLabel("Početni Datum:");
@@ -127,24 +118,26 @@ public class Pretraga
 		buttonPretragaTrazi.setBounds(458, 185, 114, 24);
 		buttonPretragaTrazi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(calendarPretragaPocetni.getDate().after(calendarPretragaKrajnji.getDate())) {
+				if(calendarPretragaPocetni.getDate().before(calendarPretragaKrajnji.getDate())) {
 					Integer id = new KorisnikRepository().dajIdKorisnikaPoUsername(label_2.getText());
-					List<DokumentDbModel> dokumentsi = new DokumentRepository().getDokumentByKorisnikAjDi(id);
-					List<DokumentVerzijaDbModel> verzijeDokumenta = new ArrayList<DokumentVerzijaDbModel>();
-					for (DokumentDbModel aDokumentsi : dokumentsi) {
-						verzijeDokumenta.addAll(new DokumentRepository().dajVerzijeDokumenta((int) aDokumentsi.getDokumentId()));
-					}
-					Object[][] array = new Object[verzijeDokumenta.size()][5];
+					logger.info("Id usera " + id);
+					List<DokumentVerzijaDbModel> verzijeDokumenta = new DokumentRepository().getDokumentByKorisnikAjDi(id);
+					Object[][] array = new Object[verzijeDokumenta.size()+1][5];
+					logger.info("Broj dokumenata: " + verzijeDokumenta.size());
+					array[0] = new Object[]{"ID Dokumenta", "Naziv Dokumenta", "Verzija", "Korisnik Postavio", "Datum Postavljanja"};
 					for(int i = 0; i < verzijeDokumenta.size(); i++) {
-						array[i][0] = verzijeDokumenta.get(i).getDokumentId();
-						array[i][1] = verzijeDokumenta.get(i).getDokument().getDokumentNaziv();
-						array[i][2] = verzijeDokumenta.get(i).getDokumentVerzijaId();
-						array[i][3] = verzijeDokumenta.get(i).getPostavioKorisnikId();
-						array[i][4] = "Not yet implemeted.";
+						array[i+1][0] = verzijeDokumenta.get(i).getDokumentId();
+						array[i+1][1] = verzijeDokumenta.get(i).getDokument().getDokumentNaziv();
+						array[i+1][2] = verzijeDokumenta.get(i).getDokumentVerzijaId();
+						array[i+1][3] = verzijeDokumenta.get(i).getPostavioKorisnikId();
+						array[i+1][4] = "Not yet implemeted.";
 					}
 					tablePretragaDokumenti.setModel(new DefaultTableModel(array, new String[] {
 							"ID Dokumenta", "Naziv Dokumenta", "Verzija", "Korisnik Postavio", "Datum Postavljanja"
 					} ));
+				} else {
+					JOptionPane.showMessageDialog(null, "Krajnji datum mora biti veći od početnog.", "Neuspješna operacija", JOptionPane.WARNING_MESSAGE);
+
 				}
 			}
 		});
@@ -185,18 +178,25 @@ public class Pretraga
 			public void actionPerformed(ActionEvent e) {
 				if(comboBox.getSelectedIndex() != 0) {
 					List<Dokument> dokumenti = new ArrayList<Dokument>();
-					for(int i = 0; i < tablePretragaDokumenti.getRowCount(); i++) {
+                    List<DokumentDbModel> dokumentDbModels = DbDMSContext.getInstance().getDokumenti().ucitajSve();
+					for(int i = 0; i < dokumentDbModels.size(); i++) {
 						Dokument novi = new Dokument();
-						novi.setDatum(new Date());
-						novi.setNaziv((String)tablePretragaDokumenti.getValueAt(i, 2));
-						novi.setBrojZahtjeva(new Random().nextInt());
-						novi.setZadnjiStatus("Odobreno");
+						novi.setDatum(new Date().toString());
+						novi.setNaziv(dokumentDbModels.get(i).getDokumentNaziv());
+						novi.setBroj(0);
+						novi.setStatus("Odobreno");
 						dokumenti.add(novi);
 					}
+                    String location = promptForFolder();
+                    if(location == null) {
+                        JOptionPane.showMessageDialog(null, "Lokacija nije validna.", "Neuspješna operacija", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
 					try {
-						InputStream is = new FileInputStream("templates/template_za_dokument_izvjestaj.xls");
+                        InputStream is = new FileInputStream(new File("./templates/template_za_dokument_izvjestaj.xlsx"));
 						try {
-							OutputStream os = new FileOutputStream("target/rezultat.xls");
+                            location = String.format("%s/%sizvjestaj.xls", location, new Date().toString());
+							OutputStream os = new FileOutputStream(location);
 							Context context = new Context();
 							context.putVar("dokumenti", dokumenti);
 							JxlsHelper.getInstance().processTemplate(is, os, context);
@@ -209,8 +209,22 @@ public class Pretraga
 						throw new RuntimeException(ex);
 					}
 				}
-			}
-		});
+                JOptionPane.showMessageDialog(null, "Izvještaj generisan.", "Uspješna operacija", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 		frmPretragaizvjetaji.getContentPane().add(button_1);
 	}
+
+    private String promptForFolder()
+    {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
+
+        if( fc.showOpenDialog( frmPretragaizvjetaji ) == JFileChooser.APPROVE_OPTION )
+        {
+            return fc.getSelectedFile().getAbsolutePath();
+        }
+
+        return null;
+    }
 }
