@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `korisnikpozicija` (
 -- Dumping data for table `korisnikpozicija`
 --
 -- --------------------------------------------------------
-INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Menad≈æer', b'1');
+INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Menadûer', b'1');
 INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Direktor', b'1');
 INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Junior developer', b'1');
 INSERT INTO `korisnikpozicija` (`KorisnikPozicijaNaziv`, `Aktivan`) VALUES ('Senior developer', b'1');
@@ -266,26 +266,11 @@ CREATE TABLE IF NOT EXISTS `zahtjev` (
   KEY `fk_Zahtjev_Korisnik1_idx` (`KreiraoKorisnikID`),
   KEY `fk_Zahtjev_Korisnik2_idx` (`UpucenoKorisnikID`),
   KEY `fk_Zahtjev_ZahtjevTip1_idx` (`ZahtjevTipID`),
-  KEY `fk_Zahtjev_ZahjtevStatus1_idx` (`ZahtjevStatusID`),
+  KEY `fk_Zahtjev_ZahtjevStatus1_idx` (`ZahtjevStatusID`),
   KEY `fk_Zahtjev_DokumentVerzija1_idx` (`DokumentVerzijaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `zahtjevstatus`
---
-
-CREATE TABLE IF NOT EXISTS `zahtjevstatus` (
-  `ZahjtevStatusID` int(11) NOT NULL AUTO_INCREMENT,
-  `ZahjtevStatusNaziv` varchar(100) DEFAULT NULL,
-  `Aktivan` bit(1) NOT NULL,
-  PRIMARY KEY (`ZahjtevStatusID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za prikazivanje', b'1');
-INSERT INTO `zahtjevstatus` (`ZahjtevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev za odobravanje', b'1'); 
 
 --
 -- Table structure for table `zahtjevtip`
@@ -298,9 +283,24 @@ CREATE TABLE IF NOT EXISTS `zahtjevtip` (
   PRIMARY KEY (`ZahtjevTipID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev poslan', b'1');
-INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odobren', b'1');
-INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev odbijen', b'1');
+-- --------------------------------------------------------
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev za prikazivanje', b'1');
+INSERT INTO `zahtjevtip` (`ZahtjevTipNaziv`, `Aktivan`) VALUES ('Zahtjev za odobravanje', b'1'); 
+
+--
+-- Table structure for table `zahtjevstatus`
+--
+
+CREATE TABLE IF NOT EXISTS `zahtjevstatus` (
+  `ZahtjevStatusID` int(11) NOT NULL AUTO_INCREMENT,
+  `ZahtjevStatusNaziv` varchar(100) DEFAULT NULL,
+  `Aktivan` bit(1) NOT NULL,
+  PRIMARY KEY (`ZahtjevStatusID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+INSERT INTO `zahtjevstatus` (`ZahtjevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev poslan', b'1');
+INSERT INTO `zahtjevstatus` (`ZahtjevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev odobren', b'1');
+INSERT INTO `zahtjevstatus` (`ZahtjevStatusNaziv`, `Aktivan`) VALUES ('Zahtjev odbijen', b'1');
 
 CREATE USER 'EtfSI2015'@'localhost' IDENTIFIED BY '2015SIEtf';GRANT USAGE ON *.* TO 'EtfSI2015'@'localhost' IDENTIFIED BY '2015SIEtf' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `tim11`.* TO 'EtfSI2015'@'localhost';
 

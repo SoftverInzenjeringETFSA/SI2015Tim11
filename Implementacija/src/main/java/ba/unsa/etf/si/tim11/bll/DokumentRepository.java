@@ -15,7 +15,7 @@ import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
-import ba.unsa.etf.si.tim11.forms.ZahtjevZaOdobrenje;
+import ba.unsa.etf.si.tim11.forms.DodavanjeZahtjeva;
 
 public class DokumentRepository implements Serializable {
 	
@@ -93,9 +93,16 @@ public class DokumentRepository implements Serializable {
 
 	public List<DokumentDbModel> getDokumentByKorisnikAjDi(Integer korisnikAjDi) {
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
-		kriterijum.add(Restrictions.eq("korisnikId", korisnikAjDi));
+		kriterijum.add(Restrictions.eq("korisnikId", (long) (int) korisnikAjDi));
 
 		return DbDMSContext.getInstance().getDokumenti().ucitajSveSaKriterujumom(kriterijum);
+	}
+	
+	public List<DokumentVerzijaDbModel> getDokumentVerzijaByKorisnikAjDi(Integer korisnikAjDi) {
+		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
+		kriterijum.add(Restrictions.eq("postavioKorisnikId", korisnikAjDi));
+
+		return DbDMSContext.getInstance().getDokumentiVerzije().ucitajSveSaKriterujumom(kriterijum);
 	}
 	
 	public List<DokumentDbModel> dajDokumente(Integer folderId){
