@@ -209,8 +209,9 @@ public class Pretraga
 						throw new RuntimeException(ex);
 					}
 				}
-			}
-		});
+                JOptionPane.showMessageDialog(null, "Izvještaj generisan.", "Uspješna operacija", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 		frmPretragaizvjetaji.getContentPane().add(button_1);
 	}
 
