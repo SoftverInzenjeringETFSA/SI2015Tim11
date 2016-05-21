@@ -93,7 +93,7 @@ public class DokumentRepository implements Serializable {
 
 	public List<DokumentDbModel> getDokumentByKorisnikAjDi(Integer korisnikAjDi) {
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
-		kriterijum.add(Restrictions.eq("korisnikId", (long) (int) korisnikAjDi));
+		kriterijum.add(Restrictions.eq("korisnikId", korisnikAjDi));
 
 		return DbDMSContext.getInstance().getDokumenti().ucitajSveSaKriterujumom(kriterijum);
 	}
