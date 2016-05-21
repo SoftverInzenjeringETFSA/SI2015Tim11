@@ -1037,9 +1037,21 @@ public class GlavnaForma {
 		menuBar.add(mnZahtjevi);
 
 		mntmPregledZahtjeva = new JMenuItem("Pregled zahtjeva");
+		mntmPregledZahtjeva.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				PregledZahtjeva pregledZahtjevaForma = new PregledZahtjeva();
+				pregledZahtjevaForma.pokreniFormu();
+			}
+		});
 		mnZahtjevi.add(mntmPregledZahtjeva);
 
 		mntmDodavanjeZahtjeva = new JMenuItem("Dodavanje zahtjeva");
+		mntmDodavanjeZahtjeva.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DodavanjeZahtjeva dodavanjeZahtjevaForma = new DodavanjeZahtjeva();
+				dodavanjeZahtjevaForma.pokreniFormu();
+			}
+		});
 		mnZahtjevi.add(mntmDodavanjeZahtjeva);
 		
 		JMenu mnNewMenu = new JMenu("Izvještaji");
