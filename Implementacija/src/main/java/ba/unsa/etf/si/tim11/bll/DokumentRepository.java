@@ -91,11 +91,11 @@ public class DokumentRepository implements Serializable {
 		return false;
 	}
 
-	public List<DokumentDbModel> getDokumentByKorisnikAjDi(Integer korisnikAjDi) {
+	public List<DokumentVerzijaDbModel> getDokumentByKorisnikAjDi(Integer korisnikAjDi) {
 		ArrayList<Criterion> kriterijum = new ArrayList<Criterion>();
-		kriterijum.add(Restrictions.eq("korisnikId", korisnikAjDi));
+		kriterijum.add(Restrictions.eq("postavioKorisnikId", korisnikAjDi));
 
-		return DbDMSContext.getInstance().getDokumenti().ucitajSveSaKriterujumom(kriterijum);
+		return DbDMSContext.getInstance().getDokumentiVerzije().ucitajSveSaKriterujumom(kriterijum);
 	}
 	
 	public List<DokumentDbModel> dajDokumente(Integer folderId){
