@@ -1047,6 +1047,11 @@ public class GlavnaForma {
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Pregled izvještaja");
 		mnNewMenu.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Pretraga.pokreniFormu();
+			}
+		});
 		
 		//prikaz menija zavisno od tipa korisnika
 		prikazTopMenija();
