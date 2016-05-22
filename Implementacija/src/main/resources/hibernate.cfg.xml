@@ -4,21 +4,25 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">
+        <!-- property name="connection.url">
             org.hibernate.dialect.MySQLDialect
-        </property>
+        </property-->
+        
         <property name="connection.driver_class">
             com.mysql.jdbc.Driver
         </property>
-        <property name="hibernate.connection.url">
+        
+        <!-- sada se vuce iz db properties -->
+        <!-- property name="hibernate.connection.url">
             jdbc:mysql://localhost:3306/tim11
         </property>
         <property name="connection.username">
-                EtfSI2015
+                EtfSI20152
         </property>
         <property name="connection.password">
-                2015SIEtf
-        </property>
+                2015SIEtf2
+        </property-->
+        
         
         <!-- DB schema will be updated if needed -->
         <property name="hbm2ddl.auto">update</property> 

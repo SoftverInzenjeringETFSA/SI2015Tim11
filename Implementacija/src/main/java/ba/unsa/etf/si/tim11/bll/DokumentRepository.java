@@ -15,7 +15,9 @@ import ba.unsa.etf.si.tim11.dbmodels.FolderDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.GrupaXKorisnikDbModel;
 import ba.unsa.etf.si.tim11.dbmodels.KorisnikDbModel;
+import ba.unsa.etf.si.tim11.dbmodels.ZahtjevDbModel;
 import ba.unsa.etf.si.tim11.forms.DodavanjeZahtjeva;
+import javassist.bytecode.Descriptor.Iterator;
 
 public class DokumentRepository implements Serializable {
 	
@@ -37,7 +39,7 @@ public class DokumentRepository implements Serializable {
 			verzija.setAktivan(true);
 			verzija.setDokumentId((Integer)(int)dokumentId);
 			verzija.setPostavioKorisnikId(kor.dajIdKorisnikaPoUsername(Sesija.getUsername()));
-			//fali status
+			//verzija.setDokumentVerzijaStatusId(1);
 			verzija.setSadrzaj(sadrzaj);
 			
 			dodajverzijuDokumenta(verzija);
@@ -79,7 +81,6 @@ public class DokumentRepository implements Serializable {
 		DokumentDbModel dokument = DbDMSContext.getInstance().getDokumenti().ucitaj((long)(int)dokumentId);
 		if(dokument != null){
 			dokument.setAktivan(false);
-			
 			try {
 				DbDMSContext.getInstance().getDokumenti().sacuvajIliAzuriraj(dokument);
 				return true;
@@ -124,6 +125,23 @@ public class DokumentRepository implements Serializable {
 		List<DokumentVerzijaDbModel> lista = DbDMSContext.getInstance()
 				.getDokumentiVerzije()
 				.ucitajSveSaKriterujumom(kriterijum);
+		
+		for (java.util.Iterator<DokumentVerzijaDbModel> iterator = lista.iterator(); iterator.hasNext();) {
+		    DokumentVerzijaDbModel dokumentVerzijaDbModel = iterator.next();
+		    
+		    //izbacivanje onih za koje je izdat zahtjev za prikazivanje
+			ArrayList<Criterion> kriterijumZahtjev = new ArrayList<Criterion>();
+			kriterijumZahtjev.add(Restrictions.eq("dokumentVerzijaId", (Integer)(int)dokumentVerzijaDbModel.getDokumentVerzijaId()));
+			kriterijumZahtjev.add(Restrictions.in("zahtjevStatusId", new Integer[]{1,3} ));
+			kriterijumZahtjev.add(Restrictions.eq("aktivan", true));
+			
+			List<ZahtjevDbModel> listaZahtjeva = DbDMSContext.getInstance()
+					.getZahtjevi()
+					.ucitajSveSaKriterujumom(kriterijumZahtjev);
+			
+			if(listaZahtjeva.size() != 0)
+				iterator.remove();
+		}
 		return lista;
 	}
 }

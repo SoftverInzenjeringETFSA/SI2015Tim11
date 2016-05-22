@@ -244,6 +244,10 @@ public class PregledZahtjeva {
 				try {
 					Integer zahtjevId = (Integer) tablePrimljeniZahtjevi.getValueAt(tablePrimljeniZahtjevi.getSelectedRow(), 0);
 					zahtjevRepository.promijeniStatusZahtjev(2, zahtjevId);
+					JOptionPane.showMessageDialog(null, "Uspješno odobreno",
+							"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+					//zatvaranje forme
+					frmPregledZahtjeva.dispose();
 				} catch (RuntimeException e) {
 					throw e;
 				} catch (Exception e) {
@@ -260,6 +264,10 @@ public class PregledZahtjeva {
 				try {
 					Integer zahtjevId = (Integer) tablePrimljeniZahtjevi.getValueAt(tablePrimljeniZahtjevi.getSelectedRow(), 0);
 					zahtjevRepository.promijeniStatusZahtjev(3, zahtjevId);
+					JOptionPane.showMessageDialog(null, "Uspješno odbijeno",
+							"Obavještenje", JOptionPane.INFORMATION_MESSAGE);
+					//zatvaranje forme
+					frmPregledZahtjeva.dispose();
 				} catch (RuntimeException e) {
 					throw e;
 				} catch (Exception e) {

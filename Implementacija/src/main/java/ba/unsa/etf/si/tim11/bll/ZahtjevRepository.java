@@ -34,6 +34,7 @@ public class ZahtjevRepository implements Serializable {
 		ZahtjevDbModel zahtjev = DbDMSContext.getInstance().getZahtjevi().ucitaj((long) zahtjevId);
 		//ZahtjevStatusDbModel zahtjevStatus = DbDMSContext.getInstance().getZahtjevStatusi().ucitaj((long) statusId);
 		zahtjev.setZahtjevStatusId(statusId);
+		DbDMSContext.getInstance().getZahtjevi().sacuvajIliAzuriraj(zahtjev);
 	}
 
 	/**
